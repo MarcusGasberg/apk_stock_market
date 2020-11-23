@@ -1,0 +1,93 @@
+@startuml StockMarket Class Diagram
+skinparam Monochrome true
+skinparam Shadowing false
+
+note as N1
+  # namespaces
+  # stl containers
+  # stl iterators
+  # stl algorithms
+  # boost signal2
+  # std::bind
+  # std::function
+  # std::variant
+  # exceptions
+  # compile time if
+  # literals
+  # moving
+  # promises and futures
+  # threading
+  # variadics
+  # metaprogramming
+  # memory mapped registers
+  # PMR
+end note
+
+
+note as N2
+  Threading do/undo variadaic operations
+end note
+
+class TraderClient {
+
+}
+
+class StockBroker {
+  - StockTradeCommand[] stockTrades
+  + place_trade(StockTradeCommand command): void
+  + list_trades(): void
+} 
+
+class StockTrade {
+  + buy()
+  + sell()
+}
+
+class StockTradeCommand {
+  - string id
+  - CommandType type
+  + execute(): void
+}
+
+enum CommandType {
+  + Sell
+  + Buy
+}
+
+class BuyStockCommand {
+  - StockTrade trade
+  - CommandType type
+  + execute(): void
+}
+
+class SellStockCommand {
+  - StockTrade trade
+  - CommandType type
+  + execute(): void
+}
+
+class StockProvider {
+  - Stock[] stocks_for_sale
+  - Stock[] stock_buy_requests
+  + list_stocks_for_sale(): void
+  + list_stock_buy_requests(): void
+}
+
+class StockUpdater {
+  - Stock[] stocks
+  - boost::signal on_stock_updates
+  + register_on_stock_update(std::function)
+}
+
+StockTradeCommand --o CommandType
+StockTradeCommand <|-- BuyStockCommand
+StockTradeCommand <|-- SellStockCommand
+StockTradeCommand --> StockTrade
+
+StockBroker --o StockTradeCommand
+TraderClient --> StockBroker
+
+TraderClient --> StockProvider
+StockProvider --> StockUpdater
+
+@enduml

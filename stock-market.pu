@@ -114,8 +114,7 @@ IStockTradeCommand <|-- BuyStockCommand
 IStockTradeCommand <|-- SellStockCommand
 IStockTradeCommand --> StockTrade
 
-StockBroker --o IStockTradeCommandList
-IStockTradeCommandList --o IStockTradeCommand
+StockBroker --o IStockTradeCommand
 TraderClient --> StockBroker
 
 TraderClient --> StockProvider

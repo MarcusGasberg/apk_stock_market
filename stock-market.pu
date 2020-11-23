@@ -25,7 +25,8 @@ end note
 
 
 note as N2
-  Threading do/undo variadaic operations
+  # Threading do/undo variadaic operations
+  # Mediator handle sync between TraderAccount stocks and StockProvider
 end note
 
 class TraderClient {
@@ -38,12 +39,7 @@ class StockBroker {
   + list_trades(): void
 } 
 
-class StockTrade {
-  + buy()
-  + sell()
-}
-
-class IStockTradeCommand {
+interface IStockTradeCommand {
   + get_buyer_id(): string
   + get_stock_id(): string
   + get_stock_trade(): StockTrade
@@ -68,6 +64,7 @@ class BuyStockCommand {
   + execute(): void
   + undo(): void
 }
+
 class SellStockCommand {
   - StockTrade trade
   - string buyer_id
@@ -87,7 +84,7 @@ class StockProvider {
   + list_stock_buy_requests(): void
 }
 
-class StockUpdater {
+class StockMediator {
   - Stock[] stocks
   - boost::signal on_stock_updates
   + register_on_stock_update(std::function)
@@ -101,6 +98,8 @@ class AccountManager {
 class TraderAccount {
   - string id
   - Stock[] stocks
+  + buy()
+  + sell()
 }
 
 class Stock {
@@ -112,18 +111,17 @@ class Stock {
 IStockTradeCommand --* CommandType
 IStockTradeCommand <|-- BuyStockCommand
 IStockTradeCommand <|-- SellStockCommand
-IStockTradeCommand --> StockTrade
+IStockTradeCommand --> TraderAccount
 
 StockBroker --o IStockTradeCommand
 TraderClient --> StockBroker
 
 TraderClient --> StockProvider
-StockProvider --> StockUpdater
-
-StockTrade --> TraderAccount
+StockProvider --> StockMediator
 
 AccountManager --o TraderAccount
 TraderAccount --o Stock
 StockBroker --> AccountManager
+TraderAccount --> StockMediator
 
 @enduml

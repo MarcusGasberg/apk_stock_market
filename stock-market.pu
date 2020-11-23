@@ -33,7 +33,7 @@ class TraderClient {
 }
 
 class StockBroker {
-  - StockTradeCommand[] stockTrades
+  - IStockTradeCommandList stockTrades
   + place_trade(StockTradeCommand command): void
   + list_trades(): void
 } 
@@ -43,10 +43,12 @@ class StockTrade {
   + sell()
 }
 
-class StockTradeCommand {
-  - string id
+class IStockTradeCommand {
+  - string buyerId
+  - string stockId
   - CommandType type
   + execute(): void
+  + undo(): void
 }
 
 enum CommandType {
@@ -56,8 +58,17 @@ enum CommandType {
 
 class BuyStockCommand {
   - StockTrade trade
+  - CommandType type 
+  + execute(): void
+  + undo_execute(): void
+}
+
+class IStockTradeCommandList <Vector<Command>, IStockTradeCommand>{
+  - string buyerId
+  - string stockId
   - CommandType type
   + execute(): void
+  + undo(): void
 }
 
 class SellStockCommand {
@@ -79,15 +90,38 @@ class StockUpdater {
   + register_on_stock_update(std::function)
 }
 
-StockTradeCommand --o CommandType
-StockTradeCommand <|-- BuyStockCommand
-StockTradeCommand <|-- SellStockCommand
-StockTradeCommand --> StockTrade
+class AccountManager {
+  - TraderAccount[] traderAccounts
+  + get_account(string id): TraderAccount
+}
 
-StockBroker --o StockTradeCommand
+class TraderAccount {
+  - string id
+  - Stock[] stocks
+}
+
+class Stock {
+  - string seller_id
+  - int value_each
+  - int amount
+}
+
+IStockTradeCommand --* CommandType
+IStockTradeCommand <|-- BuyStockCommand
+IStockTradeCommand <|-- SellStockCommand
+IStockTradeCommand --> StockTrade
+
+StockBroker --o IStockTradeCommandList
+IStockTradeCommandList --o IStockTradeCommand
 TraderClient --> StockBroker
 
 TraderClient --> StockProvider
 StockProvider --> StockUpdater
+
+StockTrade --> TraderAccount
+
+AccountManager --o TraderAccount
+TraderAccount --o Stock
+StockBroker --> AccountManager
 
 @enduml

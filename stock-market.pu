@@ -33,7 +33,7 @@ class TraderClient {
 }
 
 class StockBroker {
-  - IStockTradeCommandList stockTrades
+  - vector<IStockTradeCommand> stockTrades
   + place_trade(StockTradeCommand command): void
   + list_trades(): void
 } 
@@ -44,9 +44,10 @@ class StockTrade {
 }
 
 class IStockTradeCommand {
-  - string buyerId
-  - string stockId
-  - CommandType type
+  + get_buyer_id(): string
+  + get_stock_id(): string
+  + get_stock_trade(): StockTrade
+  + get_command_type(): CommandType
   + execute(): void
   + undo(): void
 }
@@ -58,23 +59,25 @@ enum CommandType {
 
 class BuyStockCommand {
   - StockTrade trade
-  - CommandType type 
-  + execute(): void
-  + undo_execute(): void
-}
-
-class IStockTradeCommandList <Vector<Command>, IStockTradeCommand>{
-  - string buyerId
-  - string stockId
+  - string buyer_id
+  - string stock_id
   - CommandType type
+  + get_buyer_id(): string
+  + get_stock_id(): string
+  + get_command_type(): CommandType
   + execute(): void
   + undo(): void
 }
-
 class SellStockCommand {
   - StockTrade trade
+  - string buyer_id
+  - string stock_id
   - CommandType type
+  + get_buyer_id(): string
+  + get_stock_id(): string
+  + get_command_type(): CommandType
   + execute(): void
+  + undo(): void
 }
 
 class StockProvider {

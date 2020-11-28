@@ -82,6 +82,15 @@
 				</MakeCommands>
 			</Target>
 		</Build>
+		<Unit filename="/home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/Commands/BuyStockCommand.h">
+			<Option target="StockMarketProject"/>
+		</Unit>
+		<Unit filename="/home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/Commands/Command.h">
+			<Option target="StockMarketProject"/>
+		</Unit>
+		<Unit filename="/home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/Commands/SellStockCommand.h">
+			<Option target="StockMarketProject"/>
+		</Unit>
 		<Unit filename="/home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/main.cpp">
 			<Option target="StockMarketProject"/>
 		</Unit>

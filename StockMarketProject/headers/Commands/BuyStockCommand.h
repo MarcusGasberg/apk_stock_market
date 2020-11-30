@@ -4,13 +4,22 @@
 
 #ifndef STOCKMARKETPROJECT_BUYSTOCKCOMMAND_H
 #define STOCKMARKETPROJECT_BUYSTOCKCOMMAND_H
-#include "Command.h"
+#include <iostream>
+#include <string>
 
-class BuyStockCommand : StockTradeCommand
+namespace stock
 {
-public:
-    void Execute() const override {
-        // Buy logic...
-    }
-};
+    struct BuyStockCommand
+    {
+        static void execute()
+        {
+            std::cout << "Doing buy " << "\n";
+        }
+
+        static void describe()
+        {
+            std::cout << "A buy command\n";
+        }
+    };
+}
 #endif //STOCKMARKETPROJECT_BUYSTOCKCOMMAND_H

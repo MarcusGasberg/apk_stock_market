@@ -4,13 +4,21 @@
 
 #ifndef STOCKMARKETPROJECT_SELLSTOCKCOMMAND_H
 #define STOCKMARKETPROJECT_SELLSTOCKCOMMAND_H
-#include "Command.h"
+#include <iostream>
 
-class SellStockCommand : StockTradeCommand
+namespace stock
 {
-public:
-    void Execute() const override {
-        // Sell logic...
-    }
-};
+    struct SellStockCommand
+    {
+        static void execute()
+        {
+            std::cout << "Doing sell\n";
+        }
+
+        static void describe()
+        {
+            std::cout << "A sell command\n";
+        }
+    };
+}
 #endif //STOCKMARKETPROJECT_SELLSTOCKCOMMAND_H

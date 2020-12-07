@@ -1,16 +1,8 @@
 /home/stud/Desktop/Clion/clion-2020.2.1/bin/cmake/linux/bin/cmake -DCMAKE_BUILD_TYPE=Debug -G "CodeBlocks - Unix Makefiles" /home/stud/Desktop/Clion/apk_stock_market/StockMarketProject
--- Configuring done
-CMake Error at CMakeLists.txt:6 (add_executable):
-  Cannot find source file:
-
-    headers/Mixins/Interface/Bells.h
-
-  Tried extensions .c .C .c++ .cc .cpp .cxx .cu .m .M .mm .h .hh .h++ .hm
-  .hpp .hxx .in .txx
+CMake Error at CMakeLists.txt:10:
+  Parse error.  Expected a command name, got unquoted argument with text
+  "<<<<<<<".
 
 
-CMake Error at CMakeLists.txt:6 (add_executable):
-  No SOURCES given to target: StockMarketProject
-
-
-CMake Generate step failed.  Build files cannot be regenerated correctly.
+-- Configuring incomplete, errors occurred!
+See also "/home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/cmake-build-debug/CMakeFiles/CMakeOutput.log".

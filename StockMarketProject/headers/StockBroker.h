@@ -98,7 +98,6 @@ namespace stock
                         using T = std::decay_t<decltype(q)>;
                         if constexpr (std::is_same_v<T, stock::GetLatestStockQuery>)
                         {
-                            q.result = std::get<0>(all_commands.back());
                         }
                     }
                 , query);

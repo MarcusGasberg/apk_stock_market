@@ -5,10 +5,10 @@ set(CMAKE_CXX_STANDARD 17)
 set(Boost_USE_STATIC_LIBS OFF)
 set(Boost_USE_MULTITHREADED ON)
 set(Boost_USE_STATIC_RUNTIME OFF)
-find_package(Boost 1.74.0 COMPONENTS REQUIRED)
+find_package(Boost 1.71.0 COMPONENTS REQUIRED)
 
 
-add_executable(StockMarketProject main.cpp headers/StockBroker.h headers/Commands/BuyStockCommand.h headers/Commands/SellStockCommand.h  headers/Commands/ListAllStockCommand.h   "headers/Exceptions/BadCommandException.h"  "headers/Commands/Command.h" "headers/Commands/CommandBase.h" "headers/Commands/UndoLatestCommand.h"  "headers/Queries/GetAllStockQuery.h" "headers/StockPrinter.h")
+add_executable(StockMarketProject main.cpp headers/StockBroker.h headers/Commands/BuyStockCommand.h headers/Commands/SellStockCommand.h  headers/Commands/ListAllStockCommand.h   "headers/Exceptions/BadCommandException.h"  "headers/Commands/Command.h" "headers/Commands/CommandBase.h" "headers/Commands/UndoLatestCommand.h"  "headers/Queries/GetAllStockQuery.h" "headers/StockPrinter.h" "headers/StockMediator/StockMediator.h" "headers/StockMediator/Stock.h")
 
 if(Boost_FOUND)
     include_directories(${Boost_INCLUDE_DIRS})

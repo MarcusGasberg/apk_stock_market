@@ -5,20 +5,39 @@
 #ifndef STOCKMARKETPROJECT_BUYSTOCKCOMMAND_H
 #define STOCKMARKETPROJECT_BUYSTOCKCOMMAND_H
 #include <iostream>
+#include <sstream>
 #include <string>
+
+#include "CommandBase.h"
 
 namespace stock
 {
-    struct BuyStockCommand
+    class BuyStockCommand : public CommandBase
     {
-        static void execute()
+    public:
+
+        BuyStockCommand()  = default;
+
+        void execute()
         {
-            std::cout << "Doing buy " << "\n";
+            std::cout << "Doing buy\n";
         }
 
-        static void describe()
+        void undo()
         {
-            std::cout << "A buy command\n";
+            std::cout << get_description() << ": Undoing buy...\n";
+        }
+
+        [[nodiscard]] std::string get_description() const override
+        {
+            std::stringstream ss;
+            ss << "BuyCommand[" << get_id() << "]";
+            return ss.str();
+        }
+
+        friend std::ostream& operator<<(std::ostream& os, const BuyStockCommand& obj)
+        {
+            return os << obj.get_description();
         }
     };
 }

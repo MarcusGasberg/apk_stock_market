@@ -103,9 +103,6 @@
 		<Unit filename="/home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/StockMediator/StockMediator.h">
 			<Option target="StockMarketProject"/>
 		</Unit>
-		<Unit filename="/home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/TraderAccount/CountryRatePolicy.h">
-			<Option target="StockMarketProject"/>
-		</Unit>
 		<Unit filename="/home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/TraderAccount/StandardTraderPolicy.h">
 			<Option target="StockMarketProject"/>
 		</Unit>
@@ -115,13 +112,7 @@
 		<Unit filename="/home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/TraderAccount/TraderAccount.h">
 			<Option target="StockMarketProject"/>
 		</Unit>
-		<Unit filename="/home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/TraderAccount/TraderPolicy.h">
-			<Option target="StockMarketProject"/>
-		</Unit>
 		<Unit filename="/home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/main.cpp">
-			<Option target="StockMarketProject"/>
-		</Unit>
-		<Unit filename="/home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/source/AccountManager.cpp">
 			<Option target="StockMarketProject"/>
 		</Unit>
 		<Unit filename="/home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/CMakeLists.txt">

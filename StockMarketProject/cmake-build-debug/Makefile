@@ -170,33 +170,6 @@ main.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/StockMarketProject.dir/build.make CMakeFiles/StockMarketProject.dir/main.cpp.s
 .PHONY : main.cpp.s
 
-source/AccountManager.o: source/AccountManager.cpp.o
-
-.PHONY : source/AccountManager.o
-
-# target to build an object file
-source/AccountManager.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/StockMarketProject.dir/build.make CMakeFiles/StockMarketProject.dir/source/AccountManager.cpp.o
-.PHONY : source/AccountManager.cpp.o
-
-source/AccountManager.i: source/AccountManager.cpp.i
-
-.PHONY : source/AccountManager.i
-
-# target to preprocess a source file
-source/AccountManager.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/StockMarketProject.dir/build.make CMakeFiles/StockMarketProject.dir/source/AccountManager.cpp.i
-.PHONY : source/AccountManager.cpp.i
-
-source/AccountManager.s: source/AccountManager.cpp.s
-
-.PHONY : source/AccountManager.s
-
-# target to generate assembly for a file
-source/AccountManager.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/StockMarketProject.dir/build.make CMakeFiles/StockMarketProject.dir/source/AccountManager.cpp.s
-.PHONY : source/AccountManager.cpp.s
-
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -209,9 +182,6 @@ help:
 	@echo "... main.o"
 	@echo "... main.i"
 	@echo "... main.s"
-	@echo "... source/AccountManager.o"
-	@echo "... source/AccountManager.i"
-	@echo "... source/AccountManager.s"
 .PHONY : help
 
 

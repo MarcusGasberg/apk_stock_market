@@ -3,12 +3,17 @@
 #include <type_traits>
 #include <tuple>
 #include <vector>
+#include <functional>
+#include <boost/signals2/signal.hpp>
 
 
 #include "Commands/BuyStockCommand.h"
-#include "Commands/ListAllStockCommand.h"
 #include "Commands/SellStockCommand.h"
+#include "Commands/Command.h"
+#include "Commands/ListAllStockCommand.h"
 #include "Exceptions/BadCommandException.h"
+#include "Queries/GetAllStockQuery.h"
+#include "Queries/GetLatestStockQuery.h"
 
 namespace stock
 {
@@ -25,7 +30,7 @@ namespace stock
 
     template <typename TList>
     using typelist_variant_t = apply<std::variant, TList>;
-    
+
     template <typename ...T>
     std::variant<T...> as_variant(TypeList<T...>);
 
@@ -33,75 +38,140 @@ namespace stock
     template <typename ...T>
     std::tuple<T...> as_tuple(TypeList<T...>);
 
-    template <typename... Command>
-    void list_trades(Command &&... args)
+    template<typename T>
+    class to_vector_visitor
     {
-        (args.describe(), ...);
-    }
-
-    template <typename List>
-    typelist_variant_t<List> create_command(int choice)
-    {
-        auto result = typelist_variant_t<List>();
-        switch (choice)
+        std::vector<std::shared_ptr<T>>& vec_;
+    public:
+        explicit to_vector_visitor(std::vector<std::shared_ptr<T>>& vec)
+            : vec_(vec)
         {
-        case 1:
-            result = BuyStockCommand();
-            break;
-        case 2:
-            result = SellStockCommand();
-            break;
-        case 3:
-            result = ListAllStocksCommand();
-            break;
-        default:
-            throw BadCommandException("Command not found");
         }
 
-        return result;
-    }
+        void operator ()(T& val)
+        {
+            vec_.push_back(std::make_shared<T>(val));
+        }
 
-    // Inspiration from 19.5 (p. 428) of C++ Templates: The Complete Guide
-    template<typename T>
-    struct HasExecuteHelper
-    {
-        template<typename C, typename = decltype(std::declval<C>().execute())>
-        static std::true_type test(void*);
-
-        // test() fallback:
-        template<typename>
-        static std::false_type test(...);
-
-        using Type = decltype(test<T>(nullptr));
-        static constexpr bool value = std::is_same_v<decltype(test<T>(nullptr)), char>;
+        void operator()(...) const {}
     };
 
-    template<typename T>
-    struct HasExecuteT : HasExecuteHelper<T>::Type {
-    };
-
-    template<typename T>
-    constexpr bool hasExecute = HasExecuteT<T>::value;
-
-
-    template <typename Command>
-    void place_trade(const Command& command)
+    template <typename QueryVar, typename CommandVar>
+    class StockBroker
     {
-        command.execute();
-    }
+        std::vector<CommandVar> all_commands;
+        boost::signals2::signal<void(QueryVar&)>& queries_sig_;
+        boost::signals2::signal<void(CommandVar&)>& command_sig_;
 
-    template <typename List>
-    void handle_command(typelist_variant_t<List> variant)
-    {
-        std::visit([](auto&& command)
+    public:
+        StockBroker(boost::signals2::signal<void(QueryVar&)>& queries_sig,
+            boost::signals2::signal<void(CommandVar&)>& command_sig)
+            : queries_sig_(queries_sig),
+              command_sig_(command_sig)
+        {
+            const std::function<void(QueryVar&)> get_commands_from_stockbroker_f = [this](QueryVar& query)
+            {
+                std::visit([this](auto&& q)
+                    {
+                        using T = std::decay_t<decltype(q)>;
+                        if constexpr (std::is_same_v<T, stock::GetAllStockQuery>)
+                        {
+                            auto buy_stocks = get_all_commands_of_type<stock::BuyStockCommand>();
+                            auto sell_stocks = get_all_commands_of_type<stock::SellStockCommand>();
+                            for (const auto& b : buy_stocks)
+                            {
+                                q.result.push_back(b);
+                            }
+                            for (const auto& s : sell_stocks)
+                            {
+                                q.result.push_back(s);
+                            }
+                        }
+                    }
+                , query);
+            };
+
+            const std::function<void(QueryVar&)> get_latest_stock_f = [this](QueryVar& query)
+            {
+                std::visit([this](auto&& q)
+                    {
+                        using T = std::decay_t<decltype(q)>;
+                        if constexpr (std::is_same_v<T, stock::GetLatestStockQuery>)
+                        {
+                            q.result = std::get<0>(all_commands.back());
+                        }
+                    }
+                , query);
+            };
+
+            const std::function<void(CommandVar&)> commands_f = [this](CommandVar& variant)
+            {
+                std::visit([&](auto&& command)
+                    {
+                        using T = std::decay_t<decltype(command)>;
+                        if constexpr (!stock::hasExecute<T>)
+                        {
+                            return;
+                        }
+                        handle_command(command);
+                    }, variant);
+            };
+
+
+            queries_sig_.connect(get_commands_from_stockbroker_f);
+            command_sig_.connect(commands_f);
+        }
+
+        template<typename Command>
+        void handle_command(Command& command)
         {
             using T = std::decay_t<decltype(command)>;
-            if constexpr (hasExecute<T>)
-                place_trade(command);
-            else
-                std::cout << "A command must implement execute" << std::endl;
-        }, variant);
+            if constexpr (!hasExecute<T>)
+            {
+                throw stock::BadCommandException();
+            }
+            if constexpr (std::is_same_v<T, BuyStockCommand>)
+            {
+                buy(command);
+            }
+            else if constexpr (std::is_same_v<T, SellStockCommand>)
+            {
+                sell(command);
+            }
+        }
 
-    }
+        void buy(BuyStockCommand& buy_command)
+        {
+            std::cout << "Stockbroker doing buy...\n";
+            buy_command.execute();
+            all_commands.push_back(buy_command);
 
+        }
+
+        void sell(SellStockCommand& sell_command)
+        {
+            std::cout << "Stockbroker doing sell...\n";
+            sell_command.execute();
+            all_commands.push_back(sell_command);
+        }
+
+        template<typename Command>
+        std::vector<std::shared_ptr<Command>> get_all_commands_of_type()
+        {
+            std::vector<std::shared_ptr<Command>> commands;
+            to_vector_visitor<Command> visitor(commands);
+            for (size_t i = 0; i < all_commands.size(); ++i)
+            {
+                std::visit(visitor, all_commands[i]);
+            }
+            return commands;
+        }
+
+        template <typename Command>
+        void do_execute(Command& command)
+        {
+            command.execute();
+            all_commands.push_back(command);
+        }
+    };
 } // namespace stock

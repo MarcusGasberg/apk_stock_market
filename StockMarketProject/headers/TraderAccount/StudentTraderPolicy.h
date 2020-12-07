@@ -7,15 +7,20 @@
 #include "../AccountManager/AccountManager.h"
 #include "../Helpers/IsNumeric.h"
 
+/*
+ * Lower commission rate
+ * Different tax regulations
+ * No country commission rate
+ */
 class StudentTraderPolicy {
+private:
+    static constexpr float commissionRate = 1.2;
 public:
-    // TODO: Do check if amount is int, float, double...
     // Account Manager, Account Type
     template<typename T, typename = typename IsNumeric<T>::value>
-    static void calculateCommission(AccountManager&& accountManager, T const& boughtAmount)
+    static void takeCommission(AccountManager&& accountManager, T const& boughtAmount)
     {
-        // 1.2% commission.
-        accountManager.withdraw(boughtAmount * (100 + 1.2));
+        accountManager.withdraw(boughtAmount * commissionRate);
     }
 };
 #endif //STOCKMARKETPROJECT_STUDENTTRADERPOLICY_H

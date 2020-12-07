@@ -1,8 +1,4 @@
 /home/stud/Desktop/Clion/clion-2020.2.1/bin/cmake/linux/bin/cmake -DCMAKE_BUILD_TYPE=Debug -G "CodeBlocks - Unix Makefiles" /home/stud/Desktop/Clion/apk_stock_market/StockMarketProject
-CMake Error at CMakeLists.txt:10:
-  Parse error.  Expected a command name, got unquoted argument with text
-  "<<<<<<<".
-
-
--- Configuring incomplete, errors occurred!
-See also "/home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/cmake-build-debug/CMakeFiles/CMakeOutput.log".
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/cmake-build-debug

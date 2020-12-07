@@ -3,12 +3,11 @@
 #include <type_traits>
 #include <tuple>
 #include <vector>
-
+#include <functional>
 
 #include "Commands/BuyStockCommand.h"
-#include "Commands/ListAllStockCommand.h"
 #include "Commands/SellStockCommand.h"
-#include "Exceptions/BadCommandException.h"
+#include "Commands/Command.h"
 
 namespace stock
 {
@@ -25,7 +24,7 @@ namespace stock
 
     template <typename TList>
     using typelist_variant_t = apply<std::variant, TList>;
-    
+
     template <typename ...T>
     std::variant<T...> as_variant(TypeList<T...>);
 
@@ -39,69 +38,76 @@ namespace stock
         (args.describe(), ...);
     }
 
-    template <typename List>
-    typelist_variant_t<List> create_command(int choice)
+    template<typename T>
+    class to_vector_visitor
     {
-        auto result = typelist_variant_t<List>();
-        switch (choice)
+        std::vector<std::shared_ptr<T>>& vec_;
+    public:
+        explicit to_vector_visitor(std::vector<std::shared_ptr<T>>& vec)
+            : vec_(vec)
         {
-        case 1:
-            result = BuyStockCommand();
-            break;
-        case 2:
-            result = SellStockCommand();
-            break;
-        case 3:
-            result = ListAllStocksCommand();
-            break;
-        default:
-            throw BadCommandException("Command not found");
         }
 
-        return result;
-    }
+        void operator ()(T& val)
+        {
+            vec_.push_back(std::make_shared<T>(val));
+        }
 
-    // Inspiration from 19.5 (p. 428) of C++ Templates: The Complete Guide
-    template<typename T>
-    struct HasExecuteHelper
-    {
-        template<typename C, typename = decltype(std::declval<C>().execute())>
-        static std::true_type test(void*);
-
-        // test() fallback:
-        template<typename>
-        static std::false_type test(...);
-
-        using Type = decltype(test<T>(nullptr));
-        static constexpr bool value = std::is_same_v<decltype(test<T>(nullptr)), char>;
+        void operator()(...) const {}
     };
-
-    template<typename T>
-    struct HasExecuteT : HasExecuteHelper<T>::Type {
-    };
-
-    template<typename T>
-    constexpr bool hasExecute = HasExecuteT<T>::value;
-
-
-    template <typename Command>
-    void place_trade(const Command& command)
-    {
-        command.execute();
-    }
 
     template <typename List>
-    void handle_command(typelist_variant_t<List> variant)
+    class StockBroker
     {
-        std::visit([](auto&& command)
+        std::vector<std::function<void()>> undo_history;
+        std::vector<typelist_variant_t<List>> all_commands;
+    public:
+
+        void handle_command(typelist_variant_t<List>& variant)
         {
-            using T = std::decay_t<decltype(command)>;
-            if constexpr (hasExecute<T>)
-                place_trade(command);
-            else
-                std::cout << "A command must implement execute" << std::endl;
-        }, variant);
+            std::visit([&](auto&& command)
+                {
+                    using T = std::decay_t<decltype(command)>;
+                    if constexpr (hasExecute<T>)
+                    {
+                        do_execute(command);
+                    }
+                    else
+                    {
+                        std::cout << "A command must implement execute" << std::endl;
+                    }
 
-    }
+                    if constexpr (hasUndo<T>)
+                    {
+                        store_undo(command);
+                    }
+                }, variant);
+        }
 
+        template<typename Command>
+        std::vector<std::shared_ptr<Command>> get_all_commands_of_type()
+        {
+            std::vector<std::shared_ptr<Command>> commands;
+            to_vector_visitor<Command> visitor(commands);
+            for (size_t i = 0; i < all_commands.size(); ++i)
+            {
+                std::visit(visitor, all_commands[i]);
+            }
+            return commands;
+        }
+
+        template <typename Command>
+        void do_execute(Command& command)
+        {
+            command.execute();
+            all_commands.push_back(command);
+        }
+
+        template <typename Command>
+        void store_undo(Command& command)
+        {
+            const std::function<void()> undo_f = std::bind(&Command::undo, command); // Could have done lambda instead
+            undo_history.push_back(undo_f);
+        }
+    };
 } // namespace stock

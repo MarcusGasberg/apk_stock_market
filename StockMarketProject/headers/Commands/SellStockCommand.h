@@ -5,19 +5,36 @@
 #ifndef STOCKMARKETPROJECT_SELLSTOCKCOMMAND_H
 #define STOCKMARKETPROJECT_SELLSTOCKCOMMAND_H
 #include <iostream>
+#include <ostream>
+#include "CommandBase.h"
 
 namespace stock
 {
-    struct SellStockCommand
+    class SellStockCommand : public CommandBase
     {
-        static void execute()
+    public:
+        SellStockCommand() = default;
+
+        void execute()
         {
             std::cout << "Doing sell\n";
         }
 
-        static void describe()
+        void undo()
         {
-            std::cout << "A sell command\n";
+            std::cout << "Undoing sell..." << "\n";
+        }
+
+        [[nodiscard]] std::string get_description() const override
+        {
+            std::stringstream ss;
+            ss << "SellCommand[" << get_id() << "]";
+            return ss.str();
+        }
+
+        friend std::ostream& operator<<(std::ostream& os, const SellStockCommand& obj)
+        {
+            return os << obj.get_description();
         }
     };
 }

@@ -6,7 +6,9 @@
 
 #IncludeRegexTransform: 
 
-/home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/main.cpp
-iostream
--
+/home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/AccountManager/AccountManager.h
+
+/home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/source/AccountManager.cpp
+../headers/AccountManager/AccountManager.h
+/home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/AccountManager/AccountManager.h
 

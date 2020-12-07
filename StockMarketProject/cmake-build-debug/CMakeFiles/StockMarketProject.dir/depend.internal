@@ -3,3 +3,6 @@
 
 CMakeFiles/StockMarketProject.dir/main.cpp.o
  /home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/main.cpp
+CMakeFiles/StockMarketProject.dir/source/AccountManager.cpp.o
+ /home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/AccountManager/AccountManager.h
+ /home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/source/AccountManager.cpp

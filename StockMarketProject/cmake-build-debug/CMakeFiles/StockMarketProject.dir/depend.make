@@ -3,3 +3,6 @@
 
 CMakeFiles/StockMarketProject.dir/main.cpp.o: ../main.cpp
 
+CMakeFiles/StockMarketProject.dir/source/AccountManager.cpp.o: ../headers/AccountManager/AccountManager.h
+CMakeFiles/StockMarketProject.dir/source/AccountManager.cpp.o: ../source/AccountManager.cpp
+

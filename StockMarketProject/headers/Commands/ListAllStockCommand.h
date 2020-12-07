@@ -9,6 +9,13 @@ namespace stock
     {
     public:
 
+        ListAllStocksCommand() = default;
+
+        ListAllStocksCommand(const std::vector<std::shared_ptr<CommandBase>>& all_commands)
+            : all_commands(all_commands)
+        {
+        }
+
         std::vector<std::shared_ptr<CommandBase>> all_commands;
 
         void execute()

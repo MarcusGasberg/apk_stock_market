@@ -8,7 +8,7 @@ set(Boost_USE_STATIC_RUNTIME OFF)
 find_package(Boost 1.74.0 COMPONENTS REQUIRED) 
 
 
-add_executable(StockMarketProject main.cpp headers/StockBroker.h headers/Commands/BuyStockCommand.h headers/Commands/SellStockCommand.h  headers/Commands/ListAllStockCommand.h   "headers/Exceptions/BadCommandException.h" "headers/CommandFactory.h" "headers/Commands/Command.h" "headers/Commands/CommandBase.h" "headers/Commands/UndoLatestCommand.h"  "headers/Queries/GetAllStockQuery.h")
+add_executable(StockMarketProject main.cpp headers/StockBroker.h headers/Commands/BuyStockCommand.h headers/Commands/SellStockCommand.h  headers/Commands/ListAllStockCommand.h   "headers/Exceptions/BadCommandException.h"  "headers/Commands/Command.h" "headers/Commands/CommandBase.h" "headers/Commands/UndoLatestCommand.h"  "headers/Queries/GetAllStockQuery.h" "headers/StockPrinter.h")
 
 if(Boost_FOUND)
     include_directories(${Boost_INCLUDE_DIRS}) 

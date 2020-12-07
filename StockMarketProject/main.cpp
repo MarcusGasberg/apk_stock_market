@@ -13,6 +13,9 @@ int main()
 
 
     using commands_t = stock::TypeList<stock::BuyStockCommand, stock::SellStockCommand, stock::ListAllStocksCommand>;
+    using stock_broker_commands_t = stock::TypeList<stock::BuyStockCommand, stock::SellStockCommand>;
+
+    using stock_broker_var_t = stock::typelist_variant_t<stock_broker_commands_t>;
     using commands_var_t = stock::typelist_variant_t<commands_t>;
 
     using queries_t = stock::TypeList<stock::GetAllStockQuery>;
@@ -27,7 +30,7 @@ int main()
     std::cout << "3: List All Stocks" << std::endl;
     std::cout << "4: Undo Latest" << std::endl;
 
-    stock::StockBroker<commands_t> stock_broker;
+    stock::StockBroker<stock_broker_var_t> stock_broker;
 
     boost::signals2::signal<void(commands_var_t&)> command_sig;
     boost::signals2::signal<void(queries_var_t&)> queries_sig;
@@ -54,7 +57,28 @@ int main()
         , query);
     };
 
+    const std::function<void(commands_var_t&)> commands_f = [&stock_broker](commands_var_t& variant)
+    {
+        std::visit([&](auto&& command)
+        {
+            using T = std::decay_t<decltype(command)>;
+            if constexpr (!stock::hasExecute<T>)
+            {
+                return;
+            }
+            if constexpr (std::is_same_v<T, stock::SellStockCommand> || std::is_same_v<T, stock::BuyStockCommand>)
+            {
+                stock_broker.handle_command(command); // Delegate these command to stock broker
+            }
+            else
+            {
+                command.execute();
+            }
+        }, variant);
+    };
+
     queries_sig.connect(get_commands_from_stockbroker_f);
+    command_sig.connect(commands_f);
 
     stock::CommandFactory<queries_var_t, commands_var_t> command_factory(queries_sig);
 
@@ -69,8 +93,8 @@ int main()
         try
         {
             auto stock_command = command_factory.create_command(choice);
-
-            stock_broker.handle_command(stock_command);
+            command_sig(stock_command);
+            
         }
         catch (const stock::BadCommandException& bad_command_exception)
         {

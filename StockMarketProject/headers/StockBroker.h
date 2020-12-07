@@ -8,6 +8,7 @@
 #include "Commands/BuyStockCommand.h"
 #include "Commands/SellStockCommand.h"
 #include "Commands/Command.h"
+#include "Exceptions/BadCommandException.h"
 
 namespace stock
 {
@@ -56,32 +57,42 @@ namespace stock
         void operator()(...) const {}
     };
 
-    template <typename List>
+    template <typename CommandVar>
     class StockBroker
     {
-        std::vector<std::function<void()>> undo_history;
-        std::vector<typelist_variant_t<List>> all_commands;
+        std::vector<CommandVar> all_commands;
     public:
-
-        void handle_command(typelist_variant_t<List>& variant)
+        template<typename Command>
+        void handle_command(Command& command)
         {
-            std::visit([&](auto&& command)
-                {
-                    using T = std::decay_t<decltype(command)>;
-                    if constexpr (hasExecute<T>)
-                    {
-                        do_execute(command);
-                    }
-                    else
-                    {
-                        std::cout << "A command must implement execute" << std::endl;
-                    }
+            using T = std::decay_t<decltype(command)>;
+            if constexpr (!hasUndo<T>)
+            {
+                throw stock::BadCommandException();
+            }
+            if constexpr (std::is_same_v<T, BuyStockCommand>)
+            {
+                buy(command);
+            }
+            if constexpr (std::is_same_v<T, SellStockCommand>)
+            {
+                sell(command);
+            }
+        }
 
-                    if constexpr (hasUndo<T>)
-                    {
-                        store_undo(command);
-                    }
-                }, variant);
+        void buy(BuyStockCommand& buy_command)
+        {
+            std::cout << "Stockbroker doing buy...\n";
+            buy_command.execute();
+            all_commands.push_back(buy_command);
+
+        }
+
+        void sell(SellStockCommand& sell_command)
+        {
+            std::cout << "Stockbroker doing sell...\n";
+            sell_command.execute();
+            all_commands.push_back(sell_command);
         }
 
         template<typename Command>
@@ -101,13 +112,6 @@ namespace stock
         {
             command.execute();
             all_commands.push_back(command);
-        }
-
-        template <typename Command>
-        void store_undo(Command& command)
-        {
-            const std::function<void()> undo_f = std::bind(&Command::undo, command); // Could have done lambda instead
-            undo_history.push_back(undo_f);
         }
     };
 } // namespace stock

@@ -12,6 +12,7 @@ namespace stock
     template<typename QueriesVar, typename CommandsVar>
     class CommandFactory
     {
+
         const boost::signals2::signal<void(QueriesVar&)>& queries_sig_;
     public:
         explicit CommandFactory(const boost::signals2::signal<void(QueriesVar&)>& queries_sig)

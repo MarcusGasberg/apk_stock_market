@@ -41,11 +41,11 @@ int main()
                 {
                     auto buy_stocks = stock_broker.get_all_commands_of_type<stock::BuyStockCommand>();
                     auto sell_stocks = stock_broker.get_all_commands_of_type<stock::SellStockCommand>();
-                    for (auto b : buy_stocks)
+                    for (const auto& b : buy_stocks)
                     {
                         q.result.push_back(b);
                     }
-                    for (auto s : sell_stocks)
+                    for (const auto& s : sell_stocks)
                     {
                         q.result.push_back(s);
                     }

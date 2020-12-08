@@ -1,16 +1,16 @@
 #pragma once
-#include <exception>
+#include <stdexcept>
 
 namespace stock
 {
-    class BadCommandException : std::exception
+    class BadCommandException : public std::exception
     {
     public:
 
         BadCommandException() = default;
 
         explicit BadCommandException(char const* const _Message)
-            : exception(_Message)
+            : std::exception(_Message)
         {
         }
 

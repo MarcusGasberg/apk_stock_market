@@ -5,21 +5,24 @@
 #include "Commands/SellStockCommand.h"
 #include "Exceptions/BadCommandException.h"
 #include "boost/signals2/signal.hpp"
-#include "Queries/GetAllStockQuery.h"
+#include "Queries/GetAllTransactionsQuery.h"
 #include "Queries/GetLatestStockQuery.h"
+#include "Queries/GetStockQuery.h"
+#include "Queries/GetTraderAccountQuery.h"
 
 namespace stock
 {
     template<typename QueriesVar, typename CommandsVar>
     class CommandBuilder
     {
-
+        std::shared_ptr<TraderAccount<>> trader_account_;
         const boost::signals2::signal<void(std::shared_ptr<QueriesVar>)>& queries_sig_;
     public:
-        explicit CommandBuilder(const boost::signals2::signal<void(std::shared_ptr<QueriesVar>)>& queries_sig)
-            : queries_sig_(queries_sig)
+        explicit CommandBuilder(const boost::signals2::signal<void(std::shared_ptr<QueriesVar>)>& queries_sig, std::shared_ptr<TraderAccount<>> trader_account)
+            : trader_account_(std::move(trader_account)), queries_sig_(queries_sig)
         {
         }
+
 
         std::shared_ptr<CommandsVar> create_command(int choice)
         {
@@ -27,24 +30,36 @@ namespace stock
             switch (choice)
             {
             case 1:
-                result = std::make_shared<CommandsVar>(BuyStockCommand());
-                break;
+            {
+                std::cout << "What kind of stock do you want to buy?" << "\n";
+                std::string stock_id;
+                std::getline(std::cin, stock_id);
+
+                std::shared_ptr<QueriesVar> queries_var = std::make_shared<QueriesVar>(GetStockQuery(stock_id));
+                queries_sig_(queries_var);
+                const GetStockQuery queries_result = std::get<GetStockQuery>(*queries_var);
+                if (queries_result.result)
+                {
+                    result = std::make_shared<CommandsVar>(BuyStockCommand(trader_account_, queries_result.result));
+                }
+            }
+            break;
             case 2:
-                result = std::make_shared<CommandsVar>(SellStockCommand());
+                result = std::make_shared<CommandsVar>(SellStockCommand(trader_account_));
                 break;
             case 3:
-                {
-                    std::shared_ptr<QueriesVar> queries_var = std::make_shared<QueriesVar>(GetAllStockQuery());
-                    queries_sig_(queries_var);
-                    const GetAllStockQuery queries_result = std::get<0>(*queries_var);
-                    result = std::make_shared<CommandsVar>(ListAllStocksCommand(queries_result.result));
-                }
-                break;
+            {
+                std::shared_ptr<QueriesVar> queries_var = std::make_shared<QueriesVar>(GetAllTransactionsQuery());
+                queries_sig_(queries_var);
+                const GetAllTransactionsQuery queries_result = std::get<0>(*queries_var);
+                result = std::make_shared<CommandsVar>(ListAllStocksCommand(queries_result.result));
+            }
+            break;
             case 4:
-                {
-                    result = std::make_shared<CommandsVar>(UndoLatestCommand());
-                }
-                break;
+            {
+                result = std::make_shared<CommandsVar>(UndoLatestCommand());
+            }
+            break;
             default:
                 throw BadCommandException("Command not found");
             }

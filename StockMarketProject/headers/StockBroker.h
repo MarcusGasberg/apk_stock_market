@@ -12,7 +12,7 @@
 #include "Commands/Command.h"
 #include "Commands/UndoLatestCommand.h"
 #include "Exceptions/BadCommandException.h"
-#include "Queries/GetAllStockQuery.h"
+#include "Queries/GetAllTransactionsQuery.h"
 #include "Queries/GetLatestStockQuery.h"
 
 namespace stock
@@ -59,7 +59,7 @@ namespace stock
     template <typename QueryVar, typename CommandVar>
     class StockBroker
     {
-        std::vector<CommandVar> all_commands;
+        std::vector<CommandVar> all_transactions;
         std::vector<boost::signals2::connection> connections;
         boost::signals2::signal<void(std::shared_ptr<QueryVar>)>& queries_sig_;
         boost::signals2::signal<void(std::shared_ptr<CommandVar>)>& command_sig_;
@@ -75,7 +75,7 @@ namespace stock
                 std::visit([this](auto&& q)
                     {
                         using T = std::decay_t<decltype(q)>;
-                        if constexpr (std::is_same_v<T, GetAllStockQuery>)
+                        if constexpr (std::is_same_v<T, GetAllTransactionsQuery>)
                         {
                             auto buy_stocks = get_all_commands_of_type<stock::BuyStockCommand>();
                             auto sell_stocks = get_all_commands_of_type<stock::SellStockCommand>();
@@ -142,7 +142,7 @@ namespace stock
         {
             std::cout << "Stockbroker doing buy...\n";
             buy_command.execute();
-            all_commands.push_back(buy_command);
+            all_transactions.push_back(buy_command);
 
         }
 
@@ -150,17 +150,17 @@ namespace stock
         {
             std::cout << "Stockbroker doing sell...\n";
             sell_command.execute();
-            all_commands.push_back(sell_command);
+            all_transactions.push_back(sell_command);
         }
 
         void handle(UndoLatestCommand& undo_command)
         {
-            auto latest = all_commands.back();
+            auto latest = all_transactions.back();
             if constexpr (hasUndo<std::decay_t<decltype(latest)>>)
             {
                 std::cout << "Stockbroker undoing latest...\n";
                 latest.undo();
-                all_commands.pop_back();
+                all_transactions.pop_back();
             }
 
         }
@@ -170,9 +170,9 @@ namespace stock
         {
             std::vector<std::shared_ptr<Command>> commands;
             to_vector_visitor<Command> visitor(commands);
-            for (size_t i = 0; i < all_commands.size(); ++i)
+            for (size_t i = 0; i < all_transactions.size(); ++i)
             {
-                std::visit(visitor, all_commands[i]);
+                std::visit(visitor, all_transactions[i]);
             }
             return commands;
         }
@@ -181,7 +181,7 @@ namespace stock
         void do_execute(Command& command)
         {
             command.execute();
-            all_commands.push_back(command);
+            all_transactions.push_back(command);
         }
     };
 } // namespace stock

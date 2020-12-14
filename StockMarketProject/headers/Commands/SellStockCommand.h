@@ -12,10 +12,15 @@ namespace stock
 {
     class SellStockCommand : public CommandBase
     {
+        std::shared_ptr<TraderAccount<>> seller_account_;
     public:
-        SellStockCommand()
+
+        SellStockCommand() = default;
+
+
+        explicit SellStockCommand(std::shared_ptr<TraderAccount<>> seller_account)
+            : seller_account_(std::move(seller_account))
         {
-            std::cout << "SELL CREATED\n";
         }
 
         void execute()

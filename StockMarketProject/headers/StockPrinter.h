@@ -4,7 +4,7 @@
 
 #include "Commands/Command.h"
 #include "Commands/ListAllStockCommand.h"
-#include "Queries/GetAllStockQuery.h"
+#include "Queries/GetAllTransactionsQuery.h"
 
 
 namespace stock
@@ -44,7 +44,7 @@ namespace stock
 
         void handle(ListAllStocksCommand& command)
         {
-            if(command.all_commands.size() > 0)
+            if(!command.all_commands.empty())
             {
                 command.execute();
             }

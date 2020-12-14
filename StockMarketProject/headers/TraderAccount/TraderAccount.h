@@ -7,7 +7,6 @@
 #include <vector>
 
 #include "StandardTraderPolicy.h"
-#include "StudentTraderPolicy.h"
 #include "../StockMediator/Stock.h"
 
 template<typename TraderPolicy> class TraderAccount;
@@ -19,8 +18,20 @@ template<typename TraderPolicy = StandardTraderPolicy>
 class TraderAccount
 {
 private:
+    std::string id_;
     std::vector<Stock> ownedStocks;
 public:
+    explicit TraderAccount(std::string id)
+        : id_(id)
+    {
+    }
+
+
+    [[nodiscard]] std::string get_id() const
+    {
+        return id_;
+    }
+
     // TODO: Perfect forwarding?
     bool BuyStock(Stock & stock);
     bool SellStock(Stock & stock);

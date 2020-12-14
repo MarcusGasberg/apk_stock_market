@@ -16,7 +16,10 @@ namespace stock
     {
     public:
 
-        BuyStockCommand()  = default;
+        BuyStockCommand()
+        {
+            std::cout << "BUY CREATED\n";
+        }
 
         void execute()
         {

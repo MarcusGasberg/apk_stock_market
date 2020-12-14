@@ -13,7 +13,10 @@ namespace stock
     class SellStockCommand : public CommandBase
     {
     public:
-        SellStockCommand() = default;
+        SellStockCommand()
+        {
+            std::cout << "SELL CREATED\n";
+        }
 
         void execute()
         {

@@ -10,9 +10,9 @@
 #include "Commands/BuyStockCommand.h"
 #include "Commands/SellStockCommand.h"
 #include "Commands/Command.h"
-#include "Commands/ListAllStockCommand.h"
+#include "Commands/UndoLatestCommand.h"
 #include "Exceptions/BadCommandException.h"
-#include "Queries/GetAllStockQuery.h"
+#include "Queries/GetAllTransactionsQuery.h"
 #include "Queries/GetLatestStockQuery.h"
 
 namespace stock
@@ -59,22 +59,23 @@ namespace stock
     template <typename QueryVar, typename CommandVar>
     class StockBroker
     {
-        std::vector<CommandVar> all_commands;
-        boost::signals2::signal<void(QueryVar&)>& queries_sig_;
-        boost::signals2::signal<void(CommandVar&)>& command_sig_;
+        std::vector<CommandVar> all_transactions;
+        std::vector<boost::signals2::connection> connections;
+        boost::signals2::signal<void(std::shared_ptr<QueryVar>)>& queries_sig_;
+        boost::signals2::signal<void(std::shared_ptr<CommandVar>)>& command_sig_;
 
     public:
-        StockBroker(boost::signals2::signal<void(QueryVar&)>& queries_sig,
-            boost::signals2::signal<void(CommandVar&)>& command_sig)
+        StockBroker(boost::signals2::signal<void(std::shared_ptr<QueryVar>)>& queries_sig,
+            boost::signals2::signal<void(std::shared_ptr<CommandVar>)>& command_sig)
             : queries_sig_(queries_sig),
-              command_sig_(command_sig)
+            command_sig_(command_sig)
         {
-            const std::function<void(QueryVar&)> get_commands_from_stockbroker_f = [this](QueryVar& query)
+            const std::function<void(std::shared_ptr<QueryVar>)> get_commands_from_stockbroker_f = [this](std::shared_ptr<QueryVar> query)
             {
                 std::visit([this](auto&& q)
                     {
                         using T = std::decay_t<decltype(q)>;
-                        if constexpr (std::is_same_v<T, stock::GetAllStockQuery>)
+                        if constexpr (std::is_same_v<T, GetAllTransactionsQuery>)
                         {
                             auto buy_stocks = get_all_commands_of_type<stock::BuyStockCommand>();
                             auto sell_stocks = get_all_commands_of_type<stock::SellStockCommand>();
@@ -87,39 +88,32 @@ namespace stock
                                 q.result.push_back(s);
                             }
                         }
-                    }
-                , query);
+                    },
+                    *query);
             };
 
-            const std::function<void(QueryVar&)> get_latest_stock_f = [this](QueryVar& query)
+            const std::function<void(std::shared_ptr<CommandVar>)> commands_f = [this](std::shared_ptr<CommandVar> variant)
             {
-                std::visit([this](auto&& q)
+                std::visit([this](auto&& command)
                     {
-                        using T = std::decay_t<decltype(q)>;
-                        if constexpr (std::is_same_v<T, stock::GetLatestStockQuery>)
-                        {
-                            q.result = std::get<0>(all_commands.back());
-                        }
-                    }
-                , query);
-            };
-
-            const std::function<void(CommandVar&)> commands_f = [this](CommandVar& variant)
-            {
-                std::visit([&](auto&& command)
-                    {
-                        using T = std::decay_t<decltype(command)>;
-                        if constexpr (!stock::hasExecute<T>)
-                        {
-                            return;
-                        }
                         handle_command(command);
-                    }, variant);
+                    }, *variant);
             };
 
 
-            queries_sig_.connect(get_commands_from_stockbroker_f);
-            command_sig_.connect(commands_f);
+            auto query_connection = queries_sig_.connect(get_commands_from_stockbroker_f);
+            auto command_connection = command_sig_.connect(commands_f);
+            connections.push_back(query_connection);
+            connections.push_back(command_connection);
+        }
+
+        ~StockBroker()
+        {
+            for (int i = connections.size() - 1; i >= 0; --i)
+            {
+                connections[i].disconnect();
+                connections.pop_back();
+            }
         }
 
         template<typename Command>
@@ -132,27 +126,43 @@ namespace stock
             }
             if constexpr (std::is_same_v<T, BuyStockCommand>)
             {
-                buy(command);
+                handle(command);
             }
             else if constexpr (std::is_same_v<T, SellStockCommand>)
             {
-                sell(command);
+                handle(command);
+            }
+            else if constexpr (std::is_same_v<T, UndoLatestCommand>)
+            {
+                handle(command);
             }
         }
 
-        void buy(BuyStockCommand& buy_command)
+        void handle(BuyStockCommand& buy_command)
         {
             std::cout << "Stockbroker doing buy...\n";
             buy_command.execute();
-            all_commands.push_back(buy_command);
+            all_transactions.push_back(buy_command);
 
         }
 
-        void sell(SellStockCommand& sell_command)
+        void handle(SellStockCommand& sell_command)
         {
             std::cout << "Stockbroker doing sell...\n";
             sell_command.execute();
-            all_commands.push_back(sell_command);
+            all_transactions.push_back(sell_command);
+        }
+
+        void handle(UndoLatestCommand& undo_command)
+        {
+            auto latest = all_transactions.back();
+            if constexpr (hasUndo<std::decay_t<decltype(latest)>>)
+            {
+                std::cout << "Stockbroker undoing latest...\n";
+                latest.undo();
+                all_transactions.pop_back();
+            }
+
         }
 
         template<typename Command>
@@ -160,9 +170,9 @@ namespace stock
         {
             std::vector<std::shared_ptr<Command>> commands;
             to_vector_visitor<Command> visitor(commands);
-            for (size_t i = 0; i < all_commands.size(); ++i)
+            for (size_t i = 0; i < all_transactions.size(); ++i)
             {
-                std::visit(visitor, all_commands[i]);
+                std::visit(visitor, all_transactions[i]);
             }
             return commands;
         }
@@ -171,7 +181,7 @@ namespace stock
         void do_execute(Command& command)
         {
             command.execute();
-            all_commands.push_back(command);
+            all_transactions.push_back(command);
         }
     };
 } // namespace stock

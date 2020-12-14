@@ -5,7 +5,6 @@
 
 namespace stock
 {
-    template<typename UndoableCommandsVar>
     class UndoLatestCommand
     {
     public:

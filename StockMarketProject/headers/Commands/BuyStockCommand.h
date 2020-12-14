@@ -7,20 +7,31 @@
 #include <iostream>
 #include <sstream>
 #include <string>
+#include <utility>
 
 #include "CommandBase.h"
+#include "../TraderAccount/TraderAccount.h"
 
 namespace stock
 {
     class BuyStockCommand : public CommandBase
     {
+        std::shared_ptr<TraderAccount<>> buyer_account_;
+        std::shared_ptr<Stock> stock_;
     public:
 
-        BuyStockCommand()  = default;
+        BuyStockCommand()= default;
+
+
+        BuyStockCommand(std::shared_ptr<TraderAccount<>> buyer_account, std::shared_ptr<Stock> stock)
+            :
+              buyer_account_(std::move(buyer_account)), stock_(std::move(stock))
+        {
+        }
 
         void execute()
         {
-            std::cout << "Doing buy\n";
+            buyer_account_->BuyStock(*stock_);
         }
 
         void undo()

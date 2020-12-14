@@ -10,11 +10,11 @@ int main()
     StockMediator<void, int, int> mediator;
     TraderAccount traderAccount(std::move(mediator));
 
-    traderAccount.mediator_.subscribe("buy", &StockProvider::stockHasBeenBought, stockProvider);
+    boost::signals2::connection connection = traderAccount.mediator_.subscribe("buy", &StockProvider::stockHasBeenBought, stockProvider);
 
     traderAccount.buy();
 
-    traderAccount.mediator_.unSubscribe("buy", stockProvider);
+    traderAccount.mediator_.unSubscribe("buy", connection);
 
     traderAccount.buy();
 

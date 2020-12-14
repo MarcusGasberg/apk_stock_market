@@ -33,7 +33,7 @@ public:
     // TODO: Change T with actual provider or provider interface
     // TODO: Shared_pointer / Unique_pointer for connection?
     template<typename T>
-    void subscribe(const std::string & topic, returnType (T::* providerCallback)(params ...), T * providerObject)
+    boost::signals2::connection subscribe(const std::string & topic, returnType (T::* providerCallback)(params ...), T * providerObject)
     {
         // 1. Check if topic exists
         // 2. Check if provider already registered
@@ -61,29 +61,30 @@ public:
             {
                 throw "An error occurred when inserting topic map.";
             }
+            return connection;
         } else {
             std::cout << "Connecting: " << typeid(providerObject).name() << " to EXISTING topic: " << topic << std::endl;
-            topicIterator->second.connect(callback);
+            return topicIterator->second.connect(callback);
         }
     }
 
     // Provider must implement equality operator.
-    template<typename T>
-    void unSubscribe(const std::string & topic, T * providerObject)
+    // TODO: Make connection be handled by mediator.
+    // TODO: Make connections tracked.
+    void unSubscribe(const std::string & topic, boost::signals2::connection & connection)
     {
         // Only works if provider has equality operator.
-        if constexpr (HasEquality<T>()) {
+        if (connection.connected()) {
             // 1. Check if topic exists
             // 2. Remove connection for that topic.
             auto topicIterator = std::find_if(topicMap.begin(), topicMap.end(), [&](const auto &map) {
                 return map.first == topic;
             });
 
-            // Topic does not exist.
+            // Topic does exist.
             if (topicIterator != topicMap.end()) {
-                std::cout << "Disconnecting: " << typeid(providerObject).name() << " from topic: " << topicIterator->first
-                          << std::endl;
-                topicIterator->second.disconnect(providerObject);
+                std::cout << "Disconnecting from topic: " << topicIterator->first << std::endl;
+                connection.disconnect();
             }
         }
     }

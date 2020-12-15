@@ -6,45 +6,47 @@
 #define STOCKMARKETPROJECT_TRADERACCOUNT_H
 #include <vector>
 
-#include "StandardTraderPolicy.h"
-#include "../StockMediator/Stock.h"
+#include "Policies/StandardTraderPolicy.h"
+#include "../StockMediator/Mediator.h"
+#include "../Models/Stock.h"
+#include "TraderTopics.h"
 
-template<typename TraderPolicy> class TraderAccount;
+namespace stock {
+    template<typename TraderPolicy>
+    class TraderAccount;
 
-// Know all stock ids so it can send signal to StockMediator
-// Take some commission for trade based on behaviour policy (Student, Plus-Member, Standard)
-// Withdraw appropriated funds from account manager (either by reference or signal).
-template<typename TraderPolicy = StandardTraderPolicy>
-class TraderAccount
-{
-private:
-    std::string id_;
-    std::vector<Stock> ownedStocks;
-public:
-    explicit TraderAccount(std::string id)
-        : id_(id)
-    {
-    }
+    // Take some commission for trade based on behaviour policy (Student, Plus-Member, Standard)
+    // Withdraw appropriated funds from account manager (either by reference or signal).
+    template<typename TraderPolicy = StandardTraderPolicy>
+    class TraderAccount {
+    private:
+        std::string id_;
+        std::vector<Stock> ownedStocks_;
+        // TODO: Make shared ptr - several trader account can have same mediator?
+        Mediator<void, Stock> mediator_;
+    public:
+        explicit TraderAccount(std::string id, Mediator<void, Stock> && mediator)
+                : id_(id), mediator_(std::move(mediator)) {}
 
+       std::string get_id() const {
+            return id_;
+        }
 
-    [[nodiscard]] std::string get_id() const
-    {
-        return id_;
-    }
+        // TODO: Perfect forwarding?
+        bool BuyStock(Stock & stock) {
+            // TODO: Logic with policy and account manager
+            std::cout << "Buying " << stock.getStockId() << std::endl;
+            mediator_.notify(TOPICS[TraderTopics::BUY], std::move(stock));
+            return true;
+        }
 
-    // TODO: Perfect forwarding?
-    bool BuyStock(Stock & stock);
-    bool SellStock(Stock & stock);
-};
-
-template<typename TraderPolicy>
-bool TraderAccount<TraderPolicy>::BuyStock(Stock & stock) {
-    return true;
-}
-
-template<typename TraderPolicy>
-bool TraderAccount<TraderPolicy>::SellStock(Stock & stock) {
-    return true;
+        bool SellStock(Stock & stock) {
+            // TODO: Logic with policy and account manager
+            std::cout << "Selling " << stock.getStockId() << std::endl;
+            mediator_.notify(TOPICS[TraderTopics::BUY], std::move(stock));
+            return true;
+        }
+    };
 }
 
 #endif //STOCKMARKETPROJECT_TRADERACCOUNT_H

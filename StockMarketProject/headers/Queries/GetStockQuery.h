@@ -2,7 +2,7 @@
 #include <memory>
 #include <string>
 
-#include "../StockMediator/Stock.h"
+#include "../Models/Stock.h"
 
 
 namespace stock

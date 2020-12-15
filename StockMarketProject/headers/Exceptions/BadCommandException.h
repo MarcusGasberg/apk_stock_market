@@ -3,28 +3,27 @@
 
 namespace stock
 {
-    class BadCommandException : public std::exception
+    class BadCommandException : public std::runtime_error
     {
     public:
-
         BadCommandException() = default;
 
-        explicit BadCommandException(char const* const _Message)
-            : std::exception(_Message)
+        explicit BadCommandException(const runtime_error _Message)
+            : runtime_error(_Message)
         {
         }
 
-        BadCommandException(char const* const _Message, const int i)
-            : exception(_Message, i)
+        BadCommandException(char const* const _Message)
+                : runtime_error(_Message)
         {
         }
 
-        explicit BadCommandException(exception const& _Other)
-            : exception(_Other)
+        explicit BadCommandException(runtime_error const& _Other)
+            : runtime_error(_Other)
         {
         }
 
-        char const* what() const override
+        char const* what() const noexcept override
         {
             return exception::what();
         };

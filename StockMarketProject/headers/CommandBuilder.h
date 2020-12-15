@@ -38,10 +38,7 @@ namespace stock
                 std::shared_ptr<QueriesVar> queries_var = std::make_shared<QueriesVar>(GetStockQuery(stock_id));
                 queries_sig_(queries_var);
                 const GetStockQuery queries_result = std::get<GetStockQuery>(*queries_var);
-                if (queries_result.result)
-                {
-                    result = std::make_shared<CommandsVar>(BuyStockCommand(trader_account_, queries_result.result));
-                }
+                result = std::make_shared<CommandsVar>(BuyStockCommand(trader_account_, queries_result.result));
             }
             break;
             case 2:

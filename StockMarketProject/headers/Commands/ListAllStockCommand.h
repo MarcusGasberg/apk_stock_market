@@ -2,6 +2,7 @@
 #include <iostream>
 #include <string>
 #include <boost/signals2/signal.hpp>
+#include <utility>
 
 namespace stock
 {
@@ -11,8 +12,8 @@ namespace stock
 
         ListAllStocksCommand() = default;
 
-        ListAllStocksCommand(const std::vector<std::shared_ptr<TransactionBase>>& all_commands)
-            : all_commands(all_commands)
+        ListAllStocksCommand(std::vector<std::shared_ptr<TransactionBase>> all_commands)
+            : all_commands(std::move(all_commands))
         {
         }
 

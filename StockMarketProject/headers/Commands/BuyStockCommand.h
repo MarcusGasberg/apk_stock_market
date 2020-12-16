@@ -23,7 +23,7 @@ namespace stock
         BuyStockCommand()= default;
 
         BuyStockCommand(std::shared_ptr<TraderAccount<>> buyer_account, std::shared_ptr<Stock> stock)
-            :
+            : TransactionBase(),
               buyer_account_(std::move(buyer_account)), stock_(std::move(stock))
         {
         }
@@ -45,7 +45,7 @@ namespace stock
             std::cout << get_description() << ": Undoing buy...\n";
         }
 
-        [[nodiscard]] std::string get_description() const override
+        std::string get_description() const override
         {
             std::stringstream ss;
             ss << "BuyCommand[" << get_id() << "]";

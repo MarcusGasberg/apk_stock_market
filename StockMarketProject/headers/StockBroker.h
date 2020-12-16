@@ -48,11 +48,16 @@ namespace stock
         {
         }
 
-        void operator ()(T& val)
+        template <typename C>
+        void operator ()(C val)
         {
-            vec_.push_back(std::make_shared<T>(val));
+            if constexpr (std::is_base_of_v<T, C>)
+            {
+                vec_.push_back(std::make_shared<C>(val));
+            }
         }
 
+        template<typename >
         void operator()(...) const {}
     };
 
@@ -77,15 +82,10 @@ namespace stock
                         using T = std::decay_t<decltype(q)>;
                         if constexpr (std::is_same_v<T, GetAllTransactionsQuery>)
                         {
-                            auto buy_stocks = get_all_commands_of_type<stock::BuyStockCommand>();
-                            auto sell_stocks = get_all_commands_of_type<stock::SellStockCommand>();
-                            for (const auto& b : buy_stocks)
+                            auto transactions = get_all_transactions();
+                            for (auto transaction : transactions)
                             {
-                                q.result.push_back(b);
-                            }
-                            for (const auto& s : sell_stocks)
-                            {
-                                q.result.push_back(s);
+                                q.result.push_back(std::move(transaction));
                             }
                         }
                     },
@@ -162,11 +162,10 @@ namespace stock
                 }, latest);
         }
 
-        template<typename Command>
-        std::vector<std::shared_ptr<Command>> get_all_commands_of_type()
+        std::vector<std::shared_ptr<TransactionBase>> get_all_transactions()
         {
-            std::vector<std::shared_ptr<Command>> commands;
-            to_vector_visitor<Command> visitor(commands);
+            std::vector<std::shared_ptr<TransactionBase>> commands;
+            to_vector_visitor<TransactionBase> visitor(commands);
             for (size_t i = 0; i < all_transactions.size(); ++i)
             {
                 std::visit(visitor, all_transactions[i]);

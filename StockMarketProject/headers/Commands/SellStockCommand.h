@@ -33,7 +33,7 @@ namespace stock
             std::cout << "Undoing sell..." << "\n";
         }
 
-        [[nodiscard]] std::string get_description() const override
+        std::string get_description() const override
         {
             std::stringstream ss;
             ss << "SellCommand[" << get_id() << "]";

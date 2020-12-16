@@ -34,8 +34,8 @@ int main()
 
     stock::Mediator<void, stock::Stock> mediator;
     stock::AccountHolder<queries_var_t> account_holder(queries_sig);
-    const auto my_account = std::make_shared<stock::TraderAccount<>>(stock::TraderAccount<>("Jens", std::move(mediator)));
-    const auto other_account = std::make_shared<stock::TraderAccount<>>(stock::TraderAccount<>("Knud", std::move(mediator)));
+    const auto my_account = std::make_shared<stock::TraderAccount<>>(stock::TraderAccount<>("Jens", mediator));
+    const auto other_account = std::make_shared<stock::TraderAccount<>>(stock::TraderAccount<>("Knud", mediator));
     account_holder.add_account(my_account);
     account_holder.add_account(other_account);
 

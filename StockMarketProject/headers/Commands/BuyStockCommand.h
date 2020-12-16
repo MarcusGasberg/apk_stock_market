@@ -30,7 +30,14 @@ namespace stock
 
         void execute()
         {
-            buyer_account_->BuyStock(*stock_);
+            if(stock_)
+            {
+                buyer_account_->BuyStock(*stock_);
+            }
+            else
+            {
+                std::cout << "Stock not found\n";
+            }
         }
 
         void undo()

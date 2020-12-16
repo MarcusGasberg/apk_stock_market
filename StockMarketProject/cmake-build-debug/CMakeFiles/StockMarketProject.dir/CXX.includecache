@@ -189,6 +189,8 @@ Queries/GetAllTransactionsQuery.h
 /home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/Helpers/IsNumeric.h
 
 /home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/TraderAccount/TraderAccount.h
+utility
+-
 vector
 -
 Policies/StandardTraderPolicy.h

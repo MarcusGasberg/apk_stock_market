@@ -4,6 +4,7 @@
 
 #ifndef STOCKMARKETPROJECT_TRADERACCOUNT_H
 #define STOCKMARKETPROJECT_TRADERACCOUNT_H
+#include <utility>
 #include <vector>
 
 #include "Policies/StandardTraderPolicy.h"
@@ -23,10 +24,10 @@ namespace stock {
         std::string id_;
         std::vector<Stock> ownedStocks_;
         // TODO: Make shared ptr - several trader account can have same mediator?
-        Mediator<void, Stock> mediator_;
+        Mediator<void, Stock>& mediator_;
     public:
-        explicit TraderAccount(std::string id, Mediator<void, Stock> && mediator)
-                : id_(id), mediator_(std::move(mediator)) {}
+        explicit TraderAccount(std::string id, Mediator<void, Stock>& mediator)
+                : id_(std::move(id)), mediator_(mediator) {}
 
        std::string get_id() const {
             return id_;

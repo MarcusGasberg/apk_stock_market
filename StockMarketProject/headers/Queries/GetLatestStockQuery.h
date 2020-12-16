@@ -2,12 +2,12 @@
 
 #include <memory>
 
-#include "../Commands/CommandBase.h"
+#include "../Commands/TransactionBase.h"
 
 namespace stock
 {
     struct GetLatestStockQuery
     {
-        std::shared_ptr<CommandBase> result;
+        std::shared_ptr<TransactionBase> result;
     };
 }

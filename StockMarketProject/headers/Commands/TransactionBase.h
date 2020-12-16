@@ -1,13 +1,13 @@
 #pragma once
 namespace stock
 {
-    class CommandBase
+    class TransactionBase
     {
         int id_;
         inline static int current_id;
     public:
-        virtual ~CommandBase() = default;
-        CommandBase() : id_(current_id++) {  }
+        virtual ~TransactionBase() = default;
+        TransactionBase() : id_(current_id++) {  }
 
         [[nodiscard]] int get_id() const
         {

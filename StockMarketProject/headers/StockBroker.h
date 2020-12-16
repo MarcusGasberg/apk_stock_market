@@ -124,45 +124,42 @@ namespace stock
             {
                 throw stock::BadCommandException("No execute");
             }
-            if constexpr (std::is_same_v<T, BuyStockCommand>)
+            if constexpr (std::is_base_of_v<TransactionBase, T> && hasUndo<std::decay_t<T>>)
             {
-                handle(command);
-            }
-            else if constexpr (std::is_same_v<T, SellStockCommand>)
-            {
-                handle(command);
+                do_transaction(command);
             }
             else if constexpr (std::is_same_v<T, UndoLatestCommand>)
             {
-                handle(command);
+                undo_latest_transaction(command);
             }
         }
 
-        void handle(BuyStockCommand& buy_command)
+        template<typename TTransaction>
+        void do_transaction(TTransaction transaction)
         {
-            std::cout << "Stockbroker doing buy...\n";
-            buy_command.execute();
-            all_transactions.push_back(buy_command);
-
+            transaction.execute();
+            all_transactions.push_back(transaction);
         }
 
-        void handle(SellStockCommand& sell_command)
+        void undo_latest_transaction(UndoLatestCommand& undo_command)
         {
-            std::cout << "Stockbroker doing sell...\n";
-            sell_command.execute();
-            all_transactions.push_back(sell_command);
-        }
-
-        void handle(UndoLatestCommand& undo_command)
-        {
-            auto latest = all_transactions.back();
-            if constexpr (hasUndo<std::decay_t<decltype(latest)>>)
+            if(all_transactions.empty())
             {
-                std::cout << "Stockbroker undoing latest...\n";
-                latest.undo();
-                all_transactions.pop_back();
+                std::cout << "No more transactions...\n";
+                return;
             }
 
+            auto latest =  all_transactions.back();
+
+            std::visit([&](auto&& val)
+                {
+                    if constexpr (hasUndo<std::decay_t<decltype(val)>> )
+                    {
+                        std::cout << "Stockbroker undoing latest...\n";
+                        val.undo();
+                        all_transactions.pop_back();
+                    }
+                }, latest);
         }
 
         template<typename Command>

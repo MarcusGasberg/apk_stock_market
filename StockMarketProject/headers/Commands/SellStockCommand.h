@@ -6,11 +6,11 @@
 #define STOCKMARKETPROJECT_SELLSTOCKCOMMAND_H
 #include <iostream>
 #include <ostream>
-#include "CommandBase.h"
+#include "TransactionBase.h"
 
 namespace stock
 {
-    class SellStockCommand : public CommandBase
+    class SellStockCommand : public TransactionBase
     {
         std::shared_ptr<TraderAccount<>> seller_account_;
     public:

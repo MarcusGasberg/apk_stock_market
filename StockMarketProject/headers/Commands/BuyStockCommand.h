@@ -9,12 +9,12 @@
 #include <string>
 #include <utility>
 
-#include "CommandBase.h"
+#include "TransactionBase.h"
 #include "../TraderAccount/TraderAccount.h"
 
 namespace stock
 {
-    class BuyStockCommand : public CommandBase
+    class BuyStockCommand : public TransactionBase
     {
         std::shared_ptr<TraderAccount<>> buyer_account_;
         std::shared_ptr<Stock> stock_;

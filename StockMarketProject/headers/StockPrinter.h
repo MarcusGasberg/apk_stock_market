@@ -2,27 +2,20 @@
 #include <variant>
 #include <boost/signals2/signal.hpp>
 
-#include "Commands/Command.h"
 #include "Commands/ListAllStockCommand.h"
 #include "Queries/GetAllTransactionsQuery.h"
 
 
 namespace stock
 {
-    template <typename QueryVar, typename CommandVar>
     class StockPrinter
     {
-        std::vector<std::shared_ptr<CommandVar>> all_commands;
-        boost::signals2::signal<void(std::shared_ptr<QueryVar>)>& queries_sig_;
-        boost::signals2::signal<void(std::shared_ptr<CommandVar>)>& command_sig_;
+        std::vector<std::shared_ptr<commands_var_t>> all_commands;
 
     public:
-        StockPrinter(boost::signals2::signal<void(std::shared_ptr<QueryVar>)>& queries_sig,
-                     boost::signals2::signal<void(std::shared_ptr<CommandVar>)>& command_sig)
-            : queries_sig_(queries_sig),
-              command_sig_(command_sig)
+        StockPrinter(boost::signals2::signal<void(std::shared_ptr<commands_var_t>)>& command_sig)
         {
-            const std::function<void(std::shared_ptr<CommandVar>)> commands_f = [this](std::shared_ptr<CommandVar> variant)
+            const std::function<void(std::shared_ptr<commands_var_t>)> commands_f = [this](std::shared_ptr<commands_var_t> variant)
             {
                 std::visit([&](auto&& command)
                 {
@@ -39,7 +32,7 @@ namespace stock
             };
 
 
-            command_sig_.connect(commands_f);
+            command_sig.connect(commands_f);
         }
 
         void handle(ListAllStocksCommand& command)

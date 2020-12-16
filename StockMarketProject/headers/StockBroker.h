@@ -1,7 +1,6 @@
 #pragma once
 #include <variant>
 #include <type_traits>
-#include <tuple>
 #include <vector>
 #include <functional>
 #include <boost/signals2/signal.hpp>
@@ -9,35 +8,14 @@
 
 #include "Commands/BuyStockCommand.h"
 #include "Commands/SellStockCommand.h"
-#include "Commands/Command.h"
+#include "Commands/Commands.h"
 #include "Commands/UndoLatestCommand.h"
 #include "Exceptions/BadCommandException.h"
 #include "Queries/GetAllTransactionsQuery.h"
-#include "Queries/GetLatestStockQuery.h"
+#include "Queries/Queries.h"
 
 namespace stock
 {
-    template <typename... T>
-    struct TypeList
-    {
-        template<template<typename ...> typename MFn>
-        using apply = MFn<T...>;
-    };
-
-    template <template<typename ...> typename MFn, typename TList >
-    using apply = typename TList::template apply<MFn>;
-
-
-    template <typename TList>
-    using typelist_variant_t = apply<std::variant, TList>;
-
-    template <typename ...T>
-    std::variant<T...> as_variant(TypeList<T...>);
-
-
-    template <typename ...T>
-    std::tuple<T...> as_tuple(TypeList<T...>);
-
     template<typename T>
     class to_vector_visitor
     {
@@ -61,21 +39,17 @@ namespace stock
         void operator()(...) const {}
     };
 
-    template <typename QueryVar, typename CommandVar>
     class StockBroker
     {
-        std::vector<CommandVar> all_transactions;
+        std::vector<commands_var_t> all_transactions;
         std::vector<boost::signals2::connection> connections;
-        boost::signals2::signal<void(std::shared_ptr<QueryVar>)>& queries_sig_;
-        boost::signals2::signal<void(std::shared_ptr<CommandVar>)>& command_sig_;
 
     public:
-        StockBroker(boost::signals2::signal<void(std::shared_ptr<QueryVar>)>& queries_sig,
-            boost::signals2::signal<void(std::shared_ptr<CommandVar>)>& command_sig)
-            : queries_sig_(queries_sig),
-            command_sig_(command_sig)
+        StockBroker(boost::signals2::signal<void(std::shared_ptr<queries_var_t>)>& queries_sig,
+            boost::signals2::signal<void(std::shared_ptr<commands_var_t>)>& command_sig)
         {
-            const std::function<void(std::shared_ptr<QueryVar>)> get_commands_from_stockbroker_f = [this](std::shared_ptr<QueryVar> query)
+            const std::function<void(std::shared_ptr<queries_var_t>)> get_commands_from_stockbroker_f =
+                [this](const std::shared_ptr<queries_var_t> query)
             {
                 std::visit([this](auto&& q)
                     {
@@ -92,7 +66,8 @@ namespace stock
                     *query);
             };
 
-            const std::function<void(std::shared_ptr<CommandVar>)> commands_f = [this](std::shared_ptr<CommandVar> variant)
+            const std::function<void(std::shared_ptr<commands_var_t>)> commands_f = 
+                [this](const std::shared_ptr<commands_var_t> variant)
             {
                 std::visit([this](auto&& command)
                     {
@@ -101,8 +76,8 @@ namespace stock
             };
 
 
-            auto query_connection = queries_sig_.connect(get_commands_from_stockbroker_f);
-            auto command_connection = command_sig_.connect(commands_f);
+            const auto query_connection = queries_sig.connect(get_commands_from_stockbroker_f);
+            const auto command_connection = command_sig.connect(commands_f);
             connections.push_back(query_connection);
             connections.push_back(command_connection);
         }
@@ -175,18 +150,11 @@ namespace stock
         {
             std::vector<std::shared_ptr<TransactionBase>> commands;
             to_vector_visitor<TransactionBase> visitor(commands);
-            for (size_t i = 0; i < all_transactions.size(); ++i)
+            for (auto& all_transaction : all_transactions)
             {
-                std::visit(visitor, all_transactions[i]);
+                std::visit(visitor, all_transaction);
             }
             return commands;
-        }
-
-        template <typename Command>
-        void do_execute(Command& command)
-        {
-            command.execute();
-            all_transactions.push_back(command);
         }
     };
 } // namespace stock

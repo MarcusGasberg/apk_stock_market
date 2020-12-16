@@ -1,6 +1,13 @@
 #pragma once
 #include <type_traits>
 
+
+#include "BuyStockCommand.h"
+#include "ListAllStockCommand.h"
+#include "SellStockCommand.h"
+#include "UndoLatestCommand.h"
+#include "../TypeList.h"
+
 namespace stock
 {
     // Inspiration from 19.5 (p. 428) of C++ Templates: The Complete Guide
@@ -45,4 +52,8 @@ namespace stock
 
     template<typename T>
     constexpr bool hasUndo = HasUndoT<T>::value;
+
+
+    using commands_t = TypeList<stock::BuyStockCommand, stock::SellStockCommand, stock::ListAllStocksCommand, stock::UndoLatestCommand>;
+    using commands_var_t = stock::typelist_variant_t<commands_t>;
 }

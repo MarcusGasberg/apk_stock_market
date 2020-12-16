@@ -7,18 +7,15 @@
 #include "headers/TransactionUndoer.h"
 #include "headers/AccountManager/AccountHolder.h"
 #include "headers/Commands/BuyStockCommand.h"
+#include "headers/Commands/Commands.h"
 #include "headers/Commands/SellStockCommand.h"
 #include "headers/Queries/GetAllTransactionsQuery.h"
 #include "headers/Queries/GetStockQuery.h"
 #include "headers/Queries/GetTraderAccountQuery.h"
+#include "headers/Queries/Queries.h"
 
 int main()
 {
-    using commands_t = stock::TypeList<stock::BuyStockCommand, stock::SellStockCommand, stock::ListAllStocksCommand, stock::UndoLatestCommand>;
-    using commands_var_t = stock::typelist_variant_t<commands_t>;
-
-    using queries_t = stock::TypeList<stock::GetAllTransactionsQuery, stock::GetLatestStockQuery, stock::GetTraderAccountQuery, stock::GetStockQuery>;
-    using queries_var_t = stock::typelist_variant_t<queries_t>;
 
     std::cout << "_______________________________________" << std::endl;
     std::cout << "     Welcome To Northern Networks    " << std::endl;
@@ -30,22 +27,22 @@ int main()
     std::cout << "4: Undo Latest" << std::endl;
 
 
-    boost::signals2::signal<void(std::shared_ptr<commands_var_t>)> command_sig;
-    boost::signals2::signal<void(std::shared_ptr<queries_var_t>)> queries_sig;
+    boost::signals2::signal<void(std::shared_ptr<stock::commands_var_t>)> command_sig;
+    boost::signals2::signal<void(std::shared_ptr<stock::queries_var_t>)> queries_sig;
 
     stock::Mediator<void, stock::Stock> mediator;
-    stock::AccountHolder<queries_var_t> account_holder(queries_sig);
+    stock::AccountHolder<stock::queries_var_t> account_holder(queries_sig);
     const auto my_account = std::make_shared<stock::TraderAccount<>>(stock::TraderAccount<>("Jens", mediator));
     const auto other_account = std::make_shared<stock::TraderAccount<>>(stock::TraderAccount<>("Knud", mediator));
     account_holder.add_account(my_account);
     account_holder.add_account(other_account);
 
 
-    stock::StockBroker<queries_var_t, commands_var_t> stock_broker(queries_sig, command_sig);
-    stock::StockPrinter<queries_var_t, commands_var_t> stock_printer(queries_sig, command_sig);
-    stock::CommandBuilder<queries_var_t, commands_var_t> command_builder(queries_sig, my_account);
+    stock::StockBroker stock_broker(queries_sig, command_sig);
+    stock::StockPrinter stock_printer(command_sig);
+    stock::CommandBuilder command_builder(queries_sig, my_account);
 
-    stock::TransactionUndoer<commands_var_t> transaction_undoer(command_sig);
+    stock::TransactionUndoer transaction_undoer(command_sig);
 
     while (true)
     {

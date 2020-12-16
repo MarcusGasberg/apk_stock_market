@@ -3,22 +3,18 @@
 #include <variant>
 #include <boost/signals2/signal.hpp>
 
-#include "Commands/Command.h"
 #include "Commands/UndoLatestCommand.h"
 
 
 namespace stock
 {
-    template <typename CommandVar>
     class TransactionUndoer
     {
-        boost::signals2::signal<void(std::shared_ptr<CommandVar>)>& command_sig_;
 
     public:
-        TransactionUndoer(boost::signals2::signal<void(std::shared_ptr<CommandVar>)>& command_sig)
-            : command_sig_(command_sig)
+        TransactionUndoer(boost::signals2::signal<void(std::shared_ptr<commands_var_t>)>& command_sig)
         {
-            const std::function<void(std::shared_ptr<CommandVar>)> commands_f = [this](std::shared_ptr<CommandVar> variant)
+            const std::function<void(std::shared_ptr<commands_var_t>)> commands_f = [this](std::shared_ptr<commands_var_t> variant)
             {
                 std::visit([&](auto&& command)
                     {
@@ -35,7 +31,7 @@ namespace stock
             };
 
 
-            command_sig_.connect(commands_f);
+            command_sig.connect(commands_f);
         }
     };
 }

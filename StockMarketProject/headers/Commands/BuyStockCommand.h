@@ -42,7 +42,10 @@ namespace stock
 
         void undo()
         {
-            std::cout << get_description() << ": Undoing buy...\n";
+            if (stock_)
+            {
+                buyer_account_->SellStock(*stock_);
+            }
         }
 
         std::string get_description() const override

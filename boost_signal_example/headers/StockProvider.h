@@ -18,15 +18,6 @@ public:
         std::cout << "Someone bought " << amount << " stocks for the price of " << price << " with id " << "314d4123" << std::endl;
     }
 
-    bool operator==(const StockProvider &rhs) const {
-        std::cout << "Equality operator" << std::endl;
-        return name == rhs.name;
-    }
-
-    bool operator!=(const StockProvider &rhs) const {
-        std::cout << "Equality operator" << std::endl;
-        return !(rhs == *this);
-    }
 };
 
 #endif //BOOST_SIGNAL_EXAMPLE_STOCKPROVIDER_H

@@ -100,7 +100,13 @@
 		<Unit filename="/home/stud/Desktop/Clion/apk_stock_market/boost_signal_example/headers/StockProvider.h">
 			<Option target="boost_signal_example"/>
 		</Unit>
+		<Unit filename="/home/stud/Desktop/Clion/apk_stock_market/boost_signal_example/headers/TimeLiteral.h">
+			<Option target="boost_signal_example"/>
+		</Unit>
 		<Unit filename="/home/stud/Desktop/Clion/apk_stock_market/boost_signal_example/headers/TraderAccount.h">
+			<Option target="boost_signal_example"/>
+		</Unit>
+		<Unit filename="/home/stud/Desktop/Clion/apk_stock_market/boost_signal_example/headers/TraderTopics.h">
 			<Option target="boost_signal_example"/>
 		</Unit>
 		<Unit filename="/home/stud/Desktop/Clion/apk_stock_market/boost_signal_example/main.cpp">

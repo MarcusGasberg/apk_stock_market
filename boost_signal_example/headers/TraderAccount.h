@@ -6,6 +6,7 @@
 #define BOOST_SIGNAL_EXAMPLE_TRADERACCOUNT_H
 
 #include "StockMediator.h"
+#include "TraderTopics.h"
 #include <string>
 
 
@@ -21,15 +22,14 @@ public:
     {
         // Do business logic
         // Trigger mediator topic "buy"
-
-        mediator_.notify(buy_, 10, 22);
+        mediator_.notify(TOPICS[TraderTopics::BUY], 10, 22);
     }
 
     void sell()
     {
         // Do business logic
         // Trigger mediator topic "sell"
-        mediator_.notify(sell_, 10, 22);
+        mediator_.notify(TOPICS[TraderTopics::SELL], 10, 22);
     }
 };
 #endif //BOOST_SIGNAL_EXAMPLE_TRADERACCOUNT_H

@@ -2,8 +2,8 @@
 // Created by stud on 12/16/20.
 //
 
-#ifndef STOCKMARKETPROJECT_TIMEPRINTER_H
-#define STOCKMARKETPROJECT_TIMEPRINTER_H
+#ifndef STOCKMARKETPROJECT_USERLITERALS_H
+#define STOCKMARKETPROJECT_USERLITERALS_H
 #include <iostream>
 
 // Inspiration from https://en.cppreference.com/w/cpp/language/user_literal
@@ -15,4 +15,4 @@ void operator"" _print(const char * str, std::size_t N)
     std::cout << std::string{str} << " " << dt << std::endl;
 }
 
-#endif //STOCKMARKETPROJECT_TIMEPRINTER_H
+#endif //STOCKMARKETPROJECT_USERLITERALS_H

@@ -103,6 +103,9 @@
 		<Unit filename="/home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/Exceptions/BadCommandException.h">
 			<Option target="StockMarketProject"/>
 		</Unit>
+		<Unit filename="/home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/Helpers/TimePrinter.h">
+			<Option target="StockMarketProject"/>
+		</Unit>
 		<Unit filename="/home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/Models/Stock.h">
 			<Option target="StockMarketProject"/>
 		</Unit>
@@ -118,10 +121,10 @@
 		<Unit filename="/home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/StockBroker.h">
 			<Option target="StockMarketProject"/>
 		</Unit>
-		<Unit filename="/home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/StockMediator/Placeholders.h">
+		<Unit filename="/home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/StockMediator/Mediator.h">
 			<Option target="StockMarketProject"/>
 		</Unit>
-		<Unit filename="/home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/StockMediator/StockMediator.h">
+		<Unit filename="/home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/StockMediator/Placeholders.h">
 			<Option target="StockMarketProject"/>
 		</Unit>
 		<Unit filename="/home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/StockPrinter.h">

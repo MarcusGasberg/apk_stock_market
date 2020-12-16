@@ -156,19 +156,19 @@ Queries/GetAllTransactionsQuery.h
 Queries/GetLatestStockQuery.h
 /home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/Queries/GetLatestStockQuery.h
 
-/home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/StockMediator/Placeholders.h
-iostream
-/home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/StockMediator/iostream
-functional
-/home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/StockMediator/functional
-
-/home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/StockMediator/StockMediator.h
+/home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/StockMediator/Mediator.h
 Placeholders.h
 /home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/StockMediator/Placeholders.h
 boost/signals2.hpp
 /home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/StockMediator/boost/signals2.hpp
 iostream
 /home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/StockMediator/iostream
+
+/home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/StockMediator/Placeholders.h
+iostream
+/home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/StockMediator/iostream
+functional
+/home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/StockMediator/functional
 
 /home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/StockPrinter.h
 variant
@@ -193,8 +193,8 @@ vector
 -
 Policies/StandardTraderPolicy.h
 /home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/TraderAccount/Policies/StandardTraderPolicy.h
-../StockMediator/StockMediator.h
-/home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/StockMediator/StockMediator.h
+../StockMediator/Mediator.h
+/home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/StockMediator/Mediator.h
 ../Models/Stock.h
 /home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/Models/Stock.h
 TraderTopics.h

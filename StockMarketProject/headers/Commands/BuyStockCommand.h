@@ -22,7 +22,6 @@ namespace stock
 
         BuyStockCommand()= default;
 
-
         BuyStockCommand(std::shared_ptr<TraderAccount<>> buyer_account, std::shared_ptr<Stock> stock)
             :
               buyer_account_(std::move(buyer_account)), stock_(std::move(stock))

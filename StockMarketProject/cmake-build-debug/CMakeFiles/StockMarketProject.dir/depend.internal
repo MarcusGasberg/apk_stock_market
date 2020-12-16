@@ -19,8 +19,8 @@ CMakeFiles/StockMarketProject.dir/main.cpp.o
  /home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/Queries/GetStockQuery.h
  /home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/Queries/GetTraderAccountQuery.h
  /home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/StockBroker.h
+ /home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/StockMediator/Mediator.h
  /home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/StockMediator/Placeholders.h
- /home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/StockMediator/StockMediator.h
  /home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/StockPrinter.h
  /home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/TraderAccount/Policies/StandardTraderPolicy.h
  /home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/TraderAccount/TraderAccount.h

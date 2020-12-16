@@ -4,6 +4,7 @@
 #include "headers/CommandBuilder.h"
 #include "headers/StockBroker.h"
 #include "headers/StockPrinter.h"
+#include "headers/TransactionUndoer.h"
 #include "headers/AccountManager/AccountHolder.h"
 #include "headers/Commands/BuyStockCommand.h"
 #include "headers/Commands/SellStockCommand.h"
@@ -44,7 +45,7 @@ int main()
     stock::StockPrinter<queries_var_t, commands_var_t> stock_printer(queries_sig, command_sig);
     stock::CommandBuilder<queries_var_t, commands_var_t> command_builder(queries_sig, my_account);
 
-
+    stock::TransactionUndoer<commands_var_t> transaction_undoer(command_sig);
 
     while (true)
     {

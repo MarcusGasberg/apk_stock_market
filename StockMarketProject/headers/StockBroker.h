@@ -111,8 +111,11 @@ namespace stock
         {
             for (int i = connections.size() - 1; i >= 0; --i)
             {
-                connections[i].disconnect();
-                connections.pop_back();
+                if (connections[i].connected())
+                {
+                    connections[i].disconnect();
+                    connections.pop_back();
+                }
             }
         }
 
@@ -122,7 +125,7 @@ namespace stock
             using T = std::decay_t<decltype(command)>;
             if constexpr (!hasExecute<T>)
             {
-                throw stock::BadCommandException("No execute");
+                throw BadCommandException("No execute");
             }
             if constexpr (std::is_base_of_v<TransactionBase, T> && hasUndo<std::decay_t<T>>)
             {
@@ -143,23 +146,29 @@ namespace stock
 
         void undo_latest_transaction(UndoLatestCommand& undo_command)
         {
-            if(all_transactions.empty())
+            if (all_transactions.empty())
             {
-                std::cout << "No more transactions...\n";
+                std::cout << "No more transactions in stock broker...\n";
                 return;
             }
 
-            auto latest =  all_transactions.back();
+            std::function<void()> f = [this]()
+            {
 
-            std::visit([&](auto&& val)
-                {
-                    if constexpr (hasUndo<std::decay_t<decltype(val)>> )
+                auto latest = all_transactions.back();
+
+                std::visit([&](auto&& val)
                     {
-                        std::cout << "Stockbroker undoing latest...\n";
-                        val.undo();
-                        all_transactions.pop_back();
-                    }
-                }, latest);
+                        if constexpr (hasUndo<std::decay_t<decltype(val)>>)
+                        {
+                            std::cout << "Stockbroker undoing latest...\n";
+                            val.undo();
+                            all_transactions.pop_back();
+                        }
+                    }, latest);
+            };
+
+            undo_command.add_undo_action(f);
         }
 
         std::vector<std::shared_ptr<TransactionBase>> get_all_transactions()

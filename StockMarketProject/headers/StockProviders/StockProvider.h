@@ -17,10 +17,11 @@ namespace stock {
         std::string name_;
         PriceProvider& price_provider_;
         std::vector<Stock> stocks_for_sale;
+        Mediator<void, Stock&>& mediator_;
     public:
-        StockProvider(std::string&& name, PriceProvider& price_provider, queries_sig_t& queries_sig) :
+        StockProvider(std::string&& name, PriceProvider& price_provider, queries_sig_t& queries_sig, Mediator<void, Stock&>& mediator) :
             name_(std::move(name)),
-            price_provider_(price_provider)
+            price_provider_(price_provider), mediator_(mediator)
         {
             const std::function<void(std::shared_ptr<queries_var_t>)> get_stock_f = [this](const std::shared_ptr<queries_var_t> query_var)
             {
@@ -47,11 +48,32 @@ namespace stock {
                                 query.result.push_back(stock);
                             });
                         }
+                        if constexpr (std::is_same_v<T, GetStockPriceQuery>)
+                        {
+                            query.result = std::make_shared<Price>(price_provider_.get_price(query.get_stock_id()));
+                        }
                     }, 
                     *query_var);
             };
 
             queries_sig.connect(get_stock_f);
+
+            mediator_.subscribe(TOPICS[TraderTopics::BUY], &StockProvider::remove_bought_stock, this);
+            mediator_.subscribe(TOPICS[TraderTopics::SELL], &StockProvider::add_sold_stock, this);
+        }
+
+        void remove_bought_stock(Stock& stock)
+        {
+            const auto remove_itr = std::remove_if(stocks_for_sale.begin(), stocks_for_sale.end(), [&stock](Stock& st)
+            {
+                return st.getStockId() == stock.getStockId();
+            });
+            stocks_for_sale.erase(remove_itr);
+        }
+
+        void add_sold_stock(Stock& stock)
+        {
+            stocks_for_sale.push_back(stock);
         }
 
         void add_stock_for_sale(const Stock& stock)

@@ -25,7 +25,7 @@ namespace std {
 template<class R, class T, class...Types,  int... indices>
 std::function<R (Types...)> custom_bind(R (T::* providerCallback)(Types ...), T * providerObject, std::integer_sequence<int, indices...>)
 {
-    return std::bind(providerCallback, std::ref(providerObject), custom_placeholder<indices+1>::cp...);
+    return std::bind(providerCallback, providerObject, custom_placeholder<indices+1>::cp...);
 }
 
 template<class R, class T, class...Types>

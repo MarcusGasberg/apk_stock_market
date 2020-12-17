@@ -42,7 +42,18 @@ namespace stock
             }
             break;
             case 2:
-                result = std::make_shared<commands_var_t>(SellStockCommand(trader_account_));
+                {
+                std::cout << "What kind of stock do you want to buy?" << "\n";
+                std::string stock_id;
+                std::getline(std::cin, stock_id);
+
+                using TQuery = GetStockPriceQuery;
+                const std::shared_ptr<queries_var_t> queries_var = std::make_shared<queries_var_t>(TQuery(std::move(stock_id)));
+                queries_sig_(queries_var);
+                auto queries_result = std::get<TQuery>(*queries_var);
+
+                result = std::make_shared<commands_var_t>(SellStockCommand(trader_account_,std::move(queries_result.get_stock_id()), queries_result.result));
+                }
                 break;
             case 3:
             {

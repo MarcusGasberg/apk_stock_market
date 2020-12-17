@@ -135,7 +135,6 @@ namespace stock
 
             std::function<void()> undo_latest_f = [this]()
             {
-
                 auto latest = all_transactions.back();
 
                 std::visit([&](auto&& val)

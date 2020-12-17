@@ -13,13 +13,13 @@ namespace stock
     {
     private:
         std::string stockId;
-        uint64_t amount_{};
+        int amount_{};
         std::shared_ptr<Price> price_;
     public:
 
         Stock() = default;
 
-        Stock(std::string&& stock_id,  const uint64_t amount)
+        Stock(std::string&& stock_id,  const int amount)
             : stockId(std::move(stock_id)),
               amount_(amount)
         {
@@ -33,11 +33,11 @@ namespace stock
             Stock::stockId = stockId;
         }
 
-        uint64_t getAmount() const {
+        int getAmount() const {
             return amount_;
         }
 
-        void setAmount(uint64_t amount) {
+        void setAmount(int amount) {
             Stock::amount_ = amount;
         }
 

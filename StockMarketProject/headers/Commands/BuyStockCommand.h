@@ -48,7 +48,7 @@ namespace stock
         {
             if(stock_)
             {
-                buyer_account_->BuyStock(*stock_, stock_price_);
+                buyer_account_->buy_stock(*stock_, stock_price_);
             }
             else
             {
@@ -60,7 +60,7 @@ namespace stock
         {
             if (stock_)
             {
-                buyer_account_->SellStock(*stock_, stock_price_);
+                buyer_account_->sell_stock(*stock_, stock_price_);
             }
         }
 

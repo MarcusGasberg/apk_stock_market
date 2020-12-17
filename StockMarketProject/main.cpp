@@ -35,7 +35,6 @@ int main()
 
     my_account->deposit(1000);
 
-
     stock::StockBroker stock_broker(queries_sig, command_sig);
     stock::StockPrinter stock_printer(command_sig);
     stock::CommandBuilder command_builder(queries_sig, my_account);

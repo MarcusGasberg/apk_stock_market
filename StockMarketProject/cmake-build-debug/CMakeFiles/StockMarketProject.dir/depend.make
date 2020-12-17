@@ -17,6 +17,7 @@ CMakeFiles/StockMarketProject.dir/main.cpp.o: ../headers/Models/Stock.h
 CMakeFiles/StockMarketProject.dir/main.cpp.o: ../headers/Queries/GetAllStockQuery.h
 CMakeFiles/StockMarketProject.dir/main.cpp.o: ../headers/Queries/GetAllTransactionsQuery.h
 CMakeFiles/StockMarketProject.dir/main.cpp.o: ../headers/Queries/GetLatestStockQuery.h
+CMakeFiles/StockMarketProject.dir/main.cpp.o: ../headers/Queries/GetStockPriceQuery.h
 CMakeFiles/StockMarketProject.dir/main.cpp.o: ../headers/Queries/GetStockQuery.h
 CMakeFiles/StockMarketProject.dir/main.cpp.o: ../headers/Queries/GetTraderAccountQuery.h
 CMakeFiles/StockMarketProject.dir/main.cpp.o: ../headers/Queries/Queries.h

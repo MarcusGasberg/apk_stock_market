@@ -17,6 +17,7 @@ namespace stock {
         std::string name_;
         PriceProvider& price_provider_;
         std::vector<Stock> stocks_for_sale;
+        std::vector<boost::signals2::connection> connections;
         Mediator<void, Stock&>& mediator_;
     public:
         StockProvider(std::string&& name, PriceProvider& price_provider, queries_sig_t& queries_sig, Mediator<void, Stock&>& mediator) :
@@ -58,8 +59,22 @@ namespace stock {
 
             queries_sig.connect(get_stock_f);
 
-            mediator_.subscribe(TOPICS[TraderTopics::BUY], &StockProvider::remove_bought_stock, this);
-            mediator_.subscribe(TOPICS[TraderTopics::SELL], &StockProvider::add_sold_stock, this);
+            auto buy_connection = mediator_.subscribe(TOPICS[TraderTopics::BUY], &StockProvider::remove_bought_stock, this);
+            auto sell_connection = mediator_.subscribe(TOPICS[TraderTopics::SELL], &StockProvider::add_sold_stock, this);
+            connections.push_back(buy_connection);
+            connections.push_back(sell_connection);
+
+        }
+
+        virtual ~StockProvider() {
+            for (int i = connections.size() - 1; i >= 0; --i)
+            {
+                if (connections[i].connected())
+                {
+                    connections[i].disconnect();
+                    connections.pop_back();
+                }
+            }
         }
 
         void remove_bought_stock(Stock& stock)

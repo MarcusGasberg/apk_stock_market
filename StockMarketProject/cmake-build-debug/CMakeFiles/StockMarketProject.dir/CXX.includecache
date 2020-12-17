@@ -144,6 +144,12 @@ memory
 ../Commands/TransactionBase.h
 /home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/Commands/TransactionBase.h
 
+/home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/Queries/GetStockPriceQuery.h
+vector
+-
+../Models/Stock.h
+/home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/Models/Stock.h
+
 /home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/Queries/GetStockQuery.h
 memory
 -
@@ -165,6 +171,8 @@ GetAllStockQuery.h
 /home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/Queries/GetAllStockQuery.h
 GetLatestStockQuery.h
 /home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/Queries/GetLatestStockQuery.h
+GetStockPriceQuery.h
+/home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/Queries/GetStockPriceQuery.h
 GetStockQuery.h
 /home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/Queries/GetStockQuery.h
 GetTraderAccountQuery.h
@@ -213,6 +221,8 @@ functional
 /home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/StockMediator/functional
 
 /home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/StockPrices/PriceProvider.h
+shared_mutex
+-
 map
 /home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/StockPrices/map
 string
@@ -301,10 +311,6 @@ headers/Commands/Commands.h
 /home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/Commands/Commands.h
 headers/Commands/SellStockCommand.h
 /home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/Commands/SellStockCommand.h
-headers/Queries/GetAllTransactionsQuery.h
-/home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/Queries/GetAllTransactionsQuery.h
-headers/Queries/GetStockQuery.h
-/home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/Queries/GetStockQuery.h
 headers/Queries/GetTraderAccountQuery.h
 /home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/Queries/GetTraderAccountQuery.h
 headers/Queries/Queries.h
@@ -313,4 +319,6 @@ headers/StockPrices/PriceProvider.h
 /home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/StockPrices/PriceProvider.h
 headers/StockProviders/StockProvider.h
 /home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/StockProviders/StockProvider.h
+headers/Models/Price.h
+/home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/Models/Price.h
 

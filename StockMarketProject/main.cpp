@@ -13,6 +13,7 @@
 #include "headers/Queries/GetStockQuery.h"
 #include "headers/Queries/GetTraderAccountQuery.h"
 #include "headers/Queries/Queries.h"
+#include "headers/StockPrices/PriceProvider.h"
 
 int main()
 {
@@ -25,7 +26,6 @@ int main()
     std::cout << "2: Sell Stock" << std::endl;
     std::cout << "3: List All Stocks" << std::endl;
     std::cout << "4: Undo Latest" << std::endl;
-
 
     boost::signals2::signal<void(std::shared_ptr<stock::commands_var_t>)> command_sig;
     boost::signals2::signal<void(std::shared_ptr<stock::queries_var_t>)> queries_sig;
@@ -43,6 +43,7 @@ int main()
     stock::CommandBuilder command_builder(queries_sig, my_account);
 
     stock::TransactionUndoer transaction_undoer(command_sig);
+    stock::PriceProvider price_provider;
 
     while (true)
     {

@@ -5,10 +5,10 @@ CMakeFiles/StockMarketProject.dir/main.cpp.o: ../headers/AccountManager/AccountH
 CMakeFiles/StockMarketProject.dir/main.cpp.o: ../headers/AccountManager/AccountManager.h
 CMakeFiles/StockMarketProject.dir/main.cpp.o: ../headers/CommandBuilder.h
 CMakeFiles/StockMarketProject.dir/main.cpp.o: ../headers/Commands/BuyStockCommand.h
-CMakeFiles/StockMarketProject.dir/main.cpp.o: ../headers/Commands/Command.h
-CMakeFiles/StockMarketProject.dir/main.cpp.o: ../headers/Commands/CommandBase.h
+CMakeFiles/StockMarketProject.dir/main.cpp.o: ../headers/Commands/Commands.h
 CMakeFiles/StockMarketProject.dir/main.cpp.o: ../headers/Commands/ListAllStockCommand.h
 CMakeFiles/StockMarketProject.dir/main.cpp.o: ../headers/Commands/SellStockCommand.h
+CMakeFiles/StockMarketProject.dir/main.cpp.o: ../headers/Commands/TransactionBase.h
 CMakeFiles/StockMarketProject.dir/main.cpp.o: ../headers/Commands/UndoLatestCommand.h
 CMakeFiles/StockMarketProject.dir/main.cpp.o: ../headers/Exceptions/BadCommandException.h
 CMakeFiles/StockMarketProject.dir/main.cpp.o: ../headers/Helpers/IsNumeric.h
@@ -17,12 +17,16 @@ CMakeFiles/StockMarketProject.dir/main.cpp.o: ../headers/Queries/GetAllTransacti
 CMakeFiles/StockMarketProject.dir/main.cpp.o: ../headers/Queries/GetLatestStockQuery.h
 CMakeFiles/StockMarketProject.dir/main.cpp.o: ../headers/Queries/GetStockQuery.h
 CMakeFiles/StockMarketProject.dir/main.cpp.o: ../headers/Queries/GetTraderAccountQuery.h
+CMakeFiles/StockMarketProject.dir/main.cpp.o: ../headers/Queries/Queries.h
 CMakeFiles/StockMarketProject.dir/main.cpp.o: ../headers/StockBroker.h
 CMakeFiles/StockMarketProject.dir/main.cpp.o: ../headers/StockMediator/Mediator.h
 CMakeFiles/StockMarketProject.dir/main.cpp.o: ../headers/StockMediator/Placeholders.h
+CMakeFiles/StockMarketProject.dir/main.cpp.o: ../headers/StockPrices/PriceProvider.h
 CMakeFiles/StockMarketProject.dir/main.cpp.o: ../headers/StockPrinter.h
 CMakeFiles/StockMarketProject.dir/main.cpp.o: ../headers/TraderAccount/Policies/StandardTraderPolicy.h
 CMakeFiles/StockMarketProject.dir/main.cpp.o: ../headers/TraderAccount/TraderAccount.h
 CMakeFiles/StockMarketProject.dir/main.cpp.o: ../headers/TraderAccount/TraderTopics.h
+CMakeFiles/StockMarketProject.dir/main.cpp.o: ../headers/TransactionUndoer.h
+CMakeFiles/StockMarketProject.dir/main.cpp.o: ../headers/TypeList.h
 CMakeFiles/StockMarketProject.dir/main.cpp.o: ../main.cpp
 

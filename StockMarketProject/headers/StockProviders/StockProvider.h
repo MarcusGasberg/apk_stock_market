@@ -7,14 +7,16 @@
 
 #include <string>
 #include "../Models/Stock.h"
+#include "../StockPrices/PriceProvider.h"
 
 namespace stock {
     class StockProvider {
     private:
         std::string name;
         std::string id;
+        const PriceProvider & price_provider_;
     public:
-        StockProvider(const std::string &name, const std::string &id) : name(name), id(id) {}
+        StockProvider(const std::string && name, std::string && id, const PriceProvider & price_provider) : name(std::move(name)), id(std::move(id)), price_provider_(price_provider) {}
 
         void stockHasBeenBought(Stock &&stock) {
             std::cout << "Stock " << stock.getStockId() << " was bought";

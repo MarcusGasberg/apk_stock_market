@@ -57,15 +57,33 @@ namespace stock {
             return result;
         }
 
-        bool buy_stock(const std::string& stock_id, int price) {
-            const std::shared_ptr<queries_var_t> queries_var = std::make_shared<queries_var_t>(GetStockQuery(std::string{ stock_id }));
+        bool buy_stock(const std::string& stock_id) {
+            std::shared_ptr<queries_var_t> queries_var = std::make_shared<queries_var_t>(GetStockQuery(std::string{ stock_id }));
             query_sig_(queries_var);
 
             const GetStockQuery queries_result = std::get<GetStockQuery>(*queries_var);
             auto stock = queries_result.result;
 
-            auto commission = TraderPolicy::calculate_commission(stock->getAmount(), stock->getPrice().price_);
-            balance -= stock->getAmount() * stock->getPrice().price_ + commission;
+            if(!stock)
+            {
+                std::cout << "Stock not found for id: " << stock_id << "\n";
+                return false;
+            }
+
+            queries_var = std::make_shared<queries_var_t>(GetStockPriceQuery(std::string{ stock_id }));
+            query_sig_(queries_var);
+            const GetStockPriceQuery price_result = std::get<GetStockPriceQuery>(*queries_var);
+
+            if (!price_result.result)
+            {
+                std::cout << "Price not found for stock id: " << stock_id << "\n";
+                return false;
+            }
+
+            stock->setPrice(price_result.result);
+
+            auto commission = TraderPolicy::calculate_commission(stock->getAmount(), stock->getPrice()->price_);
+            balance -= stock->getAmount() * stock->getPrice()->price_ + commission;
 
             ownedStocks_.push_back(*stock);
 
@@ -74,8 +92,7 @@ namespace stock {
             return true;
         }
 
-        bool sell_stock(const std::string& stock_id, int price) {
-
+        bool sell_stock(const std::string& stock_id) {
             auto stock_itr = std::remove_if(ownedStocks_.begin(), ownedStocks_.end(), [&stock_id](Stock& st)
                 {
                     return stock_id == st.getStockId();
@@ -87,11 +104,14 @@ namespace stock {
                 return false;
             }
 
-            auto commission = TraderPolicy::calculate_commission(stock_itr->getAmount(), stock_itr->getPrice().price_);
-            balance += stock_itr->getAmount() * stock_itr->getPrice().price_ - commission;
+            auto commission = TraderPolicy::calculate_commission(stock_itr->getAmount(), stock_itr->getPrice()->price_);
+            balance += stock_itr->getAmount() * stock_itr->getPrice()->price_ - commission;
             std::cout << "Sold " << stock_itr->getStockId() << ", new balance is: " << balance << "\n";
 
             mediator_.notify(TOPICS[TraderTopics::SELL], *stock_itr);
+
+            ownedStocks_.erase(stock_itr);
+
             return true;
         }
     };

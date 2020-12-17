@@ -23,9 +23,9 @@ namespace stock
 
         void execute()
         {
-            for (const auto& all_command : all_commands)
+            for (const auto& command : all_commands)
             {
-                std::cout << all_command->get_description() << "\n";
+                std::cout << command->get_description() << "\n";
             }
         }
     };

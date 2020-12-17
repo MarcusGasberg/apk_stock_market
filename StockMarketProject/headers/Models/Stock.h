@@ -41,8 +41,8 @@ namespace stock
             Stock::amount_ = amount;
         }
 
-        const Price getPrice() const {
-            return *price_;
+        std::shared_ptr<Price> getPrice() const {
+            return price_;
         }
 
         void setPrice(std::shared_ptr<Price> price) {
@@ -50,7 +50,7 @@ namespace stock
         }
 
         friend std::ostream &operator<<(std::ostream &os, const Stock &stock1) {
-            os << "ID: " << stock1.getStockId() << ", Amount: " << stock1.getAmount() << ", Price: " << stock1.getPrice().price_ << "\n";
+            os << "ID: " << stock1.getStockId() << ", Amount: " << stock1.getAmount() << ", Price: " << stock1.getPrice()->price_ << "\n";
             return os;
         }
     };

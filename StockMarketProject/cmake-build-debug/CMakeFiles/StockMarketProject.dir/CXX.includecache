@@ -31,8 +31,6 @@ Queries/GetLatestStockQuery.h
 /home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/Queries/GetLatestStockQuery.h
 Queries/GetStockQuery.h
 /home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/Queries/GetStockQuery.h
-Queries/GetTraderAccountQuery.h
-/home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/Queries/GetTraderAccountQuery.h
 
 /home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/Commands/BuyStockCommand.h
 iostream
@@ -158,27 +156,21 @@ string
 ../Models/Stock.h
 /home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/Models/Stock.h
 
-/home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/Queries/GetTraderAccountQuery.h
-memory
--
-string
--
-../TraderAccount/TraderAccount.h
-/home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/TraderAccount/TraderAccount.h
-
 /home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/Queries/Queries.h
 GetAllStockQuery.h
 /home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/Queries/GetAllStockQuery.h
+GetAllTransactionsQuery.h
+/home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/Queries/GetAllTransactionsQuery.h
 GetLatestStockQuery.h
 /home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/Queries/GetLatestStockQuery.h
 GetStockPriceQuery.h
 /home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/Queries/GetStockPriceQuery.h
 GetStockQuery.h
 /home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/Queries/GetStockQuery.h
-GetTraderAccountQuery.h
-/home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/Queries/GetTraderAccountQuery.h
 ../StockBroker.h
 /home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/StockBroker.h
+../TypeList.h
+/home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/TypeList.h
 
 /home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/StockBroker.h
 variant
@@ -230,6 +222,20 @@ string
 algorithm
 /home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/StockPrices/algorithm
 
+/home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/StockPrices/StockPriceSimulator.h
+iostream
+/home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/StockPrices/iostream
+PriceProvider.h
+/home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/StockPrices/PriceProvider.h
+algorithm
+/home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/StockPrices/algorithm
+../Models/Price.h
+/home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/Models/Price.h
+random
+/home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/StockPrices/random
+thread
+/home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/StockPrices/thread
+
 /home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/StockPrinter.h
 variant
 -
@@ -273,6 +279,10 @@ Policies/StandardTraderPolicy.h
 /home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/Models/Stock.h
 TraderTopics.h
 /home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/TraderAccount/TraderTopics.h
+../Queries/GetStockQuery.h
+/home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/Queries/GetStockQuery.h
+../Queries/Queries.h
+/home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/Queries/Queries.h
 
 /home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/TraderAccount/TraderTopics.h
 
@@ -311,8 +321,6 @@ headers/Commands/Commands.h
 /home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/Commands/Commands.h
 headers/Commands/SellStockCommand.h
 /home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/Commands/SellStockCommand.h
-headers/Queries/GetTraderAccountQuery.h
-/home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/Queries/GetTraderAccountQuery.h
 headers/Queries/Queries.h
 /home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/Queries/Queries.h
 headers/StockPrices/PriceProvider.h
@@ -321,4 +329,8 @@ headers/StockProviders/StockProvider.h
 /home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/StockProviders/StockProvider.h
 headers/Models/Price.h
 /home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/Models/Price.h
+headers/TraderAccount/TraderAccount.h
+/home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/TraderAccount/TraderAccount.h
+headers/StockPrices/StockPriceSimulator.h
+/home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/StockPrices/StockPriceSimulator.h
 

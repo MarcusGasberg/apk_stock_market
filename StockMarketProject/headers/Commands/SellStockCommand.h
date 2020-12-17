@@ -14,7 +14,6 @@ namespace stock
     {
         std::shared_ptr<TraderAccount<>> seller_account_;
         std::string stock_id_;
-        std::shared_ptr<Stock> stock_;
         std::shared_ptr<Price> stock_price_;
     public:
 
@@ -28,16 +27,12 @@ namespace stock
 
         void execute()
         {
-            stock_ = seller_account_->get_stock(stock_id_);
-            seller_account_->sell_stock(*stock_, stock_price_->price_);
+            seller_account_->sell_stock(stock_id_, stock_price_->price_);
         }
 
         void undo()
         {
-            if(stock_)
-            {
-                seller_account_->buy_stock(*stock_, stock_price_->price_);
-            }
+            seller_account_->buy_stock(stock_id_, stock_price_->price_);
         }
 
         std::string get_description() const override

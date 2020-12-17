@@ -9,7 +9,6 @@
 #include "Queries/GetAllTransactionsQuery.h"
 #include "Queries/GetLatestStockQuery.h"
 #include "Queries/GetStockQuery.h"
-#include "Queries/GetTraderAccountQuery.h"
 
 namespace stock
 {
@@ -31,30 +30,36 @@ namespace stock
             {
             case 1:
             {
-                std::cout << "What kind of stock do you want to buy?" << "\n";
-                std::string stock_id;
-                std::getline(std::cin, stock_id);
-
-                const std::shared_ptr<queries_var_t> queries_var = std::make_shared<queries_var_t>(GetStockQuery(std::move(stock_id)));
-                queries_sig_(queries_var);
-                const GetStockQuery queries_result = std::get<GetStockQuery>(*queries_var);
-                result = std::make_shared<commands_var_t>(BuyStockCommand(trader_account_, queries_result.result));
-            }
-            break;
-            case 2:
-                {
-                std::cout << "What kind of stock do you want to buy?" << "\n";
+                std::cout << "Please Provide the id of the stock you want to buy: ";
                 std::string stock_id;
                 std::getline(std::cin, stock_id);
 
                 using TQuery = GetStockPriceQuery;
                 const std::shared_ptr<queries_var_t> queries_var = std::make_shared<queries_var_t>(TQuery(std::move(stock_id)));
                 queries_sig_(queries_var);
-                auto queries_result = std::get<TQuery>(*queries_var);
-
-                result = std::make_shared<commands_var_t>(SellStockCommand(trader_account_,std::move(queries_result.get_stock_id()), queries_result.result));
+                TQuery queries_result = std::get<TQuery>(*queries_var);
+                if (queries_result.result)
+                {
+                    result = std::make_shared<commands_var_t>(BuyStockCommand(trader_account_, queries_result.get_stock_id(), queries_result.result));
                 }
-                break;
+            }
+            break;
+            case 2:
+            {
+                std::cout << "Please Provide the id of the stock you want to sell: ";
+                std::string stock_id;
+                std::getline(std::cin, stock_id);
+
+                using TQuery = GetStockPriceQuery;
+                const std::shared_ptr<queries_var_t> queries_var = std::make_shared<queries_var_t>(TQuery(std::move(stock_id)));
+                queries_sig_(queries_var);
+                TQuery queries_result = std::get<TQuery>(*queries_var);
+                if (queries_result.result)
+                {
+                    result = std::make_shared<commands_var_t>(SellStockCommand(trader_account_, queries_result.get_stock_id(), queries_result.result));
+                }
+            }
+            break;
             case 3:
             {
                 const std::shared_ptr<queries_var_t> queries_var = std::make_shared<queries_var_t>(GetAllTransactionsQuery());

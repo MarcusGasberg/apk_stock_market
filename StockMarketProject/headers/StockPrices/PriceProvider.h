@@ -12,11 +12,10 @@
 
 namespace stock {
     class PriceProvider {
+        std::map<std::string, Price> price_map_;
         mutable std::shared_mutex price_lock_;
-        typedef std::map<std::string, Price> pm_t;
-        pm_t price_map_;
     public:
-        PriceProvider() {}
+        PriceProvider() = default;
 
         void add_stock(std::string &&id, Price&& price) {
             std::unique_lock lock(price_lock_);
@@ -28,9 +27,20 @@ namespace stock {
             price_map_.erase(id);
         }
 
-        Price get_price(std::string && id) const {
+        std::shared_ptr<Price> get_price(std::string && id) const {
             std::shared_lock lock(price_lock_);
-            return price_map_.find(id)->second;
+            auto itr = price_map_.find(id);
+            std::shared_ptr<Price> result;
+            if (itr != price_map_.end())
+            {
+                result = std::make_shared<Price>(itr->second);
+            }
+            return result;
+        }
+
+        // TODO: Make this friend only, others should
+        std::map<std::string, Price> &getPriceMap() {
+            return price_map_;
         }
 
         void update_stock(std::string &&id, Price&& newPrice) {

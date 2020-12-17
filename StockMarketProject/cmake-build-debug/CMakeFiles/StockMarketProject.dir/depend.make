@@ -19,12 +19,12 @@ CMakeFiles/StockMarketProject.dir/main.cpp.o: ../headers/Queries/GetAllTransacti
 CMakeFiles/StockMarketProject.dir/main.cpp.o: ../headers/Queries/GetLatestStockQuery.h
 CMakeFiles/StockMarketProject.dir/main.cpp.o: ../headers/Queries/GetStockPriceQuery.h
 CMakeFiles/StockMarketProject.dir/main.cpp.o: ../headers/Queries/GetStockQuery.h
-CMakeFiles/StockMarketProject.dir/main.cpp.o: ../headers/Queries/GetTraderAccountQuery.h
 CMakeFiles/StockMarketProject.dir/main.cpp.o: ../headers/Queries/Queries.h
 CMakeFiles/StockMarketProject.dir/main.cpp.o: ../headers/StockBroker.h
 CMakeFiles/StockMarketProject.dir/main.cpp.o: ../headers/StockMediator/Mediator.h
 CMakeFiles/StockMarketProject.dir/main.cpp.o: ../headers/StockMediator/Placeholders.h
 CMakeFiles/StockMarketProject.dir/main.cpp.o: ../headers/StockPrices/PriceProvider.h
+CMakeFiles/StockMarketProject.dir/main.cpp.o: ../headers/StockPrices/StockPriceSimulator.h
 CMakeFiles/StockMarketProject.dir/main.cpp.o: ../headers/StockPrinter.h
 CMakeFiles/StockMarketProject.dir/main.cpp.o: ../headers/StockProviders/StockProvider.h
 CMakeFiles/StockMarketProject.dir/main.cpp.o: ../headers/TraderAccount/Policies/StandardTraderPolicy.h

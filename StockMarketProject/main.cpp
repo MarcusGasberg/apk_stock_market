@@ -8,11 +8,12 @@
 #include "headers/Commands/BuyStockCommand.h"
 #include "headers/Commands/Commands.h"
 #include "headers/Commands/SellStockCommand.h"
-#include "headers/Queries/GetTraderAccountQuery.h"
 #include "headers/Queries/Queries.h"
 #include "headers/StockPrices/PriceProvider.h"
 #include "headers/StockProviders/StockProvider.h"
 #include "headers/Models/Price.h"
+#include "headers/TraderAccount/TraderAccount.h"
+#include "headers/StockPrices/StockPriceSimulator.h"
 
 int main()
 {
@@ -31,7 +32,7 @@ int main()
     boost::signals2::signal<void(std::shared_ptr<stock::queries_var_t>)> queries_sig;
 
     stock::Mediator<void, stock::Stock&> mediator;
-    const auto my_account = std::make_shared<stock::TraderAccount<>>(stock::TraderAccount<>("Jens", mediator));
+    const auto my_account = std::make_shared<stock::TraderAccount<>>(stock::TraderAccount<>("Jens", mediator, queries_sig));
 
     my_account->deposit(1000);
 
@@ -41,6 +42,7 @@ int main()
 
     stock::TransactionUndoer transaction_undoer(command_sig);
     stock::PriceProvider price_provider;
+
     price_provider.add_stock("stock1", Price(22));
     price_provider.add_stock("stock2", Price(33));
 

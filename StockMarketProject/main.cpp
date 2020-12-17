@@ -5,7 +5,6 @@
 #include "headers/StockBroker.h"
 #include "headers/StockPrinter.h"
 #include "headers/TransactionUndoer.h"
-#include "headers/AccountManager/AccountHolder.h"
 #include "headers/Commands/BuyStockCommand.h"
 #include "headers/Commands/Commands.h"
 #include "headers/Commands/SellStockCommand.h"
@@ -14,6 +13,7 @@
 #include "headers/Queries/GetTraderAccountQuery.h"
 #include "headers/Queries/Queries.h"
 #include "headers/StockPrices/PriceProvider.h"
+#include "headers/StockProviders/StockProvider.h"
 
 int main()
 {
@@ -24,18 +24,17 @@ int main()
     std::cout << "_______________________________________" << std::endl;
     std::cout << "1: Buy Stock" << std::endl;
     std::cout << "2: Sell Stock" << std::endl;
-    std::cout << "3: List All Stocks" << std::endl;
+    std::cout << "3: List All Transactions" << std::endl;
     std::cout << "4: Undo Latest" << std::endl;
+    std::cout << "5: List All Available Stocks" << std::endl;
 
     boost::signals2::signal<void(std::shared_ptr<stock::commands_var_t>)> command_sig;
     boost::signals2::signal<void(std::shared_ptr<stock::queries_var_t>)> queries_sig;
 
     stock::Mediator<void, stock::Stock> mediator;
-    stock::AccountHolder<stock::queries_var_t> account_holder(queries_sig);
     const auto my_account = std::make_shared<stock::TraderAccount<>>(stock::TraderAccount<>("Jens", mediator));
     const auto other_account = std::make_shared<stock::TraderAccount<>>(stock::TraderAccount<>("Knud", mediator));
-    account_holder.add_account(my_account);
-    account_holder.add_account(other_account);
+
 
 
     stock::StockBroker stock_broker(queries_sig, command_sig);
@@ -44,6 +43,10 @@ int main()
 
     stock::TransactionUndoer transaction_undoer(command_sig);
     stock::PriceProvider price_provider;
+    stock::StockProvider stock_provider("stock_provider", price_provider, queries_sig);
+
+    stock_provider.add_stock_for_sale(stock::Stock("stock1", 10));
+    stock_provider.add_stock_for_sale(stock::Stock("stock2", 20));
 
     while (true)
     {

@@ -2,7 +2,8 @@
 #include <variant>
 #include <boost/signals2/signal.hpp>
 
-#include "Commands/ListAllStockCommand.h"
+#include "Commands/ListAllStocksCommand.h"
+#include "Commands/ListAllTransactionsCommand.h"
 #include "Queries/GetAllTransactionsQuery.h"
 
 
@@ -24,7 +25,7 @@ namespace stock
                     {
                         return;
                     }
-                    if constexpr (std::is_same_v <T, ListAllStocksCommand>)
+                    if constexpr (std::is_same_v <T, ListAllTransactionsCommand> || std::is_same_v <T, ListAllStocksCommand>)
                     {
                         handle(command);
                     }
@@ -35,9 +36,17 @@ namespace stock
             command_sig.connect(commands_f);
         }
 
-        void handle(ListAllStocksCommand& command)
+        void handle(ListAllTransactionsCommand& command)
         {
             if(!command.all_commands.empty())
+            {
+                command.execute();
+            }
+        }
+
+        void handle(ListAllStocksCommand& command)
+        {
+            if (!command.all_stocks_.empty())
             {
                 command.execute();
             }

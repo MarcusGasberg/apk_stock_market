@@ -4,15 +4,17 @@
 #include <boost/signals2/signal.hpp>
 #include <utility>
 
+#include "TransactionBase.h"
+
 namespace stock
 {
-    class ListAllStocksCommand
+    class ListAllTransactionsCommand
     {
     public:
 
-        ListAllStocksCommand() = default;
+        ListAllTransactionsCommand() = default;
 
-        ListAllStocksCommand(std::vector<std::shared_ptr<TransactionBase>> all_commands)
+        ListAllTransactionsCommand(std::vector<std::shared_ptr<TransactionBase>> all_commands)
             : all_commands(std::move(all_commands))
         {
         }

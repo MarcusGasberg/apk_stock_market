@@ -1,12 +1,13 @@
 #pragma once
 #include <memory>
 #include <vector>
-#include "../Commands/CommandBase.h"
+
+#include "../Models/Stock.h"
 
 namespace stock
 {
-    struct GetAllTransactionsQuery
+    struct GetAllStockQuery
     {
-        std::vector<std::shared_ptr<CommandBase>> result;
+        std::vector<Stock> result;
     };
 }

@@ -23,7 +23,7 @@ namespace stock {
             price_map_.erase(id);
         }
 
-        int get_price(std::string && id) {
+        int get_price(std::string && id) const {
             return price_map_.find(id)->second;
         }
 

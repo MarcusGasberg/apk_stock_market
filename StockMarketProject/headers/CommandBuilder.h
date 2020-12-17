@@ -1,10 +1,11 @@
 #pragma once
 #include "StockBroker.h"
 #include "Commands/BuyStockCommand.h"
-#include "Commands/ListAllStockCommand.h"
+#include "Commands/ListAllStocksCommand.h"
 #include "Commands/SellStockCommand.h"
 #include "Exceptions/BadCommandException.h"
 #include "boost/signals2/signal.hpp"
+#include "Queries/GetAllStockQuery.h"
 #include "Queries/GetAllTransactionsQuery.h"
 #include "Queries/GetLatestStockQuery.h"
 #include "Queries/GetStockQuery.h"
@@ -34,7 +35,7 @@ namespace stock
                 std::string stock_id;
                 std::getline(std::cin, stock_id);
 
-                const std::shared_ptr<queries_var_t> queries_var = std::make_shared<queries_var_t>(GetStockQuery(stock_id));
+                const std::shared_ptr<queries_var_t> queries_var = std::make_shared<queries_var_t>(GetStockQuery(std::move(stock_id)));
                 queries_sig_(queries_var);
                 const GetStockQuery queries_result = std::get<GetStockQuery>(*queries_var);
                 result = std::make_shared<commands_var_t>(BuyStockCommand(trader_account_, queries_result.result));
@@ -48,12 +49,21 @@ namespace stock
                 const std::shared_ptr<queries_var_t> queries_var = std::make_shared<queries_var_t>(GetAllTransactionsQuery());
                 queries_sig_(queries_var);
                 const GetAllTransactionsQuery queries_result = std::get<0>(*queries_var);
-                result = std::make_shared<commands_var_t>(ListAllStocksCommand(queries_result.result));
+                result = std::make_shared<commands_var_t>(ListAllTransactionsCommand(queries_result.result));
             }
             break;
             case 4:
             {
                 result = std::make_shared<commands_var_t>(UndoLatestCommand());
+            }
+            break;
+            case 5:
+            {
+                using TQuery = GetAllStockQuery;
+                const std::shared_ptr<queries_var_t> queries_var = std::make_shared<queries_var_t>(TQuery());
+                queries_sig_(queries_var);
+                const auto queries_result = std::get<TQuery>(*queries_var);
+                result = std::make_shared<commands_var_t>(ListAllStocksCommand(queries_result.result));
             }
             break;
             default:

@@ -7,36 +7,66 @@
 
 #include <string>
 #include "../Models/Stock.h"
+#include "../Queries/GetAllStockQuery.h"
+#include "../Queries/Queries.h"
 #include "../StockPrices/PriceProvider.h"
 
 namespace stock {
     class StockProvider {
     private:
-        std::string name;
-        std::string id;
-        const PriceProvider & price_provider_;
+        std::string name_;
+        PriceProvider& price_provider_;
+        std::vector<Stock> stocks_for_sale;
     public:
-        StockProvider(const std::string && name, std::string && id, const PriceProvider & price_provider) : name(std::move(name)), id(std::move(id)), price_provider_(price_provider) {}
+        StockProvider(std::string&& name, PriceProvider& price_provider, queries_sig_t& queries_sig) :
+            name_(std::move(name)),
+            price_provider_(price_provider)
+        {
+            const std::function<void(std::shared_ptr<queries_var_t>)> get_stock_f = [this](const std::shared_ptr<queries_var_t> query_var)
+            {
+                std::visit([this](auto&& query)
+                    {
+                        using T = std::decay_t<decltype(query)>;
+                        if constexpr (std::is_same_v<T, GetStockQuery>)
+                        {
+                            auto stock = std::find_if(stocks_for_sale.begin(), stocks_for_sale.end(), [&query](Stock st)
+                                {
+                                    return st.getStockId() == query.get_stock_id();
+                                });
 
-        void stockHasBeenBought(Stock &&stock) {
+                            if (stock == stocks_for_sale.end())
+                                return;
+
+                            query.result = std::make_shared<Stock>(*stock);
+                        }
+                        if constexpr (std::is_same_v<T, GetAllStockQuery>)
+                        {
+                            query.result = stocks_for_sale;
+                        }
+                    }, 
+                    *query_var);
+            };
+
+            queries_sig.connect(get_stock_f);
+        }
+
+        void add_stock_for_sale(const Stock& stock)
+        {
+            stocks_for_sale.push_back(stock);
+        }
+
+        void stockHasBeenBought(Stock&& stock) {
             std::cout << "Stock " << stock.getStockId() << " was bought";
         }
 
-        const std::string &getName() const {
-            return name;
+        const std::string& getName() const {
+            return name_;
         }
 
-        void setName(const std::string &name) {
-            StockProvider::name = name;
+        void setName(const std::string& name) {
+            StockProvider::name_ = name;
         }
 
-        const std::string &getId() const {
-            return id;
-        }
-
-        void setId(const std::string &id) {
-            StockProvider::id = id;
-        }
     };
 }
 #endif //STOCKMARKETPROJECT_STOCKPROVIDER_H

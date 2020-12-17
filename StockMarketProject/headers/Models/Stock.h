@@ -12,9 +12,17 @@ namespace stock
     {
     private:
         std::string stockId;
-        float value_;
-        uint64_t amount_;
+        uint64_t amount_{};
     public:
+
+        Stock() = default;
+
+        Stock(std::string&& stock_id,  const uint64_t amount)
+            : stockId(std::move(stock_id)),
+              amount_(amount)
+        {
+        }
+
         const std::string &getStockId() const {
             return stockId;
         }
@@ -23,20 +31,19 @@ namespace stock
             Stock::stockId = stockId;
         }
 
-        float getValue() const {
-            return value_;
-        }
-
-        void setValue(float value) {
-            Stock::value_ = value;
-        }
-
         uint64_t getAmount() const {
             return amount_;
         }
 
         void setAmount(uint64_t amount) {
             Stock::amount_ = amount;
+        }
+
+        operator std::string() const
+        {
+            std::stringstream ss;
+            ss << "ID: " << getStockId() << ", Amount: " << getAmount() << "\n";
+            return ss.str();
         }
     };
 }

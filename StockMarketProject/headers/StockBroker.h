@@ -45,8 +45,8 @@ namespace stock
         std::vector<boost::signals2::connection> connections;
 
     public:
-        StockBroker(boost::signals2::signal<void(std::shared_ptr<queries_var_t>)>& queries_sig,
-            boost::signals2::signal<void(std::shared_ptr<commands_var_t>)>& command_sig)
+        StockBroker(queries_sig_t& queries_sig,
+            commands_sig_t& command_sig)
         {
             const std::function<void(std::shared_ptr<queries_var_t>)> get_commands_from_stockbroker_f =
                 [this](const std::shared_ptr<queries_var_t> query)

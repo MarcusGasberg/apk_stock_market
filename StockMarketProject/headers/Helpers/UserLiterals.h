@@ -4,6 +4,7 @@
 
 #ifndef STOCKMARKETPROJECT_USERLITERALS_H
 #define STOCKMARKETPROJECT_USERLITERALS_H
+#include <ctime>
 #include <iostream>
 
 // Inspiration from https://en.cppreference.com/w/cpp/language/user_literal

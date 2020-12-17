@@ -11,12 +11,14 @@ namespace stock
     {
         std::string stock_id_;
     public:
-        explicit GetStockQuery(std::string stock_id)
-            : stock_id_(stock_id)
+        GetStockQuery() = default;
+
+        explicit GetStockQuery(std::string&& stock_id)
+            : stock_id_(std::move(stock_id))
         {
         }
 
-        [[nodiscard]] std::string get_account_id() const
+        [[nodiscard]] std::string get_stock_id() const
         {
             return stock_id_;
         }

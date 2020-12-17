@@ -23,17 +23,16 @@ namespace stock
         BuyStockCommand()= default;
 
         BuyStockCommand(std::shared_ptr<TraderAccount<>> buyer_account, std::string stock_id)
-            : TransactionBase(),
-            buyer_account_(std::move(buyer_account)), stock_id_(std::move(stock_id))
+            : buyer_account_(std::move(buyer_account)), stock_id_(std::move(stock_id))
         {
         }
 
-        bool execute()
+        bool execute() const
         {
             return buyer_account_->buy_stock(stock_id_);
         }
 
-        bool undo()
+        bool undo() const
         {
             return buyer_account_->sell_stock(stock_id_);
         }

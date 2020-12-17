@@ -26,7 +26,6 @@ namespace stock {
         std::string id_;
         int balance{};
         std::vector<Stock> ownedStocks_;
-        // TODO: Make shared ptr - several trader account can have same mediator?
         Mediator<void, Stock&>& mediator_;
         queries_sig_t& query_sig_;
     public:

@@ -23,8 +23,15 @@ namespace stock {
             price_map_.erase(id);
         }
 
-        Price get_price(std::string && id) const {
-            return price_map_.find(id)->second;
+        std::shared_ptr<Price> get_price(std::string && id) const {
+            auto itr = price_map_.find(id);
+            std::shared_ptr<Price> result;
+            if (itr != price_map_.end())
+            {
+                result = std::make_shared<Price>(itr->second);
+            }
+
+            return result;
         }
 
         void update_stock(std::string &&id, Price&& newPrice) {

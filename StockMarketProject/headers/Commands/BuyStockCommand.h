@@ -17,38 +17,23 @@ namespace stock
     class BuyStockCommand : public TransactionBase
     {
         std::shared_ptr<TraderAccount<>> buyer_account_;
-        std::shared_ptr<Stock> stock_;
-        int stock_price_;
+        std::shared_ptr<Price> price_;
+        std::string stock_id_;
     public:
 
         BuyStockCommand()= default;
 
-        BuyStockCommand(std::shared_ptr<TraderAccount<>> buyer_account) : buyer_account_(std::move(buyer_account))
-        {
-        }
-
-        BuyStockCommand(std::shared_ptr<TraderAccount<>> buyer_account, std::shared_ptr<Stock> stock)
+        BuyStockCommand(std::shared_ptr<TraderAccount<>> buyer_account, std::string stock_id, std::shared_ptr<Price> price)
             : TransactionBase(),
-            buyer_account_(std::move(buyer_account)), stock_(std::move(stock))
+            buyer_account_(std::move(buyer_account)), price_(std::move(price)), stock_id_(std::move(stock_id))
         {
-        }
-
-
-        [[nodiscard]] std::shared_ptr<Stock> stock() const
-        {
-            return stock_;
-        }
-
-        void set_stock(std::shared_ptr<Stock> stock)
-        {
-            stock_ = stock;
         }
 
         void execute()
         {
-            if(stock_)
+            if(price_)
             {
-                buyer_account_->buy_stock(*stock_, stock_price_);
+                buyer_account_->buy_stock(stock_id_, price_->price_);
             }
             else
             {
@@ -58,9 +43,9 @@ namespace stock
 
         void undo()
         {
-            if (stock_)
+            if (price_)
             {
-                buyer_account_->sell_stock(*stock_, stock_price_);
+                buyer_account_->sell_stock(stock_id_, price_->price_);
             }
         }
 

@@ -10,24 +10,24 @@
 
 namespace stock {
     class PriceProvider {
-        typedef std::map<std::string, int> pm_t;
+        typedef std::map<std::string, Price> pm_t;
         pm_t price_map_;
     public:
         PriceProvider() {}
 
-        void add_stock(std::string &&id, int price) {
-            price_map_.insert(std::make_pair(id, price));
+        void add_stock(std::string &&id, Price&& price) {
+            price_map_.insert(std::make_pair(std::move(id), std::move(price)));
         }
 
         void remove_stock(std::string && id) {
             price_map_.erase(id);
         }
 
-        int get_price(std::string && id) const {
+        Price get_price(std::string && id) const {
             return price_map_.find(id)->second;
         }
 
-        void update_stock(std::string &&id, int newPrice) {
+        void update_stock(std::string &&id, Price&& newPrice) {
             auto ir = price_map_.find(id);
             ir->second = newPrice;
         }

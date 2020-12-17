@@ -34,14 +34,14 @@ namespace stock {
         }
 
         // TODO: Perfect forwarding?
-        bool BuyStock(Stock & stock) {
+        bool BuyStock(Stock & stock, int price) {
             // TODO: Logic with policy and account manager
             std::cout << "Buying " << stock.getStockId() << std::endl;
             mediator_.notify(TOPICS[TraderTopics::BUY], std::move(stock));
             return true;
         }
 
-        bool SellStock(Stock & stock) {
+        bool SellStock(Stock & stock, int price) {
             // TODO: Logic with policy and account manager
             std::cout << "Selling " << stock.getStockId() << std::endl;
             mediator_.notify(TOPICS[TraderTopics::BUY], std::move(stock));

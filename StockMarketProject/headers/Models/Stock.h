@@ -5,6 +5,7 @@
 #ifndef STOCKMARKETPROJECT_STOCK_H
 #define STOCKMARKETPROJECT_STOCK_H
 #include <iostream>
+#include "Price.h"
 
 namespace stock
 {
@@ -13,6 +14,7 @@ namespace stock
     private:
         std::string stockId;
         uint64_t amount_{};
+        std::shared_ptr<Price> price_;
     public:
 
         Stock() = default;
@@ -23,7 +25,7 @@ namespace stock
         {
         }
 
-        const std::string &getStockId() const {
+        std::string getStockId() const {
             return stockId;
         }
 
@@ -39,11 +41,17 @@ namespace stock
             Stock::amount_ = amount;
         }
 
-        operator std::string() const
-        {
-            std::stringstream ss;
-            ss << "ID: " << getStockId() << ", Amount: " << getAmount() << "\n";
-            return ss.str();
+        const Price getPrice() const {
+            return *price_;
+        }
+
+        void setPrice(std::shared_ptr<Price> price) {
+            price_ = price;
+        }
+
+        friend std::ostream &operator<<(std::ostream &os, const Stock &stock1) {
+            os << "ID: " << stock1.getStockId() << ", Amount: " << stock1.getAmount() << ", Price: " << stock1.getPrice().price_ << "\n";
+            return os;
         }
     };
 }

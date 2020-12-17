@@ -88,7 +88,10 @@
 		<Unit filename="/home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/Commands/Commands.h">
 			<Option target="StockMarketProject"/>
 		</Unit>
-		<Unit filename="/home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/Commands/ListAllStockCommand.h">
+		<Unit filename="/home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/Commands/ListAllStocksCommand.h">
+			<Option target="StockMarketProject"/>
+		</Unit>
+		<Unit filename="/home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/Commands/ListAllTransactionsCommand.h">
 			<Option target="StockMarketProject"/>
 		</Unit>
 		<Unit filename="/home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/Commands/SellStockCommand.h">
@@ -104,6 +107,9 @@
 			<Option target="StockMarketProject"/>
 		</Unit>
 		<Unit filename="/home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/Helpers/UserLiterals.h">
+			<Option target="StockMarketProject"/>
+		</Unit>
+		<Unit filename="/home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/Models/Price.h">
 			<Option target="StockMarketProject"/>
 		</Unit>
 		<Unit filename="/home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/Models/Stock.h">

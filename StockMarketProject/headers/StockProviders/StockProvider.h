@@ -37,11 +37,15 @@ namespace stock {
                             if (stock == stocks_for_sale.end())
                                 return;
 
+                            stock->setPrice(std::make_shared<Price>(price_provider_.get_price(stock->getStockId())));
                             query.result = std::make_shared<Stock>(*stock);
                         }
                         if constexpr (std::is_same_v<T, GetAllStockQuery>)
                         {
-                            query.result = stocks_for_sale;
+                            std::for_each(stocks_for_sale.begin(), stocks_for_sale.end(), [&](auto stock){
+                                stock.setPrice(std::make_shared<Price>(price_provider_.get_price(stock.getStockId())));
+                                query.result.push_back(stock);
+                            });
                         }
                     }, 
                     *query_var);

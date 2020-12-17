@@ -6,16 +6,6 @@
 
 #IncludeRegexTransform: 
 
-/home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/AccountManager/AccountHolder.h
-vector
--
-boost/signals2/signal.hpp
--
-../Queries/GetTraderAccountQuery.h
-/home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/Queries/GetTraderAccountQuery.h
-../TraderAccount/TraderAccount.h
-/home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/TraderAccount/TraderAccount.h
-
 /home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/AccountManager/AccountManager.h
 iostream
 -
@@ -25,14 +15,16 @@ StockBroker.h
 /home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/StockBroker.h
 Commands/BuyStockCommand.h
 /home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/Commands/BuyStockCommand.h
-Commands/ListAllStockCommand.h
-/home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/Commands/ListAllStockCommand.h
+Commands/ListAllStocksCommand.h
+/home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/Commands/ListAllStocksCommand.h
 Commands/SellStockCommand.h
 /home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/Commands/SellStockCommand.h
 Exceptions/BadCommandException.h
 /home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/Exceptions/BadCommandException.h
 boost/signals2/signal.hpp
 /home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/boost/signals2/signal.hpp
+Queries/GetAllStockQuery.h
+/home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/Queries/GetAllStockQuery.h
 Queries/GetAllTransactionsQuery.h
 /home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/Queries/GetAllTransactionsQuery.h
 Queries/GetLatestStockQuery.h
@@ -61,8 +53,10 @@ type_traits
 -
 BuyStockCommand.h
 /home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/Commands/BuyStockCommand.h
-ListAllStockCommand.h
-/home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/Commands/ListAllStockCommand.h
+ListAllStocksCommand.h
+/home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/Commands/ListAllStocksCommand.h
+ListAllTransactionsCommand.h
+/home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/Commands/ListAllTransactionsCommand.h
 SellStockCommand.h
 /home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/Commands/SellStockCommand.h
 UndoLatestCommand.h
@@ -70,7 +64,17 @@ UndoLatestCommand.h
 ../TypeList.h
 /home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/TypeList.h
 
-/home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/Commands/ListAllStockCommand.h
+/home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/Commands/ListAllStocksCommand.h
+iostream
+-
+string
+-
+vector
+-
+../Models/Stock.h
+/home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/Models/Stock.h
+
+/home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/Commands/ListAllTransactionsCommand.h
 iostream
 -
 string
@@ -79,6 +83,8 @@ boost/signals2/signal.hpp
 -
 utility
 -
+TransactionBase.h
+/home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/Commands/TransactionBase.h
 
 /home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/Commands/SellStockCommand.h
 iostream
@@ -106,9 +112,23 @@ stdexcept
 iostream
 -
 
+/home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/Models/Price.h
+ctime
+/home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/Models/ctime
+
 /home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/Models/Stock.h
 iostream
 -
+Price.h
+/home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/Models/Price.h
+
+/home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/Queries/GetAllStockQuery.h
+memory
+-
+vector
+-
+../Models/Stock.h
+/home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/Models/Stock.h
 
 /home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/Queries/GetAllTransactionsQuery.h
 vector
@@ -141,6 +161,8 @@ string
 /home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/TraderAccount/TraderAccount.h
 
 /home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/Queries/Queries.h
+GetAllStockQuery.h
+/home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/Queries/GetAllStockQuery.h
 GetLatestStockQuery.h
 /home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/Queries/GetLatestStockQuery.h
 GetStockQuery.h
@@ -203,10 +225,24 @@ variant
 -
 boost/signals2/signal.hpp
 -
-Commands/ListAllStockCommand.h
-/home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/Commands/ListAllStockCommand.h
+Commands/ListAllStocksCommand.h
+/home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/Commands/ListAllStocksCommand.h
+Commands/ListAllTransactionsCommand.h
+/home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/Commands/ListAllTransactionsCommand.h
 Queries/GetAllTransactionsQuery.h
 /home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/Queries/GetAllTransactionsQuery.h
+
+/home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/StockProviders/StockProvider.h
+string
+-
+../Models/Stock.h
+/home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/Models/Stock.h
+../Queries/GetAllStockQuery.h
+/home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/Queries/GetAllStockQuery.h
+../Queries/Queries.h
+/home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/Queries/Queries.h
+../StockPrices/PriceProvider.h
+/home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/StockPrices/PriceProvider.h
 
 /home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/TraderAccount/Policies/StandardTraderPolicy.h
 ../../AccountManager/AccountManager.h
@@ -259,8 +295,6 @@ headers/StockPrinter.h
 /home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/StockPrinter.h
 headers/TransactionUndoer.h
 /home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/TransactionUndoer.h
-headers/AccountManager/AccountHolder.h
-/home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/AccountManager/AccountHolder.h
 headers/Commands/BuyStockCommand.h
 /home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/Commands/BuyStockCommand.h
 headers/Commands/Commands.h
@@ -277,4 +311,6 @@ headers/Queries/Queries.h
 /home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/Queries/Queries.h
 headers/StockPrices/PriceProvider.h
 /home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/StockPrices/PriceProvider.h
+headers/StockProviders/StockProvider.h
+/home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/StockProviders/StockProvider.h
 

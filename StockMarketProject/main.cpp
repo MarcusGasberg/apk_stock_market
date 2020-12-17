@@ -43,6 +43,9 @@ int main()
 
     stock::TransactionUndoer transaction_undoer(command_sig);
     stock::PriceProvider price_provider;
+    price_provider.add_stock("stock1", Price(22));
+    price_provider.add_stock("stock2", Price(33));
+
     stock::StockProvider stock_provider("stock_provider", price_provider, queries_sig);
 
     stock_provider.add_stock_for_sale(stock::Stock("stock1", 10));

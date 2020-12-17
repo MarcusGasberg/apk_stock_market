@@ -25,7 +25,7 @@ namespace stock
         {
             for (const Stock& stock : all_stocks_)
             {
-                std::cout << "ID: "<< stock.getStockId()<< ", Amount: " << stock.getAmount() << "\n";
+                std::cout << stock;
             }
         }
     };

@@ -18,6 +18,7 @@ namespace stock
     {
         std::shared_ptr<TraderAccount<>> buyer_account_;
         std::shared_ptr<Stock> stock_;
+        int stock_price_;
     public:
 
         BuyStockCommand()= default;
@@ -47,7 +48,7 @@ namespace stock
         {
             if(stock_)
             {
-                buyer_account_->BuyStock(*stock_);
+                buyer_account_->BuyStock(*stock_, stock_price_);
             }
             else
             {
@@ -59,7 +60,7 @@ namespace stock
         {
             if (stock_)
             {
-                buyer_account_->SellStock(*stock_);
+                buyer_account_->SellStock(*stock_, stock_price_);
             }
         }
 

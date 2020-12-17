@@ -26,7 +26,7 @@ namespace stock {
         // TODO: Make shared ptr - several trader account can have same mediator?
         Mediator<void, Stock>& mediator_;
     public:
-        explicit TraderAccount(std::string id, Mediator<void, Stock>& mediator)
+        explicit TraderAccount(std::string&& id, Mediator<void, Stock>& mediator)
                 : id_(std::move(id)), mediator_(mediator) {}
 
        std::string get_id() const {

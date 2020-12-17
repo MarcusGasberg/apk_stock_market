@@ -75,7 +75,6 @@ namespace stock
                     }, *variant);
             };
 
-
             const auto query_connection = queries_sig.connect(get_commands_from_stockbroker_f);
             const auto command_connection = command_sig.connect(commands_f);
             connections.push_back(query_connection);
@@ -112,11 +111,18 @@ namespace stock
             }
         }
 
-        template<typename TTransaction>
-        void do_transaction(TTransaction transaction)
+
+        void do_transaction(BuyStockCommand transaction)
         {
             transaction.execute();
-            all_transactions.push_back(transaction);
+            all_transactions.emplace_back(transaction);
+        }
+
+        void do_transaction(SellStockCommand transaction)
+        {
+
+            transaction.execute();
+            all_transactions.emplace_back(transaction);
         }
 
         void undo_latest_transaction(UndoLatestCommand& undo_command)
@@ -127,7 +133,7 @@ namespace stock
                 return;
             }
 
-            std::function<void()> f = [this]()
+            std::function<void()> undo_latest_f = [this]()
             {
 
                 auto latest = all_transactions.back();
@@ -143,7 +149,7 @@ namespace stock
                     }, latest);
             };
 
-            undo_command.add_undo_action(f);
+            undo_command.add_undo_action(undo_latest_f);
         }
 
         std::vector<std::shared_ptr<TransactionBase>> get_all_transactions()

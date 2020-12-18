@@ -15,8 +15,6 @@ iostream
 /home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/CommandBuilder.h
 StockBroker.h
 /home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/StockBroker.h
-Utility.h
-/home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/Utility.h
 Commands/BuyStockCommand.h
 /home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/Commands/BuyStockCommand.h
 Commands/ListAllStocksCommand.h
@@ -29,14 +27,12 @@ boost/signals2/signal.hpp
 /home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/boost/signals2/signal.hpp
 Commands/TraderAccountDepositCommand.h
 /home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/Commands/TraderAccountDepositCommand.h
+Helpers/Utility.h
+/home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/Helpers/Utility.h
 Queries/GetAllStockQuery.h
 /home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/Queries/GetAllStockQuery.h
 Queries/GetAllTransactionsQuery.h
 /home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/Queries/GetAllTransactionsQuery.h
-Queries/GetLatestStockQuery.h
-/home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/Queries/GetLatestStockQuery.h
-Queries/GetStockQuery.h
-/home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/Queries/GetStockQuery.h
 
 /home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/Commands/BuyStockCommand.h
 iostream
@@ -138,6 +134,12 @@ ctime
 iostream
 -
 
+/home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/Helpers/Utility.h
+algorithm
+-
+string
+-
+
 /home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/Models/Price.h
 ctime
 /home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/Models/ctime
@@ -149,6 +151,8 @@ Price.h
 /home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/Models/Price.h
 
 /home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/Queries/GetAllStockQuery.h
+future
+-
 memory
 -
 vector
@@ -171,10 +175,14 @@ memory
 /home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/Commands/TransactionBase.h
 
 /home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/Queries/GetStockPriceQuery.h
+future
+-
 ../Models/Stock.h
 /home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/Models/Stock.h
 
 /home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/Queries/GetStockQuery.h
+future
+-
 memory
 -
 string
@@ -332,12 +340,6 @@ tuple
 variant
 -
 
-/home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/Utility.h
-algorithm
--
-string
--
-
 /home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/main.cpp
 iostream
 -
@@ -351,8 +353,8 @@ headers/StockPrinter.h
 /home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/StockPrinter.h
 headers/TransactionUndoer.h
 /home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/TransactionUndoer.h
-headers/Utility.h
-/home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/Utility.h
+headers/Helpers/Utility.h
+/home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/Helpers/Utility.h
 headers/AccountManager/AccountManager.h
 /home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/AccountManager/AccountManager.h
 headers/Commands/BuyStockCommand.h

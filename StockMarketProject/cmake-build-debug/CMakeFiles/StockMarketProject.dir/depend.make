@@ -14,6 +14,7 @@ CMakeFiles/StockMarketProject.dir/main.cpp.o: ../headers/Commands/UndoLatestComm
 CMakeFiles/StockMarketProject.dir/main.cpp.o: ../headers/Exceptions/BadCommandException.h
 CMakeFiles/StockMarketProject.dir/main.cpp.o: ../headers/Helpers/IsNumeric.h
 CMakeFiles/StockMarketProject.dir/main.cpp.o: ../headers/Helpers/UserLiterals.h
+CMakeFiles/StockMarketProject.dir/main.cpp.o: ../headers/Helpers/Utility.h
 CMakeFiles/StockMarketProject.dir/main.cpp.o: ../headers/Models/Price.h
 CMakeFiles/StockMarketProject.dir/main.cpp.o: ../headers/Models/Stock.h
 CMakeFiles/StockMarketProject.dir/main.cpp.o: ../headers/Queries/GetAllStockQuery.h
@@ -34,6 +35,5 @@ CMakeFiles/StockMarketProject.dir/main.cpp.o: ../headers/TraderAccount/TraderAcc
 CMakeFiles/StockMarketProject.dir/main.cpp.o: ../headers/TraderAccount/TraderTopics.h
 CMakeFiles/StockMarketProject.dir/main.cpp.o: ../headers/TransactionUndoer.h
 CMakeFiles/StockMarketProject.dir/main.cpp.o: ../headers/TypeList.h
-CMakeFiles/StockMarketProject.dir/main.cpp.o: ../headers/Utility.h
 CMakeFiles/StockMarketProject.dir/main.cpp.o: ../main.cpp
 

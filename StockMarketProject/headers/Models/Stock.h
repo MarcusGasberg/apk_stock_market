@@ -12,25 +12,27 @@ namespace stock
     class Stock
     {
     private:
-        std::string stockId;
+        std::string stock_id;
+        std::string stock_provider_id_;
         int amount_{};
         std::shared_ptr<Price> price_;
     public:
 
         Stock() = default;
 
-        Stock(std::string&& stock_id,  const int amount)
-            : stockId(std::move(stock_id)),
-              amount_(amount)
+        Stock(std::string&& stock_id,  const int amount, std::string && stock_provider_id)
+            : stock_id(std::move(stock_id)),
+              amount_(amount),
+              stock_provider_id_(stock_provider_id_)
         {
         }
 
         std::string getStockId() const {
-            return stockId;
+            return stock_id;
         }
 
         void setStockId(const std::string &stockId) {
-            Stock::stockId = stockId;
+            Stock::stock_id = stockId;
         }
 
         int getAmount() const {
@@ -39,6 +41,14 @@ namespace stock
 
         void setAmount(int amount) {
             Stock::amount_ = amount;
+        }
+
+        const std::string &getStockProviderId() const {
+            return stock_provider_id_;
+        }
+
+        void setStockProviderId(const std::string &stockProviderId) {
+            stock_provider_id_ = stockProviderId;
         }
 
         std::shared_ptr<Price> getPrice() const {

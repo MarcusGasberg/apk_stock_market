@@ -18,9 +18,9 @@ namespace stock {
         std::vector<Stock> stocks_for_sale;
         const int delay_ = 1;
         std::map<std::string, boost::signals2::connection> connections;
-        std::shared_ptr<Mediator<void, Stock&>> mediator_;
+        std::shared_ptr<Mediator<void, const Stock&>> mediator_;
     public:
-        StockProvider(std::string&& name, std::shared_ptr<PriceProvider> price_provider, queries_sig_t& queries_sig, std::shared_ptr<Mediator<void, Stock&>> mediator) :
+        StockProvider(std::string&& name, std::shared_ptr<PriceProvider> price_provider, queries_sig_t& queries_sig, std::shared_ptr<Mediator<void, const Stock&>> mediator) :
             name_(std::move(name)),
             price_provider_(price_provider), mediator_(mediator)
         {
@@ -40,7 +40,7 @@ namespace stock {
             queries_sig.connect(get_stock_f);
 
             auto buy_connection = mediator_->subscribe(TOPICS[TraderTopics::BUY], &StockProvider::remove_bought_stock, this);
-            auto sell_connection = mediator_->subscribe(TOPICS[TraderTopics::SELL], &StockProvider::add_sold_stock, this);
+            auto sell_connection = mediator_->subscribe(TOPICS[TraderTopics::SELL], &StockProvider::add_stock_for_sale, this);
             connections.insert(std::make_pair(TOPICS[TraderTopics::BUY], buy_connection));
             connections.insert(std::make_pair(TOPICS[TraderTopics::SELL], sell_connection));
 
@@ -53,7 +53,7 @@ namespace stock {
             connections.clear();
         }
 
-        void remove_bought_stock(Stock& stock)
+        void remove_bought_stock(const Stock& stock)
         {
             const auto remove_itr = std::remove_if(stocks_for_sale.begin(), stocks_for_sale.end(), [&stock](Stock& st)
             {
@@ -65,14 +65,10 @@ namespace stock {
             }
         }
 
-        void add_sold_stock(Stock& stock)
-        {
-            stocks_for_sale.push_back(stock);
-        }
-
         void add_stock_for_sale(const Stock& stock)
         {
-            stocks_for_sale.push_back(stock);
+            if(stock.getStockProviderId() == this->getName())
+                stocks_for_sale.push_back(stock);
         }
 
         void stockHasBeenBought(Stock&& stock) {

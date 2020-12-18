@@ -5,7 +5,7 @@
 #include "headers/StockBroker.h"
 #include "headers/StockPrinter.h"
 #include "headers/TransactionUndoer.h"
-#include "headers/Utility.h"
+#include "headers/Helpers/Utility.h"
 #include "headers/AccountManager/AccountManager.h"
 #include "headers/Commands/BuyStockCommand.h"
 #include "headers/Commands/Commands.h"
@@ -35,7 +35,7 @@ int main()
     stock::commands_sig_t command_sig;
     stock::queries_sig_t queries_sig;
 
-    std::shared_ptr<stock::Mediator<void, stock::Stock&>> shared_mediator = std::make_shared<stock::Mediator<void, stock::Stock&>>();
+    std::shared_ptr<stock::Mediator<void, const stock::Stock&>> shared_mediator = std::make_shared<stock::Mediator<void, const stock::Stock&>>();
     const auto my_account = std::make_shared<stock::TraderAccount<>>(stock::TraderAccount<>("Jens", shared_mediator, queries_sig));
 
     my_account->deposit(1000);
@@ -55,10 +55,10 @@ int main()
     stock::StockProvider stock_provider_london("London Stock Exchange", shared_price_provider, queries_sig, shared_mediator);
     stock::StockProvider stock_provider_nasdaq("NASDAQ", shared_price_provider, queries_sig, shared_mediator);
 
-    stock_provider_nasdaq.add_stock_for_sale(stock::Stock("Novo Nordisk", 10));
-    stock_provider_nasdaq.add_stock_for_sale(stock::Stock("Maersk", 20));
-    stock_provider_london.add_stock_for_sale(stock::Stock("British Airways", 30));
-    stock_provider_london.add_stock_for_sale(stock::Stock("British American Tobacco", 405));
+    stock_provider_nasdaq.add_stock_for_sale(stock::Stock("Novo Nordisk", 10, "NASDAQ"));
+    stock_provider_nasdaq.add_stock_for_sale(stock::Stock("Maersk", 20, "NASDAQ"));
+    stock_provider_london.add_stock_for_sale(stock::Stock("British Airways", 30, "London Stock Exchange"));
+    stock_provider_london.add_stock_for_sale(stock::Stock("British American Tobacco", 405, "London Stock Exchange"));
 
     stock::StockPriceSimulator sim;
     std::atomic<bool> termination_signal = false;

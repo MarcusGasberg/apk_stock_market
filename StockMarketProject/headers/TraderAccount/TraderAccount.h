@@ -26,10 +26,10 @@ namespace stock {
         std::string id_;
         int balance_{};
         std::vector<Stock> owned_stocks_;
-        std::shared_ptr<Mediator<void, Stock&>> mediator_;
+        std::shared_ptr<Mediator<void, const Stock&>> mediator_;
         queries_sig_t& query_sig_;
     public:
-        explicit TraderAccount(std::string&& id, std::shared_ptr<Mediator<void, Stock&>> mediator, queries_sig_t& query_sig)
+        explicit TraderAccount(std::string&& id, std::shared_ptr<Mediator<void, const Stock&>> mediator, queries_sig_t& query_sig)
                 : id_(std::move(id)), mediator_(mediator), query_sig_(query_sig) {}
 
        std::string get_id() const {

@@ -4,7 +4,6 @@
 
 #ifndef STOCKMARKETPROJECT_STANDARDTRADERPOLICY_H
 #define STOCKMARKETPROJECT_STANDARDTRADERPOLICY_H
-#include "../../AccountManager/AccountManager.h"
 #include "../../Helpers/IsNumeric.h"
 
 namespace stock {

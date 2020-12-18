@@ -24,8 +24,8 @@ namespace stock {
     class TraderAccount {
     private:
         std::string id_;
-        int balance{};
-        std::vector<Stock> ownedStocks_;
+        int balance_{};
+        std::vector<Stock> owned_stocks_;
         std::shared_ptr<Mediator<void, Stock&>> mediator_;
         queries_sig_t& query_sig_;
     public:
@@ -38,23 +38,33 @@ namespace stock {
 
         void deposit(int amount)
         {
-            balance += amount;
+            balance_ += amount;
+        }
+
+        int get_balance() const
+        {
+            return balance_;
         }
 
         std::shared_ptr<Stock> get_stock(std::string stock_id)
         {
             std::shared_ptr<Stock> result;
-            auto stock_itr = std::find_if(ownedStocks_.begin(), ownedStocks_.end(), [&stock_id](Stock& st)
+            auto stock_itr = std::find_if(owned_stocks_.begin(), owned_stocks_.end(), [&stock_id](Stock& st)
                 {
                     return stock_id == st.getStockId();
                 });
 
-            if (stock_itr != ownedStocks_.end())
+            if (stock_itr != owned_stocks_.end())
             {
                 result = std::make_shared<Stock>(*stock_itr);
             }
 
             return result;
+        }
+
+        std::vector<Stock> owned_stocks() const
+        {
+            return owned_stocks_;
         }
 
         bool buy_stock(const std::string& stock_id) {
@@ -83,34 +93,39 @@ namespace stock {
             stock->setPrice(price_result.result);
 
             auto commission = TraderPolicy::calculate_commission(stock->getAmount(), stock->getPrice()->price_);
-            balance -= stock->getAmount() * stock->getPrice()->price_ + commission;
+            auto subtract_amount = stock->getAmount() * stock->getPrice()->price_ + commission;
+            if(balance_ - subtract_amount < 0)
+            {
+                std::cout << "Insufficient funds: " <<  balance_ << ". Needed: " << subtract_amount << "\n";
+                return false;
+            }
 
-            ownedStocks_.push_back(*stock);
+            balance_ -= subtract_amount;
 
-            std::cout << "Bought " << stock->getStockId() << ", new balance is: " << balance << "\n";
+            std::cout << "Bought " << stock->getStockId() << ", new balance is: " << balance_ << "\n";
             mediator_.get()->notify(TOPICS[TraderTopics::BUY], *stock);
             return true;
         }
 
         bool sell_stock(const std::string& stock_id) {
-            auto stock_itr = std::remove_if(ownedStocks_.begin(), ownedStocks_.end(), [&stock_id](Stock& st)
+            auto stock_itr = std::remove_if(owned_stocks_.begin(), owned_stocks_.end(), [&stock_id](Stock& st)
                 {
                     return stock_id == st.getStockId();
                 });
 
-            if(stock_itr == ownedStocks_.end())
+            if(stock_itr == owned_stocks_.end())
             {
                 std::cout << "You don't own the stock: " << stock_id << "\n";
                 return false;
             }
 
             auto commission = TraderPolicy::calculate_commission(stock_itr->getAmount(), stock_itr->getPrice()->price_);
-            balance += stock_itr->getAmount() * stock_itr->getPrice()->price_ - commission;
-            std::cout << "Sold " << stock_itr->getStockId() << ", new balance is: " << balance << "\n";
+            balance_ += stock_itr->getAmount() * stock_itr->getPrice()->price_ - commission;
+            std::cout << "Sold " << stock_itr->getStockId() << ", new balance is: " << balance_ << "\n";
 
             mediator_.get()->notify(std::move(TOPICS[TraderTopics::SELL]), *stock_itr);
 
-            ownedStocks_.erase(stock_itr);
+            owned_stocks_.erase(stock_itr);
 
             return true;
         }

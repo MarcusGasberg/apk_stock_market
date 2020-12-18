@@ -5,7 +5,11 @@
 #include "headers/StockBroker.h"
 #include "headers/StockPrinter.h"
 #include "headers/TransactionUndoer.h"
+#include "headers/Utility.h"
+#include "headers/AccountManager/AccountManager.h"
+#include "headers/Commands/BuyStockCommand.h"
 #include "headers/Commands/Commands.h"
+#include "headers/Commands/SellStockCommand.h"
 #include "headers/Queries/Queries.h"
 #include "headers/StockPrices/PriceProvider.h"
 #include "headers/StockProviders/StockProvider.h"
@@ -15,17 +19,18 @@
 
 int main()
 {
-
-    std::cout << "_______________________________________" << std::endl;
-    std::cout << "     Welcome To Northern Networks    " << std::endl;
-    std::cout << "  Your Modern Stock Market Platform   " << std::endl;
-    std::cout << "_______________________________________" << std::endl;
-    std::cout << "0: Exit Program"  << std::endl;
-    std::cout << "1: Buy Stock" << std::endl;
-    std::cout << "2: Sell Stock" << std::endl;
-    std::cout << "3: List All Transactions" << std::endl;
-    std::cout << "4: Undo Latest" << std::endl;
-    std::cout << "5: List All Available Stocks" << std::endl;
+    std::cout << "_______________________________________\n";
+    std::cout << "     Welcome To Northern Networks    \n";
+    std::cout << "  Your Modern Stock Market Platform   \n";
+    std::cout << "_______________________________________\n";
+    std::cout << "0: Exit Program\n";
+    std::cout << "1: Buy Stock\n";
+    std::cout << "2: Sell Stock\n";
+    std::cout << "3: List All Transactions\n";
+    std::cout << "4: Undo Latest\n";
+    std::cout << "5: List All Available Stocks\n";
+    std::cout << "6: List Owned Stocks\n";
+    std::cout << "7: Deposit Funds\n\n";
 
     boost::signals2::signal<void(std::shared_ptr<stock::commands_var_t>)> command_sig;
     boost::signals2::signal<void(std::shared_ptr<stock::queries_var_t>)> queries_sig;
@@ -35,13 +40,16 @@ int main()
 
     my_account->deposit(1000);
 
+    stock::AccountManager account_manager(command_sig);
     stock::StockBroker stock_broker(queries_sig, command_sig);
     stock::StockPrinter stock_printer(command_sig);
     stock::CommandBuilder command_builder(queries_sig, my_account);
 
     stock::TransactionUndoer transaction_undoer(command_sig);
-
     std::shared_ptr<stock::PriceProvider> shared_price_provider = std::make_shared<stock::PriceProvider>();
+    shared_price_provider.get()->add_stock("stock1", Price(11));
+    shared_price_provider.get()->add_stock("stock2", Price(22));
+    shared_price_provider.get()->add_stock("stock3", Price(33));
 
     shared_price_provider.get()->add_stock("stock1", Price(22));
     shared_price_provider.get()->add_stock("stock2", Price(33));
@@ -50,6 +58,7 @@ int main()
 
     stock_provider.add_stock_for_sale(stock::Stock("stock1", 10));
     stock_provider.add_stock_for_sale(stock::Stock("stock2", 20));
+    stock_provider.add_stock_for_sale(stock::Stock("stock3", 30));
 
     stock::StockPriceSimulator sim;
     std::atomic<bool> termination_signal = false;
@@ -61,9 +70,9 @@ int main()
 
         std::string line;
         std::getline(std::cin, line);
-        if(line.empty() || !std::all_of(line.begin(), line.end(), ::isdigit))
+        if(!str_is_digit(line))
         {
-            std::cout << "Please provide a number between 0 and 6\n";
+            std::cout << "Please provide a number between 0 and 7\n";
             continue;
         }
 
@@ -71,11 +80,6 @@ int main()
 
         try
         {
-            if(choice == 0) {
-                termination_signal = true;
-                break;
-            }
-
             const auto stock_command = command_builder.create_command(choice);
             if(stock_command)
             {

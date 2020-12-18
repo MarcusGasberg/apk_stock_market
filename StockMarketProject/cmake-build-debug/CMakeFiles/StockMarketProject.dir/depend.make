@@ -8,6 +8,7 @@ CMakeFiles/StockMarketProject.dir/main.cpp.o: ../headers/Commands/Commands.h
 CMakeFiles/StockMarketProject.dir/main.cpp.o: ../headers/Commands/ListAllStocksCommand.h
 CMakeFiles/StockMarketProject.dir/main.cpp.o: ../headers/Commands/ListAllTransactionsCommand.h
 CMakeFiles/StockMarketProject.dir/main.cpp.o: ../headers/Commands/SellStockCommand.h
+CMakeFiles/StockMarketProject.dir/main.cpp.o: ../headers/Commands/TraderAccountDepositCommand.h
 CMakeFiles/StockMarketProject.dir/main.cpp.o: ../headers/Commands/TransactionBase.h
 CMakeFiles/StockMarketProject.dir/main.cpp.o: ../headers/Commands/UndoLatestCommand.h
 CMakeFiles/StockMarketProject.dir/main.cpp.o: ../headers/Exceptions/BadCommandException.h
@@ -33,5 +34,6 @@ CMakeFiles/StockMarketProject.dir/main.cpp.o: ../headers/TraderAccount/TraderAcc
 CMakeFiles/StockMarketProject.dir/main.cpp.o: ../headers/TraderAccount/TraderTopics.h
 CMakeFiles/StockMarketProject.dir/main.cpp.o: ../headers/TransactionUndoer.h
 CMakeFiles/StockMarketProject.dir/main.cpp.o: ../headers/TypeList.h
+CMakeFiles/StockMarketProject.dir/main.cpp.o: ../headers/Utility.h
 CMakeFiles/StockMarketProject.dir/main.cpp.o: ../main.cpp
 

@@ -15,11 +15,14 @@ namespace stock {
     */
     class StandardTraderPolicy {
     private:
-        static constexpr float commissionRate = 2.0;
+        static constexpr float commission_rate = 2.0;
+        static constexpr float flat_rate = 30;
     public:
         template<typename T, typename = IsNumeric<T>>
         static T calculate_commission(T boughtAmount, T stockPrice) {
-            return (stockPrice * boughtAmount * (commissionRate / 100));
+            int commission = (stockPrice * boughtAmount * (commission_rate / 100));
+            if(commission > 30) return commission;
+            else return flat_rate;
         }
     };
 }

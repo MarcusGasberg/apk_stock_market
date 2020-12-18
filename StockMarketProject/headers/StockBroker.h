@@ -111,18 +111,14 @@ namespace stock
             }
         }
 
-
-        void do_transaction(BuyStockCommand transaction)
+        template<typename Command>
+        void do_transaction(Command transaction)
         {
-            transaction.execute();
-            all_transactions.emplace_back(transaction);
-        }
-
-        void do_transaction(SellStockCommand transaction)
-        {
-
-            transaction.execute();
-            all_transactions.emplace_back(transaction);
+            auto success = transaction.execute();
+            if(success)
+            {
+                all_transactions.emplace_back(transaction);
+            }
         }
 
         void undo_latest_transaction(UndoLatestCommand& undo_command)

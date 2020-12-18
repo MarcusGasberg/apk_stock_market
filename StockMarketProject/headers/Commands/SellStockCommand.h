@@ -20,25 +20,25 @@ namespace stock
         SellStockCommand() = default;
 
 
-        explicit SellStockCommand(std::shared_ptr<TraderAccount<>> seller_account, std::string&& stock_id, std::shared_ptr<Price> stock_price)
-            : seller_account_(std::move(seller_account)), stock_id_(std::move(stock_id)), stock_price_(std::move(stock_price))
+        SellStockCommand(std::shared_ptr<TraderAccount<>> seller_account, std::string stock_id)
+            : seller_account_(std::move(seller_account)), stock_id_(std::move(stock_id))
         {
         }
 
-        void execute()
+        bool execute()
         {
-            seller_account_->sell_stock(stock_id_, stock_price_->price_);
+            return seller_account_->sell_stock(stock_id_);
         }
-
-        void undo()
+        
+        bool undo()
         {
-            seller_account_->buy_stock(stock_id_, stock_price_->price_);
+            return seller_account_->buy_stock(stock_id_);
         }
 
         std::string get_description() const override
         {
             std::stringstream ss;
-            ss << "SellCommand[" << get_id() << "]";
+            ss << "SellCommand[" << get_id() << "]: " << stock_id_;
             return ss.str();
         }
 

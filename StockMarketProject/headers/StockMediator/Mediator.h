@@ -88,7 +88,7 @@ namespace stock {
             }
         }
 
-        void notify(const std::string &topic, params &&... parameters) {
+        void notify(std::string && topic, params &&... parameters) {
             typename TopicMap::iterator topicIterator = std::find_if(topicMap.begin(), topicMap.end(),
                                                                      [&](const auto &map) {
                                                                          return map.first == topic;

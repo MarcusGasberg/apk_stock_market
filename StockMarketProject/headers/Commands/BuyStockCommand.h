@@ -17,42 +17,30 @@ namespace stock
     class BuyStockCommand : public TransactionBase
     {
         std::shared_ptr<TraderAccount<>> buyer_account_;
-        std::shared_ptr<Price> price_;
         std::string stock_id_;
     public:
 
         BuyStockCommand()= default;
 
-        BuyStockCommand(std::shared_ptr<TraderAccount<>> buyer_account, std::string stock_id, std::shared_ptr<Price> price)
-            : TransactionBase(),
-            buyer_account_(std::move(buyer_account)), price_(std::move(price)), stock_id_(std::move(stock_id))
+        BuyStockCommand(std::shared_ptr<TraderAccount<>> buyer_account, std::string stock_id)
+            : buyer_account_(std::move(buyer_account)), stock_id_(std::move(stock_id))
         {
         }
 
-        void execute()
+        bool execute() const
         {
-            if(price_)
-            {
-                buyer_account_->buy_stock(stock_id_, price_->price_);
-            }
-            else
-            {
-                std::cout << "Stock not found\n";
-            }
+            return buyer_account_->buy_stock(stock_id_);
         }
 
-        void undo()
+        bool undo() const
         {
-            if (price_)
-            {
-                buyer_account_->sell_stock(stock_id_, price_->price_);
-            }
+            return buyer_account_->sell_stock(stock_id_);
         }
 
         std::string get_description() const override
         {
             std::stringstream ss;
-            ss << "BuyCommand[" << get_id() << "]";
+            ss << "BuyCommand[" << get_id() << "]: " << stock_id_;
             return ss.str();
         }
 

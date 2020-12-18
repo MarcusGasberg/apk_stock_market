@@ -110,6 +110,12 @@ stdexcept
 iostream
 -
 
+/home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/Helpers/UserLiterals.h
+ctime
+-
+iostream
+-
+
 /home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/Models/Price.h
 ctime
 /home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/Models/ctime
@@ -235,6 +241,12 @@ random
 /home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/StockPrices/random
 thread
 /home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/StockPrices/thread
+chrono
+/home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/StockPrices/chrono
+../Helpers/UserLiterals.h
+/home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/Helpers/UserLiterals.h
+math.h
+/home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/StockPrices/math.h
 
 /home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/StockPrinter.h
 variant
@@ -315,12 +327,8 @@ headers/StockPrinter.h
 /home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/StockPrinter.h
 headers/TransactionUndoer.h
 /home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/TransactionUndoer.h
-headers/Commands/BuyStockCommand.h
-/home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/Commands/BuyStockCommand.h
 headers/Commands/Commands.h
 /home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/Commands/Commands.h
-headers/Commands/SellStockCommand.h
-/home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/Commands/SellStockCommand.h
 headers/Queries/Queries.h
 /home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/Queries/Queries.h
 headers/StockPrices/PriceProvider.h

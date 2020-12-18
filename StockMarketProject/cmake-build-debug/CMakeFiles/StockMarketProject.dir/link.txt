@@ -1,1 +1,1 @@
-/usr/bin/c++  -g   CMakeFiles/StockMarketProject.dir/main.cpp.o  -o StockMarketProject 
+/usr/bin/c++  -pthread -g   CMakeFiles/StockMarketProject.dir/main.cpp.o  -o StockMarketProject 

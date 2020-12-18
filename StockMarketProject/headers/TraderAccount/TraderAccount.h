@@ -26,10 +26,10 @@ namespace stock {
         std::string id_;
         int balance{};
         std::vector<Stock> ownedStocks_;
-        Mediator<void, Stock&>& mediator_;
+        std::shared_ptr<Mediator<void, Stock&>> mediator_;
         queries_sig_t& query_sig_;
     public:
-        explicit TraderAccount(std::string&& id, Mediator<void, Stock&>& mediator, queries_sig_t& query_sig)
+        explicit TraderAccount(std::string&& id, std::shared_ptr<Mediator<void, Stock&>> mediator, queries_sig_t& query_sig)
                 : id_(std::move(id)), mediator_(mediator), query_sig_(query_sig) {}
 
        std::string get_id() const {
@@ -70,7 +70,7 @@ namespace stock {
             ownedStocks_.push_back(*stock);
 
             std::cout << "Bought " << stock->getStockId() << ", new balance is: " << balance << "\n";
-            mediator_.notify(TOPICS[TraderTopics::BUY], *stock);
+            mediator_.get()->notify(TOPICS[TraderTopics::BUY], *stock);
             return true;
         }
 
@@ -91,7 +91,7 @@ namespace stock {
             balance += stock_itr->getAmount() * stock_itr->getPrice().price_ - commission;
             std::cout << "Sold " << stock_itr->getStockId() << ", new balance is: " << balance << "\n";
 
-            mediator_.notify(TOPICS[TraderTopics::SELL], *stock_itr);
+            mediator_.get()->notify(TOPICS[TraderTopics::SELL], *stock_itr);
             return true;
         }
     };

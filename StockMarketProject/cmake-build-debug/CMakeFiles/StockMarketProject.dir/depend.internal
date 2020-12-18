@@ -13,6 +13,7 @@ CMakeFiles/StockMarketProject.dir/main.cpp.o
  /home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/Commands/UndoLatestCommand.h
  /home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/Exceptions/BadCommandException.h
  /home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/Helpers/IsNumeric.h
+ /home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/Helpers/UserLiterals.h
  /home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/Models/Price.h
  /home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/Models/Stock.h
  /home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/Queries/GetAllStockQuery.h

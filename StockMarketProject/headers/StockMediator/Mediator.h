@@ -34,7 +34,7 @@ namespace stock {
         // TODO: Shared_pointer / Unique_pointer for connection?
         template<typename T>
         boost::signals2::connection
-        subscribe(const std::string &topic, returnType (T::* providerCallback)(params ...), T *providerObject) {
+        subscribe(std::string && topic, returnType (T::* providerCallback)(params ...), T *providerObject) {
             // 1. Check if topic exists
             // 2. Check if provider already registered
             // 3. Add callback to topic map.
@@ -56,7 +56,7 @@ namespace stock {
                 std::cout << "Connecting: " << typeid(providerObject).name() << " to NEW topic: " << topic << std::endl;
                 auto connection = signal.connect(callback);
 
-                TopicInsertResult ir = topicMap.insert(std::make_pair(topic, std::forward<ProviderSignal>(signal)));
+                TopicInsertResult ir = topicMap.insert(std::make_pair(std::move(topic), std::forward<ProviderSignal>(signal)));
                 if (!ir.second) {
                     throw "An error occurred when inserting topic map.";
                 }
@@ -68,10 +68,10 @@ namespace stock {
             }
         }
 
-        // Provider must implement equality operator.
         // TODO: Make connection be handled by mediator.
         // TODO: Make connections tracked.
-        void unSubscribe(const std::string &topic, boost::signals2::connection &connection) {
+        // Ownership of topic and connection is moved to mediator.
+        void unSubscribe(std::string && topic, boost::signals2::connection && connection) {
             // Only works if provider has equality operator.
             if (connection.connected()) {
                 // 1. Check if topic exists

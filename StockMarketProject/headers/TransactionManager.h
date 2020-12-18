@@ -34,14 +34,14 @@ namespace stock
         void operator()(...) const {}
     };
 
-    class StockBroker
+    class TransactionManager
     {
         std::vector<commands_var_t> all_transactions;
         std::vector<boost::signals2::connection> connections;
 
     public:
-        StockBroker(queries_sig_t& queries_sig,
-            commands_sig_t& command_sig)
+        TransactionManager(queries_sig_t& queries_sig,
+                           commands_sig_t& command_sig)
         {
             const std::function<void(std::shared_ptr<queries_var_t>)> get_commands_from_stockbroker_f =
                 [this](const std::shared_ptr<queries_var_t> query)
@@ -76,7 +76,7 @@ namespace stock
             connections.push_back(command_connection);
         }
 
-        ~StockBroker()
+        ~TransactionManager()
         {
             for (int i = connections.size() - 1; i >= 0; --i)
             {

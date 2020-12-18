@@ -17,10 +17,10 @@ namespace stock {
     template<typename returnType, typename... params>
     class Mediator {
     public:
-        // Reference to StockProvider callback, activated upon notification.
+        // Reference to StockBroker callback, activated upon notification.
         typedef boost::signals2::signal<returnType(params ...)> ProviderSignal;
 
-        // String id to identify subscriber topic and all StockProvider callbacks
+        // String id to identify subscriber topic and all StockBroker callbacks
         typedef std::map<std::string, ProviderSignal> TopicMap;
 
         typedef std::pair<typename TopicMap::iterator, bool> TopicInsertResult;

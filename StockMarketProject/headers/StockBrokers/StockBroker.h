@@ -2,8 +2,8 @@
 // Created by stud on 12/15/20.
 //
 
-#ifndef STOCKMARKETPROJECT_STOCKPROVIDER_H
-#define STOCKMARKETPROJECT_STOCKPROVIDER_H
+#ifndef STOCKMARKETPROJECT_STOCKBROKER_H
+#define STOCKMARKETPROJECT_STOCKBROKER_H
 
 #include <string>
 #include "../Models/Stock.h"
@@ -12,15 +12,15 @@
 #include "../StockPrices/PriceProvider.h"
 
 namespace stock {
-    class StockProvider {
+    class StockBroker {
         std::string name_;
         std::shared_ptr<PriceProvider> price_provider_;
         std::vector<Stock> stocks_for_sale;
         const int delay_ = 1;
         std::map<std::string, boost::signals2::connection> connections;
-        std::shared_ptr<Mediator<void, const Stock&>> mediator_;
+        std::shared_ptr<Mediator<void, Stock&>> mediator_;
     public:
-        StockProvider(std::string&& name, std::shared_ptr<PriceProvider> price_provider, queries_sig_t& queries_sig, std::shared_ptr<Mediator<void, const Stock&>> mediator) :
+        StockBroker(std::string&& name, std::shared_ptr<PriceProvider> price_provider, queries_sig_t& queries_sig, std::shared_ptr<Mediator < void, Stock&>> mediator) :
             name_(std::move(name)),
             price_provider_(price_provider), mediator_(mediator)
         {
@@ -39,21 +39,21 @@ namespace stock {
 
             queries_sig.connect(get_stock_f);
 
-            auto buy_connection = mediator_->subscribe(TOPICS[TraderTopics::BUY], &StockProvider::remove_bought_stock, this);
-            auto sell_connection = mediator_->subscribe(TOPICS[TraderTopics::SELL], &StockProvider::add_stock_for_sale, this);
+            auto buy_connection = mediator_->subscribe(TOPICS[TraderTopics::BUY], &StockBroker::remove_bought_stock, this);
+            auto sell_connection = mediator_->subscribe(TOPICS[TraderTopics::SELL], &StockBroker::add_stock, this);
             connections.insert(std::make_pair(TOPICS[TraderTopics::BUY], buy_connection));
             connections.insert(std::make_pair(TOPICS[TraderTopics::SELL], sell_connection));
 
         }
 
-        virtual ~StockProvider() {
+        virtual ~StockBroker() {
             std::for_each(connections.begin(), connections.end(), [&](std::pair<std::string, boost::signals2::connection> && pair){
                 mediator_->unSubscribe(std::move(pair.first), std::move(pair.second));
             });
             connections.clear();
         }
 
-        void remove_bought_stock(const Stock& stock)
+        void remove_bought_stock(Stock& stock)
         {
             const auto remove_itr = std::remove_if(stocks_for_sale.begin(), stocks_for_sale.end(), [&stock](Stock& st)
             {
@@ -63,6 +63,11 @@ namespace stock {
             {
                 stocks_for_sale.erase(remove_itr);
             }
+        }
+
+        void add_stock(Stock& stock) {
+            if(stock.getStockProviderId() == this->getName())
+                stocks_for_sale.push_back(stock);
         }
 
         void add_stock_for_sale(const Stock& stock)
@@ -80,7 +85,7 @@ namespace stock {
         }
 
         void setName(const std::string& name) {
-            StockProvider::name_ = name;
+            StockBroker::name_ = name;
         }
 
     private:
@@ -134,4 +139,4 @@ namespace stock {
         }
     };
 }
-#endif //STOCKMARKETPROJECT_STOCKPROVIDER_H
+#endif //STOCKMARKETPROJECT_STOCKBROKER_H

@@ -1,18 +1,14 @@
 #include <iostream>
-#include <variant>
-
 #include "headers/CommandBuilder.h"
-#include "headers/StockBroker.h"
+#include "headers/TransactionManager.h"
 #include "headers/StockPrinter.h"
 #include "headers/TransactionUndoer.h"
 #include "headers/Helpers/Utility.h"
 #include "headers/AccountManager/AccountManager.h"
-#include "headers/Commands/BuyStockCommand.h"
 #include "headers/Commands/Commands.h"
-#include "headers/Commands/SellStockCommand.h"
 #include "headers/Queries/Queries.h"
 #include "headers/StockPrices/PriceProvider.h"
-#include "headers/StockProviders/StockProvider.h"
+#include "headers/StockBrokers//StockBroker.h"
 #include "headers/Models/Price.h"
 #include "headers/TraderAccount/TraderAccount.h"
 #include "headers/StockPrices/StockPriceSimulator.h"
@@ -35,13 +31,13 @@ int main()
     stock::commands_sig_t command_sig;
     stock::queries_sig_t queries_sig;
 
-    std::shared_ptr<stock::Mediator<void, const stock::Stock&>> shared_mediator = std::make_shared<stock::Mediator<void, const stock::Stock&>>();
+    std::shared_ptr<stock::Mediator<void, stock::Stock&>> shared_mediator = std::make_shared<stock::Mediator<void, stock::Stock&>>();
     const auto my_account = std::make_shared<stock::TraderAccount<>>(stock::TraderAccount<>("Jens", shared_mediator, queries_sig));
 
     my_account->deposit(1000);
 
     stock::AccountManager account_manager(command_sig);
-    stock::StockBroker stock_broker(queries_sig, command_sig);
+    stock::TransactionManager stock_broker(queries_sig, command_sig);
     stock::StockPrinter stock_printer(command_sig);
     stock::CommandBuilder command_builder(queries_sig, my_account);
 
@@ -52,8 +48,8 @@ int main()
     shared_price_provider->add_stock("British Airways", Price(33));
     shared_price_provider->add_stock("British American Tobacco", Price(33));
 
-    stock::StockProvider stock_provider_london("London Stock Exchange", shared_price_provider, queries_sig, shared_mediator);
-    stock::StockProvider stock_provider_nasdaq("NASDAQ", shared_price_provider, queries_sig, shared_mediator);
+    stock::StockBroker stock_provider_london("London Stock Exchange", shared_price_provider, queries_sig, shared_mediator);
+    stock::StockBroker stock_provider_nasdaq("NASDAQ", shared_price_provider, queries_sig, shared_mediator);
 
     stock_provider_nasdaq.add_stock_for_sale(stock::Stock("Novo Nordisk", 10, "NASDAQ"));
     stock_provider_nasdaq.add_stock_for_sale(stock::Stock("Maersk", 20, "NASDAQ"));
@@ -81,7 +77,7 @@ int main()
         try
         {
             if(choice == 0) {
-                termination_signal = true;
+                //termination_signal = true;
                 break;
             }
 

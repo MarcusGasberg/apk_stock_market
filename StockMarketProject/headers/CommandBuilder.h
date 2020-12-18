@@ -1,5 +1,5 @@
 #pragma once
-#include "StockBroker.h"
+#include "TransactionManager.h"
 #include "Commands/BuyStockCommand.h"
 #include "Commands/ListAllStocksCommand.h"
 #include "Commands/SellStockCommand.h"

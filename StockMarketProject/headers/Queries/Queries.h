@@ -4,7 +4,7 @@
 #include "GetLatestStockQuery.h"
 #include "GetStockPriceQuery.h"
 #include "GetStockQuery.h"
-#include "../StockBroker.h"
+#include "../TransactionManager.h"
 #include "../TypeList.h"
 
 namespace stock

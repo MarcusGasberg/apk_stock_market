@@ -133,7 +133,7 @@
 		<Unit filename="/home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/Queries/Queries.h">
 			<Option target="StockMarketProject"/>
 		</Unit>
-		<Unit filename="/home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/StockBroker.h">
+		<Unit filename="/home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/StockBrokers/StockBroker.h">
 			<Option target="StockMarketProject"/>
 		</Unit>
 		<Unit filename="/home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/StockMediator/Mediator.h">
@@ -151,13 +151,13 @@
 		<Unit filename="/home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/StockPrinter.h">
 			<Option target="StockMarketProject"/>
 		</Unit>
-		<Unit filename="/home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/StockProviders/StockProvider.h">
-			<Option target="StockMarketProject"/>
-		</Unit>
 		<Unit filename="/home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/TraderAccount/TraderAccount.h">
 			<Option target="StockMarketProject"/>
 		</Unit>
 		<Unit filename="/home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/TraderAccount/TraderTopics.h">
+			<Option target="StockMarketProject"/>
+		</Unit>
+		<Unit filename="/home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/TransactionManager.h">
 			<Option target="StockMarketProject"/>
 		</Unit>
 		<Unit filename="/home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/TransactionUndoer.h">

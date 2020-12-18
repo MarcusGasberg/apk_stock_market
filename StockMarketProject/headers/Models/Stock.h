@@ -23,7 +23,7 @@ namespace stock
         Stock(std::string&& stock_id,  const int amount, std::string && stock_provider_id)
             : stock_id(std::move(stock_id)),
               amount_(amount),
-              stock_provider_id_(stock_provider_id_)
+              stock_provider_id_(std::move(stock_provider_id))
         {
         }
 

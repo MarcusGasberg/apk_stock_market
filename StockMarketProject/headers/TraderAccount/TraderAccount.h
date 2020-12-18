@@ -125,6 +125,13 @@ namespace stock {
                 return false;
             }
 
+            std::shared_ptr<queries_var_t> queries_var = std::make_shared<queries_var_t>(GetStockPriceQuery(std::string{ stock_id }));
+            query_sig_(queries_var);
+            GetStockPriceQuery price_result = std::move(std::get<GetStockPriceQuery>(*queries_var));
+
+            const auto price = price_result.result.get();
+            stock_itr->setPrice(price);
+
             auto commission = TraderPolicy::calculate_commission(stock_itr->getAmount(), stock_itr->getPrice()->price_);
             balance_ += stock_itr->getAmount() * stock_itr->getPrice()->price_ - commission;
             std::cout << "Sold " << stock_itr->getStockId() << ", new balance is: " << balance_ << "\n";

@@ -4,7 +4,6 @@
 #include "headers/StockBroker.h"
 #include "headers/StockPrinter.h"
 #include "headers/TransactionUndoer.h"
-#include "headers/Utility.h"
 #include "headers/AccountManager/AccountManager.h"
 #include "headers/Commands/BuyStockCommand.h"
 #include "headers/Commands/Commands.h"

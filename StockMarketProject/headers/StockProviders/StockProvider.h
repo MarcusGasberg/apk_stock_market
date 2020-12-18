@@ -13,11 +13,11 @@
 
 namespace stock {
     class StockProvider {
-    private:
         std::string name_;
         PriceProvider& price_provider_;
         std::vector<Stock> stocks_for_sale;
         Mediator<void, Stock&>& mediator_;
+        const int delay_ = 1;
     public:
         StockProvider(std::string&& name, PriceProvider& price_provider, queries_sig_t& queries_sig, Mediator<void, Stock&>& mediator) :
             name_(std::move(name)),
@@ -28,51 +28,10 @@ namespace stock {
                 std::visit([this](auto&& query)
                     {
                         using T = std::decay_t<decltype(query)>;
-                        if constexpr (std::is_same_v<T, GetStockQuery>)
+                        if constexpr (std::is_same_v<T, GetStockQuery> || std::is_same_v<T, GetAllStockQuery> || std::is_same_v<T, GetStockPriceQuery>)
                         {
-                            auto stock_id = std::make_shared<std::string>(query.get_stock_id());
-
-                            query.result = std::async(std::launch::async, [stock_id, this]()
-                                {
-                                    std::cout << "Finding stock " << *stock_id << "...\n";
-                                    std::this_thread::sleep_for(std::chrono::seconds(2));
-
-                                    std::shared_ptr<Stock> result;
-                                    auto stock = std::find_if(stocks_for_sale.begin(), stocks_for_sale.end(), [stock_id, this](Stock st)
-                                        {
-                                            return st.getStockId() == *stock_id;
-                                        });
-
-                                    if (stock == stocks_for_sale.end())
-                                        return result;
-
-                                    stock->setPrice(price_provider_.get_price(stock->getStockId()));
-                                    result = std::make_shared<Stock>(*stock);
-
-                                    return result;
-                                });
-                        }
-                        if constexpr (std::is_same_v<T, GetAllStockQuery>)
-                        {
-                            query.result = std::async(std::launch::async, [this]()
-                                {
-                                    auto stocks = stocks_for_sale;
-                                    for (auto && stock : stocks)
-                                    {
-                                        stock.setPrice(price_provider_.get_price(stock.getStockId()));
-                                    }
-                                    return stocks;
-                                });
-                        }
-                        if constexpr (std::is_same_v<T, GetStockPriceQuery>)
-                        {
-                            auto stock_id = std::make_shared<std::string>(query.get_stock_id());
-                            query.result = std::async(std::launch::async, [stock_id, this]()
-                                {
-                                    std::cout << "Getting price of " << *stock_id << "...\n";
-                                    std::this_thread::sleep_for(std::chrono::seconds(2));
-                                    return price_provider_.get_price(std::move(*stock_id));
-                                });
+                            handle(query);
+                            
                         }
                     }, 
                     *query_var);
@@ -115,6 +74,55 @@ namespace stock {
             StockProvider::name_ = name;
         }
 
+    private:
+        void handle(GetStockQuery& query)
+        {
+            auto stock_id = std::make_shared<std::string>(query.get_stock_id());
+
+            query.result = std::async(std::launch::async, [stock_id, this]()
+                {
+                    std::cout << "Finding stock " << *stock_id << "...\n";
+                    std::this_thread::sleep_for(std::chrono::seconds(delay_));
+
+                    std::shared_ptr<Stock> result;
+                    auto stock = std::find_if(stocks_for_sale.begin(), stocks_for_sale.end(), [stock_id, this](Stock st)
+                        {
+                            return st.getStockId() == *stock_id;
+                        });
+
+                    if (stock == stocks_for_sale.end())
+                        return result;
+
+                    stock->setPrice(price_provider_.get_price(stock->getStockId()));
+                    result = std::make_shared<Stock>(*stock);
+
+                    return result;
+                });
+        }
+
+        void handle(GetAllStockQuery& query)
+        {
+            query.result = std::async(std::launch::async, [this]()
+                {
+                    auto stocks = stocks_for_sale;
+                    for (auto&& stock : stocks)
+                    {
+                        stock.setPrice(price_provider_.get_price(stock.getStockId()));
+                    }
+                    return stocks;
+                });
+        }
+
+        void handle(GetStockPriceQuery& query)
+        {
+            auto stock_id = std::make_shared<std::string>(query.get_stock_id());
+            query.result = std::async(std::launch::async, [stock_id, this]()
+                {
+                    std::cout << "Getting price of " << *stock_id << "...\n";
+                    std::this_thread::sleep_for(std::chrono::seconds(delay_));
+                    return price_provider_.get_price(std::move(*stock_id));
+                });
+        }
     };
 }
 #endif //STOCKMARKETPROJECT_STOCKPROVIDER_H

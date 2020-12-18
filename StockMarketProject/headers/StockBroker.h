@@ -4,8 +4,6 @@
 #include <vector>
 #include <functional>
 #include <boost/signals2/signal.hpp>
-
-
 #include "Commands/BuyStockCommand.h"
 #include "Commands/SellStockCommand.h"
 #include "Commands/Commands.h"
@@ -27,6 +25,7 @@ namespace stock
         }
 
         template <typename C>
+        // C = Concrete variant command.
         void operator ()(C val)
         {
             if constexpr (std::is_base_of_v<T, C>)
@@ -36,6 +35,7 @@ namespace stock
         }
 
         template<typename >
+        // If not base class do not insert.
         void operator()(...) const {}
     };
 

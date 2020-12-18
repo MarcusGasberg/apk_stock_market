@@ -97,6 +97,9 @@
 		<Unit filename="/home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/Commands/SellStockCommand.h">
 			<Option target="StockMarketProject"/>
 		</Unit>
+		<Unit filename="/home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/Commands/TraderAccountDepositCommand.h">
+			<Option target="StockMarketProject"/>
+		</Unit>
 		<Unit filename="/home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/Commands/TransactionBase.h">
 			<Option target="StockMarketProject"/>
 		</Unit>
@@ -118,10 +121,10 @@
 		<Unit filename="/home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/Queries/GetAllTransactionsQuery.h">
 			<Option target="StockMarketProject"/>
 		</Unit>
-		<Unit filename="/home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/Queries/GetStockQuery.h">
+		<Unit filename="/home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/Queries/GetStockPriceQuery.h">
 			<Option target="StockMarketProject"/>
 		</Unit>
-		<Unit filename="/home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/Queries/GetTraderAccountQuery.h">
+		<Unit filename="/home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/Queries/GetStockQuery.h">
 			<Option target="StockMarketProject"/>
 		</Unit>
 		<Unit filename="/home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/Queries/Queries.h">
@@ -139,16 +142,25 @@
 		<Unit filename="/home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/StockPrices/PriceProvider.h">
 			<Option target="StockMarketProject"/>
 		</Unit>
+		<Unit filename="/home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/StockPrices/StockPriceSimulator.h">
+			<Option target="StockMarketProject"/>
+		</Unit>
 		<Unit filename="/home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/StockPrinter.h">
 			<Option target="StockMarketProject"/>
 		</Unit>
 		<Unit filename="/home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/StockProviders/StockProvider.h">
 			<Option target="StockMarketProject"/>
 		</Unit>
+		<Unit filename="/home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/TraderAccount/TraderAccount.h">
+			<Option target="StockMarketProject"/>
+		</Unit>
 		<Unit filename="/home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/TraderAccount/TraderTopics.h">
 			<Option target="StockMarketProject"/>
 		</Unit>
 		<Unit filename="/home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/TransactionUndoer.h">
+			<Option target="StockMarketProject"/>
+		</Unit>
+		<Unit filename="/home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/Utility.h">
 			<Option target="StockMarketProject"/>
 		</Unit>
 		<Unit filename="/home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/main.cpp">

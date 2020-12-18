@@ -3,7 +3,6 @@
 #include <iostream>
 #include <ostream>
 #include "TransactionBase.h"
-#include "TraderAccount/TraderAccount.h"
 
 namespace stock
 {

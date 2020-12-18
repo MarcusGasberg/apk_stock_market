@@ -14,12 +14,13 @@
 namespace stock {
     class StockProvider {
         std::string name_;
-        PriceProvider& price_provider_;
+        std::shared_ptr<PriceProvider> price_provider_;
         std::vector<Stock> stocks_for_sale;
-        Mediator<void, Stock&>& mediator_;
         const int delay_ = 1;
+        std::map<std::string, boost::signals2::connection> connections;
+        std::shared_ptr<Mediator<void, Stock&>> mediator_;
     public:
-        StockProvider(std::string&& name, PriceProvider& price_provider, queries_sig_t& queries_sig, Mediator<void, Stock&>& mediator) :
+        StockProvider(std::string&& name, std::shared_ptr<PriceProvider> price_provider, queries_sig_t& queries_sig, std::shared_ptr<Mediator<void, Stock&>> mediator) :
             name_(std::move(name)),
             price_provider_(price_provider), mediator_(mediator)
         {
@@ -31,7 +32,6 @@ namespace stock {
                         if constexpr (std::is_same_v<T, GetStockQuery> || std::is_same_v<T, GetAllStockQuery> || std::is_same_v<T, GetStockPriceQuery>)
                         {
                             handle(query);
-                            
                         }
                     }, 
                     *query_var);
@@ -39,8 +39,18 @@ namespace stock {
 
             queries_sig.connect(get_stock_f);
 
-            mediator_.subscribe(TOPICS[TraderTopics::BUY], &StockProvider::remove_bought_stock, this);
-            mediator_.subscribe(TOPICS[TraderTopics::SELL], &StockProvider::add_sold_stock, this);
+            auto buy_connection = mediator_.get()->subscribe(std::move(TOPICS[TraderTopics::BUY]), &StockProvider::remove_bought_stock, this);
+            auto sell_connection = mediator_.get()->subscribe(std::move(TOPICS[TraderTopics::SELL]), &StockProvider::add_sold_stock, this);
+            connections.insert(std::make_pair(std::move(TOPICS[TraderTopics::BUY]), buy_connection));
+            connections.insert(std::make_pair(std::move(TOPICS[TraderTopics::SELL]), sell_connection));
+
+        }
+
+        virtual ~StockProvider() {
+            std::for_each(connections.begin(), connections.end(), [&](std::pair<std::string, boost::signals2::connection> && pair){
+                mediator_.get()->unSubscribe(std::move(pair.first), std::move(pair.second));
+            });
+            connections.clear();
         }
 
         void remove_bought_stock(Stock& stock)
@@ -93,7 +103,7 @@ namespace stock {
                     if (stock == stocks_for_sale.end())
                         return result;
 
-                    stock->setPrice(price_provider_.get_price(stock->getStockId()));
+                    stock->setPrice(price_provider_->get_price(stock->getStockId()));
                     result = std::make_shared<Stock>(*stock);
 
                     return result;
@@ -107,7 +117,7 @@ namespace stock {
                     auto stocks = stocks_for_sale;
                     for (auto&& stock : stocks)
                     {
-                        stock.setPrice(price_provider_.get_price(stock.getStockId()));
+                        stock.setPrice(price_provider_->get_price(stock.getStockId()));
                     }
                     return stocks;
                 });
@@ -120,7 +130,7 @@ namespace stock {
                 {
                     std::cout << "Getting price of " << *stock_id << "...\n";
                     std::this_thread::sleep_for(std::chrono::seconds(delay_));
-                    return price_provider_.get_price(std::move(*stock_id));
+                    return price_provider_->get_price(std::move(*stock_id));
                 });
         }
     };

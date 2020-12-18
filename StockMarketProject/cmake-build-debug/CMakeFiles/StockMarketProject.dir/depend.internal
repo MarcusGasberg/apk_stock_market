@@ -9,22 +9,25 @@ CMakeFiles/StockMarketProject.dir/main.cpp.o
  /home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/Commands/ListAllStocksCommand.h
  /home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/Commands/ListAllTransactionsCommand.h
  /home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/Commands/SellStockCommand.h
+ /home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/Commands/TraderAccountDepositCommand.h
  /home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/Commands/TransactionBase.h
  /home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/Commands/UndoLatestCommand.h
  /home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/Exceptions/BadCommandException.h
  /home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/Helpers/IsNumeric.h
+ /home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/Helpers/UserLiterals.h
  /home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/Models/Price.h
  /home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/Models/Stock.h
  /home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/Queries/GetAllStockQuery.h
  /home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/Queries/GetAllTransactionsQuery.h
  /home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/Queries/GetLatestStockQuery.h
+ /home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/Queries/GetStockPriceQuery.h
  /home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/Queries/GetStockQuery.h
- /home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/Queries/GetTraderAccountQuery.h
  /home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/Queries/Queries.h
  /home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/StockBroker.h
  /home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/StockMediator/Mediator.h
  /home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/StockMediator/Placeholders.h
  /home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/StockPrices/PriceProvider.h
+ /home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/StockPrices/StockPriceSimulator.h
  /home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/StockPrinter.h
  /home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/StockProviders/StockProvider.h
  /home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/TraderAccount/Policies/StandardTraderPolicy.h
@@ -32,4 +35,5 @@ CMakeFiles/StockMarketProject.dir/main.cpp.o
  /home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/TraderAccount/TraderTopics.h
  /home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/TransactionUndoer.h
  /home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/TypeList.h
+ /home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/Utility.h
  /home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/main.cpp

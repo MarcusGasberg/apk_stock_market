@@ -39,16 +39,16 @@ namespace stock {
 
             queries_sig.connect(get_stock_f);
 
-            auto buy_connection = mediator_.get()->subscribe(std::move(TOPICS[TraderTopics::BUY]), &StockProvider::remove_bought_stock, this);
-            auto sell_connection = mediator_.get()->subscribe(std::move(TOPICS[TraderTopics::SELL]), &StockProvider::add_sold_stock, this);
-            connections.insert(std::make_pair(std::move(TOPICS[TraderTopics::BUY]), buy_connection));
-            connections.insert(std::make_pair(std::move(TOPICS[TraderTopics::SELL]), sell_connection));
+            auto buy_connection = mediator_->subscribe(TOPICS[TraderTopics::BUY], &StockProvider::remove_bought_stock, this);
+            auto sell_connection = mediator_->subscribe(TOPICS[TraderTopics::SELL], &StockProvider::add_sold_stock, this);
+            connections.insert(std::make_pair(TOPICS[TraderTopics::BUY], buy_connection));
+            connections.insert(std::make_pair(TOPICS[TraderTopics::SELL], sell_connection));
 
         }
 
         virtual ~StockProvider() {
             std::for_each(connections.begin(), connections.end(), [&](std::pair<std::string, boost::signals2::connection> && pair){
-                mediator_.get()->unSubscribe(std::move(pair.first), std::move(pair.second));
+                mediator_->unSubscribe(std::move(pair.first), std::move(pair.second));
             });
             connections.clear();
         }
@@ -59,7 +59,10 @@ namespace stock {
             {
                 return st.getStockId() == stock.getStockId();
             });
-            stocks_for_sale.erase(remove_itr);
+            if(remove_itr != stocks_for_sale.end())
+            {
+                stocks_for_sale.erase(remove_itr);
+            }
         }
 
         void add_sold_stock(Stock& stock)

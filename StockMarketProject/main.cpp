@@ -46,18 +46,18 @@ int main()
 
     stock::TransactionUndoer transaction_undoer(command_sig);
     std::shared_ptr<stock::PriceProvider> shared_price_provider = std::make_shared<stock::PriceProvider>();
-    shared_price_provider.get()->add_stock("stock1", Price(11));
-    shared_price_provider.get()->add_stock("stock2", Price(22));
-    shared_price_provider.get()->add_stock("stock3", Price(33));
+    shared_price_provider->add_stock("Novo Nordisk", Price(11));
+    shared_price_provider->add_stock("Maersk", Price(22));
+    shared_price_provider->add_stock("British Airways", Price(33));
+    shared_price_provider->add_stock("British American Tobacco", Price(33));
 
-    shared_price_provider.get()->add_stock("stock1", Price(22));
-    shared_price_provider.get()->add_stock("stock2", Price(33));
+    stock::StockProvider stock_provider_london("London Stock Exchange", shared_price_provider, queries_sig, shared_mediator);
+    stock::StockProvider stock_provider_nasdaq("NASDAQ", shared_price_provider, queries_sig, shared_mediator);
 
-    stock::StockProvider stock_provider("stock_provider", shared_price_provider, queries_sig, shared_mediator);
-
-    stock_provider.add_stock_for_sale(stock::Stock("stock1", 10));
-    stock_provider.add_stock_for_sale(stock::Stock("stock2", 20));
-    stock_provider.add_stock_for_sale(stock::Stock("stock3", 30));
+    stock_provider_nasdaq.add_stock_for_sale(stock::Stock("Novo Nordisk", 10));
+    stock_provider_nasdaq.add_stock_for_sale(stock::Stock("Maersk", 20));
+    stock_provider_london.add_stock_for_sale(stock::Stock("British Airways", 30));
+    stock_provider_london.add_stock_for_sale(stock::Stock("British American Tobacco", 405));
 
     stock::StockPriceSimulator sim;
     std::atomic<bool> termination_signal = false;

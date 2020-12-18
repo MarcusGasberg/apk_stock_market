@@ -4,8 +4,6 @@
 #include <vector>
 #include <functional>
 #include <boost/signals2/signal.hpp>
-
-
 #include "Commands/BuyStockCommand.h"
 #include "Commands/SellStockCommand.h"
 #include "Commands/Commands.h"
@@ -27,6 +25,7 @@ namespace stock
         }
 
         template <typename C, typename = typename std::enable_if<std::is_base_of<T, C>::value>::type>
+
         void operator ()(C val)
         {
             vec_.push_back(std::make_shared<C>(val));

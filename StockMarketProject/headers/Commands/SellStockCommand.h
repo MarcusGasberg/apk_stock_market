@@ -1,12 +1,9 @@
-//
-// Created by stud on 11/28/20.
-//
+#pragma once
 
-#ifndef STOCKMARKETPROJECT_SELLSTOCKCOMMAND_H
-#define STOCKMARKETPROJECT_SELLSTOCKCOMMAND_H
 #include <iostream>
 #include <ostream>
 #include "TransactionBase.h"
+#include "TraderAccount/TraderAccount.h"
 
 namespace stock
 {
@@ -48,4 +45,3 @@ namespace stock
         }
     };
 }
-#endif //STOCKMARKETPROJECT_SELLSTOCKCOMMAND_H

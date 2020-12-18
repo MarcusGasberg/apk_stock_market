@@ -36,20 +36,10 @@ namespace stock
             command_sig.connect(commands_f);
         }
 
-        void handle(ListAllTransactionsCommand& command)
+        template<typename Command>
+        void handle(Command& command)
         {
-            if(!command.all_commands.empty())
-            {
-                command.execute();
-            }
-        }
-
-        void handle(ListAllStocksCommand& command)
-        {
-            if (!command.all_stocks_.empty())
-            {
-                command.execute();
-            }
+            command.execute();
         }
     };
 }

@@ -101,6 +101,7 @@ namespace stock {
             }
 
             balance_ -= subtract_amount;
+            owned_stocks_.push_back(*stock);
 
             std::cout << "Bought " << stock->getStockId() << ", new balance is: " << balance_ << "\n";
             mediator_.get()->notify(TOPICS[TraderTopics::BUY], *stock);

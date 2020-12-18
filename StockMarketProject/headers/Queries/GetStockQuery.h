@@ -1,4 +1,5 @@
 #pragma once
+#include <future>
 #include <memory>
 #include <string>
 
@@ -23,6 +24,6 @@ namespace stock
             return stock_id_;
         }
 
-        std::shared_ptr<Stock> result;
+        std::future<std::shared_ptr<Stock>> result;
     };
 }

@@ -32,8 +32,8 @@ int main()
     std::cout << "6: List Owned Stocks\n";
     std::cout << "7: Deposit Funds\n\n";
 
-    boost::signals2::signal<void(std::shared_ptr<stock::commands_var_t>)> command_sig;
-    boost::signals2::signal<void(std::shared_ptr<stock::queries_var_t>)> queries_sig;
+    stock::commands_sig_t command_sig;
+    stock::queries_sig_t queries_sig;
 
     std::shared_ptr<stock::Mediator<void, stock::Stock&>> shared_mediator = std::make_shared<stock::Mediator<void, stock::Stock&>>();
     const auto my_account = std::make_shared<stock::TraderAccount<>>(stock::TraderAccount<>("Jens", shared_mediator, queries_sig));
@@ -48,7 +48,7 @@ int main()
     stock::TransactionUndoer transaction_undoer(command_sig);
     std::shared_ptr<stock::PriceProvider> shared_price_provider = std::make_shared<stock::PriceProvider>();
     shared_price_provider->add_stock("Novo Nordisk", Price(11));
-    shared_price_provider->add_stock("Mærsk", Price(22));
+    shared_price_provider->add_stock("Maersk", Price(22));
     shared_price_provider->add_stock("British Airways", Price(33));
     shared_price_provider->add_stock("British American Tobacco", Price(33));
 
@@ -56,7 +56,7 @@ int main()
     stock::StockProvider stock_provider_nasdaq("NASDAQ", shared_price_provider, queries_sig, shared_mediator);
 
     stock_provider_nasdaq.add_stock_for_sale(stock::Stock("Novo Nordisk", 10));
-    stock_provider_nasdaq.add_stock_for_sale(stock::Stock("Mærsk", 20));
+    stock_provider_nasdaq.add_stock_for_sale(stock::Stock("Maersk", 20));
     stock_provider_london.add_stock_for_sale(stock::Stock("British Airways", 30));
     stock_provider_london.add_stock_for_sale(stock::Stock("British American Tobacco", 405));
 

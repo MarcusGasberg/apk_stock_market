@@ -71,8 +71,8 @@ namespace stock {
             std::shared_ptr<queries_var_t> queries_var = std::make_shared<queries_var_t>(GetStockQuery(std::string{ stock_id }));
             query_sig_(queries_var);
 
-            const GetStockQuery queries_result = std::get<GetStockQuery>(*queries_var);
-            auto stock = queries_result.result;
+            GetStockQuery queries_result = std::move(std::get<GetStockQuery>(*queries_var));
+            auto stock = queries_result.result.get();
 
             if(!stock)
             {
@@ -82,15 +82,17 @@ namespace stock {
 
             queries_var = std::make_shared<queries_var_t>(GetStockPriceQuery(std::string{ stock_id }));
             query_sig_(queries_var);
-            const GetStockPriceQuery price_result = std::get<GetStockPriceQuery>(*queries_var);
+            GetStockPriceQuery price_result = std::move(std::get<GetStockPriceQuery>(*queries_var));
 
-            if (!price_result.result)
+            const auto price = price_result.result.get();
+
+            if (!price)
             {
                 std::cout << "Price not found for stock id: " << stock_id << "\n";
                 return false;
             }
 
-            stock->setPrice(price_result.result);
+            stock->setPrice(price);
 
             auto commission = TraderPolicy::calculate_commission(stock->getAmount(), stock->getPrice()->price_);
             auto subtract_amount = stock->getAmount() * stock->getPrice()->price_ + commission;
@@ -99,6 +101,8 @@ namespace stock {
                 std::cout << "Insufficient funds: " <<  balance_ << ". Needed: " << subtract_amount << "\n";
                 return false;
             }
+
+            
 
             balance_ -= subtract_amount;
             owned_stocks_.push_back(*stock);
@@ -119,6 +123,13 @@ namespace stock {
                 std::cout << "You don't own the stock: " << stock_id << "\n";
                 return false;
             }
+
+            std::shared_ptr<queries_var_t> queries_var = std::make_shared<queries_var_t>(GetStockPriceQuery(std::string{ stock_id }));
+            query_sig_(queries_var);
+            GetStockPriceQuery price_result = std::move(std::get<GetStockPriceQuery>(*queries_var));
+
+            const auto price = price_result.result.get();
+            stock_itr->setPrice(price);
 
             auto commission = TraderPolicy::calculate_commission(stock_itr->getAmount(), stock_itr->getPrice()->price_);
             balance_ += stock_itr->getAmount() * stock_itr->getPrice()->price_ - commission;

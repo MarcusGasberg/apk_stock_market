@@ -1,16 +1,14 @@
 #pragma once
 #include "StockBroker.h"
-#include "Utility.h"
 #include "Commands/BuyStockCommand.h"
 #include "Commands/ListAllStocksCommand.h"
 #include "Commands/SellStockCommand.h"
 #include "Exceptions/BadCommandException.h"
 #include "boost/signals2/signal.hpp"
 #include "Commands/TraderAccountDepositCommand.h"
+#include "Helpers/Utility.h"
 #include "Queries/GetAllStockQuery.h"
 #include "Queries/GetAllTransactionsQuery.h"
-#include "Queries/GetLatestStockQuery.h"
-#include "Queries/GetStockQuery.h"
 
 namespace stock
 {
@@ -23,7 +21,6 @@ namespace stock
             : trader_account_(std::move(trader_account)), queries_sig_(queries_sig)
         {
         }
-
 
         std::shared_ptr<commands_var_t> create_command(int choice) const
         {
@@ -66,13 +63,22 @@ namespace stock
                     using TQuery = GetAllStockQuery;
                     const std::shared_ptr<queries_var_t> queries_var = std::make_shared<queries_var_t>(TQuery());
                     queries_sig_(queries_var);
-                    const auto queries_result = std::get<TQuery>(*queries_var);
-                    result = std::make_shared<commands_var_t>(ListAllStocksCommand(queries_result.result));
+                    auto queries_result = std::move(std::get<TQuery>(*queries_var));
+                    result = std::make_shared<commands_var_t>(ListAllStocksCommand(queries_result.result.get()));
                 }
                 break;
             case 6:
                 {
-                    result = std::make_shared<commands_var_t>(ListAllStocksCommand(trader_account_->owned_stocks()));
+                    auto stocks = trader_account_->owned_stocks();
+                    for (auto && stock : stocks)
+                    {
+                        auto queries_var = std::make_shared<queries_var_t>(GetStockPriceQuery(stock.getStockId()));
+                        queries_sig_(queries_var);
+                        GetStockPriceQuery price_result = std::move(std::get<GetStockPriceQuery>(*queries_var));
+
+                        stock.setPrice(price_result.result.get());
+                    }
+                    result = std::make_shared<commands_var_t>(ListAllStocksCommand(stocks));
                 }
                 break;
             case 7:

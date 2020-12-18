@@ -24,18 +24,13 @@ namespace stock
         {
         }
 
-        template <typename C>
-        // C = Concrete variant command.
+        template <typename C, typename = typename std::enable_if<std::is_base_of<T, C>::value>::type>
+
         void operator ()(C val)
         {
-            if constexpr (std::is_base_of_v<T, C>)
-            {
-                vec_.push_back(std::make_shared<C>(val));
-            }
+            vec_.push_back(std::make_shared<C>(val));
         }
 
-        template<typename >
-        // If not base class do not insert.
         void operator()(...) const {}
     };
 
@@ -151,9 +146,9 @@ namespace stock
         {
             std::vector<std::shared_ptr<TransactionBase>> commands;
             to_vector_visitor<TransactionBase> visitor(commands);
-            for (auto& all_transaction : all_transactions)
+            for (auto& transaction : all_transactions)
             {
-                std::visit(visitor, all_transaction);
+                std::visit(visitor, transaction);
             }
             return commands;
         }

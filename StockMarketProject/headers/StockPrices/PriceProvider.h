@@ -24,7 +24,7 @@ namespace stock {
         }
 
         std::shared_ptr<Price> get_price(std::string && id) const {
-            auto itr = price_map_.find(id);
+            const auto itr = price_map_.find(id);
             std::shared_ptr<Price> result;
             if (itr != price_map_.end())
             {

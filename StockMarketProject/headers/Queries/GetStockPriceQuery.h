@@ -1,5 +1,7 @@
 #pragma once
 
+#include <future>
+
 #include "../Models/Stock.h"
 
 namespace stock
@@ -18,6 +20,6 @@ namespace stock
             return stock_id_;
         }
 
-        std::shared_ptr<Price> result;
+        std::future<std::shared_ptr<Price>> result;
     };
 }

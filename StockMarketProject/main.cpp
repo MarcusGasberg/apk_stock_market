@@ -29,8 +29,8 @@ int main()
     std::cout << "6: List Owned Stocks\n";
     std::cout << "7: Deposit Funds\n\n";
 
-    boost::signals2::signal<void(std::shared_ptr<stock::commands_var_t>)> command_sig;
-    boost::signals2::signal<void(std::shared_ptr<stock::queries_var_t>)> queries_sig;
+    stock::commands_sig_t command_sig;
+    stock::queries_sig_t queries_sig;
 
     stock::Mediator<void, stock::Stock&> mediator;
     const auto my_account = std::make_shared<stock::TraderAccount<>>(stock::TraderAccount<>("Jens", mediator, queries_sig));
@@ -56,7 +56,6 @@ int main()
 
     while (true)
     {
-
         std::string line;
         std::getline(std::cin, line);
         if(!str_is_digit(line))

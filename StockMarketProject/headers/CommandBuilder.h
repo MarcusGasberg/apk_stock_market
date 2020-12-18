@@ -66,8 +66,8 @@ namespace stock
                     using TQuery = GetAllStockQuery;
                     const std::shared_ptr<queries_var_t> queries_var = std::make_shared<queries_var_t>(TQuery());
                     queries_sig_(queries_var);
-                    const auto queries_result = std::get<TQuery>(*queries_var);
-                    result = std::make_shared<commands_var_t>(ListAllStocksCommand(queries_result.result));
+                    auto queries_result = std::move(std::get<TQuery>(*queries_var));
+                    result = std::make_shared<commands_var_t>(ListAllStocksCommand(queries_result.result.get()));
                 }
                 break;
             case 6:

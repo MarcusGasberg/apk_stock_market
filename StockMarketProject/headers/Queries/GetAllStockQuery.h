@@ -1,4 +1,5 @@
 #pragma once
+#include <future>
 #include <memory>
 #include <vector>
 
@@ -8,6 +9,6 @@ namespace stock
 {
     struct GetAllStockQuery
     {
-        std::vector<Stock> result;
+        std::future<std::vector<Stock>> result;
     };
 }

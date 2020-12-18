@@ -47,10 +47,10 @@ int main()
 
     stock::TransactionUndoer transaction_undoer(command_sig);
     std::shared_ptr<stock::PriceProvider> shared_price_provider = std::make_shared<stock::PriceProvider>();
-    shared_price_provider.get()->add_stock("Novo Nordisk", Price(11));
-    shared_price_provider.get()->add_stock("Mærsk", Price(22));
-    shared_price_provider.get()->add_stock("British Airways", Price(33));
-    shared_price_provider.get()->add_stock("British American Tobacco", Price(33));
+    shared_price_provider->add_stock("Novo Nordisk", Price(11));
+    shared_price_provider->add_stock("Mærsk", Price(22));
+    shared_price_provider->add_stock("British Airways", Price(33));
+    shared_price_provider->add_stock("British American Tobacco", Price(33));
 
     stock::StockProvider stock_provider_london("London Stock Exchange", shared_price_provider, queries_sig, shared_mediator);
     stock::StockProvider stock_provider_nasdaq("NASDAQ", shared_price_provider, queries_sig, shared_mediator);
@@ -80,6 +80,11 @@ int main()
 
         try
         {
+            if(choice == 0) {
+                termination_signal = true;
+                break;
+            }
+
             const auto stock_command = command_builder.create_command(choice);
             if(stock_command)
             {

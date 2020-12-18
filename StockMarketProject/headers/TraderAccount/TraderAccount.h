@@ -104,7 +104,7 @@ namespace stock {
             owned_stocks_.push_back(*stock);
 
             std::cout << "Bought " << stock->getStockId() << ", new balance is: " << balance_ << "\n";
-            mediator_.get()->notify(TOPICS[TraderTopics::BUY], *stock);
+            mediator_->notify(TOPICS[TraderTopics::BUY], *stock);
             return true;
         }
 
@@ -124,7 +124,7 @@ namespace stock {
             balance_ += stock_itr->getAmount() * stock_itr->getPrice()->price_ - commission;
             std::cout << "Sold " << stock_itr->getStockId() << ", new balance is: " << balance_ << "\n";
 
-            mediator_.get()->notify(std::move(TOPICS[TraderTopics::SELL]), *stock_itr);
+            mediator_->notify(std::move(TOPICS[TraderTopics::SELL]), *stock_itr);
 
             owned_stocks_.erase(stock_itr);
 

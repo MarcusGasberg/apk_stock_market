@@ -10,7 +10,6 @@ namespace stock
     {
         std::shared_ptr<TraderAccount<>> seller_account_;
         std::string stock_id_;
-        std::shared_ptr<Price> stock_price_;
     public:
 
         SellStockCommand() = default;

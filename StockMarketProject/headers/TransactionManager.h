@@ -36,8 +36,8 @@ namespace stock
 
     class TransactionManager
     {
-        std::vector<commands_var_t> all_transactions;
-        std::vector<boost::signals2::connection> connections;
+        std::vector<commands_var_t> all_transactions_;
+        std::vector<boost::signals2::connection> connections_;
 
     public:
         TransactionManager(queries_sig_t& queries_sig,
@@ -72,18 +72,18 @@ namespace stock
 
             const auto query_connection = queries_sig.connect(get_commands_from_stockbroker_f);
             const auto command_connection = command_sig.connect(commands_f);
-            connections.push_back(query_connection);
-            connections.push_back(command_connection);
+            connections_.push_back(query_connection);
+            connections_.push_back(command_connection);
         }
 
         ~TransactionManager()
         {
-            for (int i = connections.size() - 1; i >= 0; --i)
+            for (int i = connections_.size() - 1; i >= 0; --i)
             {
-                if (connections[i].connected())
+                if (connections_[i].connected())
                 {
-                    connections[i].disconnect();
-                    connections.pop_back();
+                    connections_[i].disconnect();
+                    connections_.pop_back();
                 }
             }
         }
@@ -112,13 +112,13 @@ namespace stock
             auto success = transaction.execute();
             if(success)
             {
-                all_transactions.emplace_back(transaction);
+                all_transactions_.emplace_back(transaction);
             }
         }
 
         void undo_latest_transaction(UndoLatestCommand& undo_command)
         {
-            if (all_transactions.empty())
+            if (all_transactions_.empty())
             {
                 std::cout << "No more transactions in stock broker...\n";
                 return;
@@ -126,7 +126,7 @@ namespace stock
 
             std::function<void()> undo_latest_f = [this]()
             {
-                auto latest = all_transactions.back();
+                auto latest = all_transactions_.back();
 
                 std::visit([&](auto&& val)
                     {
@@ -134,7 +134,7 @@ namespace stock
                         {
                             std::cout << "Stockbroker undoing latest...\n";
                             val.undo();
-                            all_transactions.pop_back();
+                            all_transactions_.pop_back();
                         }
                     }, latest);
             };
@@ -146,7 +146,7 @@ namespace stock
         {
             std::vector<std::shared_ptr<TransactionBase>> commands;
             to_vector_visitor<TransactionBase> visitor(commands);
-            for (auto& transaction : all_transactions)
+            for (auto& transaction : all_transactions_)
             {
                 std::visit(visitor, transaction);
             }

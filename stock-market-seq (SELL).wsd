@@ -1,0 +1,19 @@
+@startuml StockMarket Sequence Diagram (Sell Stock)
+skinparam Monochrome true
+skinparam Shadowing false
+
+participant TraderClient 
+participant CommandBuilder
+participant TransactionManager  
+participant StockBroker 
+participant TraderAccount 
+participant SellStockCommand
+participant Mediator 
+participant TraderPolicy
+participant PriceProvider 
+
+TraderClient -> CommandBuilder: create_command(SellStockCommand)
+CommandBuilder -> TraderClient: SellStockCommand
+TraderClient ->o TransactionManager: command_signal(SellStockCommand)
+
+@enduml

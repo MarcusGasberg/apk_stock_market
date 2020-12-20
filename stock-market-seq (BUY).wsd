@@ -1,0 +1,30 @@
+@startuml StockMarketSequenceDiagramBuy
+skinparam Monochrome true
+skinparam Shadowing false
+
+participant TraderClient 
+participant CommandBuilder
+participant TransactionManager  
+participant StockBroker 
+participant TraderAccount 
+participant BuyStockCommand
+participant Mediator 
+participant TraderPolicy
+participant PriceProvider 
+
+TraderClient -> CommandBuilder: create_command(BuyStockCommand)
+CommandBuilder -> TraderClient: BuyStockCommand
+TraderClient ->o TransactionManager: command_signal(BuyStockCommand)
+TransactionManager -> BuyStockCommand: execute()
+BuyStockCommand -> TraderAccount: buy_stock(stock_id_)
+TraderAccount ->> StockBroker: queries_signal(GetStockQuery)
+StockBroker --> TraderAccount: stock 
+TraderAccount ->> PriceProvider: queries_signal(GetPriceQuery) 
+PriceProvider --> TraderAccount: price 
+TraderAccount -> TraderPolicy: takeCommision(stock.amount, stock.price)
+TraderAccount --> Mediator: notify(TraderTopic::BUY, stock) 
+Mediator ->o StockBroker: provider_signal(stock)  
+alt StockBroker owns stock 
+    StockBroker -> StockBroker: remove_bought_stock(stock) 
+end 
+@enduml

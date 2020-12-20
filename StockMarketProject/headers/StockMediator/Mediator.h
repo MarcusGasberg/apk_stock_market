@@ -16,35 +16,34 @@ namespace stock {
  */
     template<typename returnType, typename... params>
     class Mediator {
-    public:
         // Reference to StockBroker callback, activated upon notification.
-        typedef boost::signals2::signal<returnType(params ...)> ProviderSignal;
+        typedef boost::signals2::signal<returnType(params ...)> provider_signal;
 
         // String id to identify subscriber topic and all StockBroker callbacks
-        typedef std::map<std::string, ProviderSignal> TopicMap;
+        typedef std::map<std::string, provider_signal> topic_map;
 
-        typedef std::pair<typename TopicMap::iterator, bool> TopicInsertResult;
-
+        typedef std::pair<typename topic_map::iterator, bool> topic_insert_result;
         // Actual map that contains callbacks.
-        TopicMap topicMap;
-
+        topic_map topic_map_;
+    public:
         // TODO: Shared_pointer / Unique_pointer for connection?
         template<typename T>
         boost::signals2::connection
         subscribe(std::string && topic, returnType (T::* providerCallback)(params ...), T *providerObject) {
-            typename TopicMap::iterator topicIterator = std::find_if(topicMap.begin(), topicMap.end(),
-                                                                     [&](const auto &map) {
+            typename topic_map::iterator topicIterator = std::find_if(topic_map_.begin(), topic_map_.end(),
+                                                                      [&](const auto &map) {
                                                                          return map.first == topic;
                                                                      });
 
             auto callback = custom_bind(providerCallback, providerObject);
 
-            if (topicIterator == topicMap.end()) {
-                ProviderSignal signal;
+            if (topicIterator == topic_map_.end()) {
+                provider_signal signal;
                 std::cout << "Connecting: " << typeid(providerObject).name() << " to NEW topic: " << topic << std::endl;
                 auto connection = signal.connect(callback);
 
-                TopicInsertResult ir = topicMap.insert(std::make_pair(std::move(topic), std::forward<ProviderSignal>(signal)));
+                // TODO: Check this forwarding.
+                topic_insert_result ir = topic_map_.insert(std::make_pair(std::move(topic), std::forward<provider_signal>(signal)));
                 if (!ir.second) {
                     throw "An error occurred when inserting topic map.";
                 }
@@ -60,11 +59,11 @@ namespace stock {
         void unSubscribe(std::string && topic, boost::signals2::connection && connection) {
             if (connection.connected()) {
 
-                auto topicIterator = std::find_if(topicMap.begin(), topicMap.end(), [&](const auto &map) {
+                auto topicIterator = std::find_if(topic_map_.begin(), topic_map_.end(), [&](const auto &map) {
                     return map.first == topic;
                 });
 
-                if (topicIterator != topicMap.end()) {
+                if (topicIterator != topic_map_.end()) {
                     std::cout << "Disconnecting from topic: " << topicIterator->first << std::endl;
                     connection.disconnect();
                 }
@@ -72,12 +71,12 @@ namespace stock {
         }
 
         void notify(std::string && topic, params &&... parameters) {
-            typename TopicMap::iterator topicIterator = std::find_if(topicMap.begin(), topicMap.end(),
-                                                                     [&](const auto &map) {
+            typename topic_map::iterator topicIterator = std::find_if(topic_map_.begin(), topic_map_.end(),
+                                                                      [&](const auto &map) {
                                                                          return map.first == topic;
                                                                      });
 
-            if (topicIterator != topicMap.end()) {
+            if (topicIterator != topic_map_.end()) {
                 topicIterator->second(parameters ...);
             }
         }

@@ -17,7 +17,7 @@ namespace stock {
         std::shared_ptr<PriceProvider> price_provider_;
         std::vector<Stock> stocks_for_sale;
         const int delay_ = 1;
-        std::map<std::string, boost::signals2::connection> connections;
+        std::map<std::string, boost::signals2::connection> connections_;
         std::shared_ptr<Mediator<void, Stock&>> mediator_;
     public:
         StockBroker(std::string&& name, std::shared_ptr<PriceProvider> price_provider, queries_sig_t& queries_sig, std::shared_ptr<Mediator < void, Stock&>> mediator) :
@@ -47,10 +47,10 @@ namespace stock {
         }
 
         virtual ~StockBroker() {
-            std::for_each(connections.begin(), connections.end(), [&](std::pair<std::string, boost::signals2::connection> && pair){
+            std::for_each(connections_.begin(), connections_.end(), [&](std::pair<std::string, boost::signals2::connection> && pair){
                 mediator_->unSubscribe(std::move(pair.first), std::move(pair.second));
             });
-            connections.clear();
+            connections_.clear();
         }
 
         void remove_bought_stock(Stock& stock)

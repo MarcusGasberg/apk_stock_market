@@ -8,7 +8,6 @@
 #include "Commands/SellStockCommand.h"
 #include "Commands/Commands.h"
 #include "Commands/UndoLatestCommand.h"
-#include "Exceptions/BadCommandException.h"
 #include "Queries/GetAllTransactionsQuery.h"
 #include "Queries/Queries.h"
 
@@ -92,12 +91,12 @@ namespace stock
         void handle_command(Command& command)
         {
             using T = std::decay_t<decltype(command)>;
-            if constexpr (!hasExecute<T>)
+
+            static_assert(hasExecute<T>);
+
+            if constexpr (std::is_base_of_v<TransactionBase, T>)
             {
-                throw BadCommandException("No execute");
-            }
-            if constexpr (std::is_base_of_v<TransactionBase, T> && hasUndo<std::decay_t<T>>)
-            {
+                static_assert(hasUndo<T>);
                 do_transaction(command);
             }
             else if constexpr (std::is_same_v<T, UndoLatestCommand>)

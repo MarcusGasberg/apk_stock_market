@@ -87,9 +87,13 @@ int main()
                 command_sig(stock_command);
             }
         }
-        catch (const stock::BadCommandException& bad_command_exception)
+        catch (const stock::NoPriceException& exception)
         {
-            std::cout << bad_command_exception.what() << std::endl;
+            std::cout << exception.what() << std::endl;
+        }
+        catch (const stock::BadCommandException& exception)
+        {
+            std::cout << exception.what() << std::endl;
         }
     } while(choice != 0);
 

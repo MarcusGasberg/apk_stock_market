@@ -18,9 +18,8 @@ TraderClient ->o TransactionManager: command_signal(BuyStockCommand)
 TransactionManager -> BuyStockCommand: execute()
 BuyStockCommand -> TraderAccount: buy_stock(stock_id_)
 TraderAccount ->> StockBroker: queries_signal(GetStockQuery)
+StockBroker -> PriceProvider: get_price(stock_id)
 StockBroker --> TraderAccount: stock 
-TraderAccount ->> PriceProvider: queries_signal(GetPriceQuery) 
-PriceProvider --> TraderAccount: price 
 TraderAccount -> TraderPolicy: takeCommision(stock.amount, stock.price)
 TraderAccount --> Mediator: notify(TraderTopic::BUY, stock) 
 Mediator ->o StockBroker: provider_signal(stock)  

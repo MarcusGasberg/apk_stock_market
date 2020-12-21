@@ -1,7 +1,8 @@
-@startuml StockMarketClassDiagrak
+@startuml StockMarketClassDiagram
 skinparam Monochrome true
 skinparam Shadowing false
-left to right direction
+
+title Stock Market Class Diagram 
 
 note as N2
   TraderClient reads input from keyboard 0 - 7
@@ -16,8 +17,8 @@ note as N2
 end note
 
 class TraderClient {
-  + boost::signal<...> command_signal 
-  + boost::signal<...> queries_signal
+  + command_sig_t command_signal 
+  + query_sig_t queries_signal
 }
 
 class TransactionManager {
@@ -41,7 +42,7 @@ class BuyStockCommand {
 class StockBroker {
   - Stock[] stocks_for_sale
   - map<string, boost::connection> connections_
-  - shared_ptr<Mediator<...>> mediator_
+  - shared_ptr<Mediator<void, shared_ptr<Stock>> mediator_
   + get_stocks(): GetAllStockQuery
   + get_stock_price(): GetPriceQuery 
   + get_stock(): GetStockQuery  
@@ -55,14 +56,14 @@ class StockMediator {
 
 class CommandBuilder {
   - shared_ptr<TraderAccount> trader_account_ 
-  - boost::signal<...> queries_signal 
+  - boost::signal<query_var_t> queries_signal 
   + create_command(choice): shared_ptr<commands_var_t> 
 }
 
 class TraderAccount {
   - int balance_ 
   - vector<Stock> owned_stocks_ 
-  - shared_ptr<Mediator<...>> mediator_ 
+  - shared_ptr<Mediator<void, shared_ptr<Stock>>> mediator_ 
   + boy_stock(stock_id) : bool 
   + sell_stock(stock_id) : bool 
 }
@@ -71,12 +72,17 @@ class TraderPolicy {
   + calculateCommission(boughtAmount, Price): T 
 }
 
+class StockPriceSimulator {
+  + update_prices(price_provider) : void 
+}
+
 TraderClient --* CommandBuilder
-CommandBuilder --o TraderAccount
-TraderAccount --o StockMediator 
+CommandBuilder --> TraderAccount
+TraderAccount --> StockMediator 
 TraderAccount --* TraderPolicy
-StockBroker --o StockMediator
-BuyStockCommand --o TraderAccount
-StockBroker --o PriceProvider
-TransactionManager --o BuyStockCommand
+StockBroker --> StockMediator
+BuyStockCommand --> TraderAccount
+StockBroker --> PriceProvider
+TransactionManager --> BuyStockCommand
+StockPriceSimulator --> PriceProvider
 @enduml

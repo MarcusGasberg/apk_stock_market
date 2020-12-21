@@ -11,11 +11,11 @@
 namespace stock {
 /*
  *  TraderAccount will signal that a topic has been activated (BUY / SELL)
- *  Mediator will find associated providers and update them via callback with whatever parameters is provided by TraderAccount
+ *  StockMediator will find associated providers and update them via callback with whatever parameters is provided by TraderAccount
  *  Provider will use the parameters to do some action.
  */
     template<typename returnType, typename... params>
-    class Mediator {
+    class StockMediator {
         // Reference to StockBroker callback, activated upon notification.
         typedef boost::signals2::signal<returnType(params ...)> provider_signal;
 
@@ -28,8 +28,7 @@ namespace stock {
     public:
         // TODO: Shared_pointer / Unique_pointer for connection?
         template<typename T>
-        boost::signals2::connection
-        subscribe(std::string && topic, returnType (T::* providerCallback)(params ...), T *providerObject) {
+        boost::signals2::connection subscribe(std::string && topic, returnType (T::* providerCallback)(params ...), T *providerObject) {
             typename topic_map::iterator topicIterator = std::find_if(topic_map_.begin(), topic_map_.end(),
                                                                       [&](const auto &map) {
                                                                          return map.first == topic;
@@ -57,14 +56,14 @@ namespace stock {
 
         // TODO: Make connections tracked so all are closed when mediator is destroyed.
 
-        void notify(std::string && topic, params &&... parameters) {
+        returnType notify(std::string && topic, params &&... parameters) {
             typename topic_map::iterator topicIterator = std::find_if(topic_map_.begin(), topic_map_.end(),
                                                                       [&](const auto &map) {
                                                                          return map.first == topic;
                                                                      });
 
             if (topicIterator != topic_map_.end()) {
-                topicIterator->second(parameters ...);
+                return topicIterator->second(parameters ...);
             }
         }
     };

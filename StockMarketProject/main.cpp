@@ -31,7 +31,7 @@ int main()
     stock::commands_sig_t command_sig;
     stock::queries_sig_t queries_sig;
 
-    std::shared_ptr<stock::Mediator<void, stock::Stock&>> shared_mediator = std::make_shared<stock::Mediator<void, stock::Stock&>>();
+    std::shared_ptr<stock::StockMediator<void, stock::Stock&>> shared_mediator = std::make_shared<stock::StockMediator<void, stock::Stock&>>();
     const auto my_account = std::make_shared<stock::TraderAccount<>>(stock::TraderAccount<>("Jens", shared_mediator, queries_sig));
 
     my_account->deposit(1000);

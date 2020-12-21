@@ -19,9 +19,9 @@ namespace stock {
         std::vector<Stock> stocks_for_sale;
         const int delay_ = 1;
         std::vector<boost::signals2::connection> connections_;
-        std::shared_ptr<Mediator<void, Stock&>> mediator_;
+        std::shared_ptr<StockMediator<void, Stock&>> mediator_;
     public:
-        StockBroker(std::string&& name, std::shared_ptr<PriceProvider> price_provider, queries_sig_t& queries_sig, std::shared_ptr<Mediator < void, Stock&>> mediator) :
+        StockBroker(std::string&& name, std::shared_ptr<PriceProvider> price_provider, queries_sig_t& queries_sig, std::shared_ptr<StockMediator < void, Stock&>> mediator) :
             name_(std::move(name)),
             price_provider_(price_provider), mediator_(mediator)
         {

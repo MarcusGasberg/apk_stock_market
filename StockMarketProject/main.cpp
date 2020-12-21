@@ -31,7 +31,7 @@ int main()
     stock::commands_sig_t command_sig;
     stock::queries_sig_t queries_sig;
 
-    std::shared_ptr<stock::Mediator<void, stock::Stock&>> shared_mediator = std::make_shared<stock::Mediator<void, stock::Stock&>>();
+    std::shared_ptr<stock::StockMediator<void, stock::Stock&>> shared_mediator = std::make_shared<stock::StockMediator<void, stock::Stock&>>();
     const auto my_account = std::make_shared<stock::TraderAccount<>>(stock::TraderAccount<>("Jens", shared_mediator, queries_sig));
 
     my_account->deposit(1000);
@@ -68,8 +68,7 @@ int main()
         if(!str_is_digit(line))
         {
             std::cout << "Please provide a number between 0 and 7\n";
-            continue;\
-
+            continue;
         }
 
         choice = std::stoi(line);
@@ -82,9 +81,17 @@ int main()
                 command_sig(stock_command);
             }
         }
-        catch (const stock::BadCommandException& bad_command_exception)
+        catch (const stock::NoStockException& exception)
         {
-            std::cout << bad_command_exception.what() << std::endl;
+            std::cout << exception.what() << std::endl;
+        }
+        catch (const stock::NoPriceException& exception)
+        {
+            std::cout << exception.what() << std::endl;
+        }
+        catch (const stock::BadCommandException& exception)
+        {
+            std::cout << exception.what() << std::endl;
         }
     } while(choice != 0);
 

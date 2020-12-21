@@ -8,9 +8,11 @@
 #include <vector>
 
 #include "Policies/StandardTraderPolicy.h"
-#include "../StockMediator/Mediator.h"
+#include "../StockMediator/StockMediator.h"
 #include "../Models/Stock.h"
 #include "TraderTopics.h"
+#include "../Exceptions/NoPriceException.h"
+#include "../Exceptions/NoStockException.h"
 #include "../Queries/GetStockQuery.h"
 #include "../Queries/Queries.h"
 
@@ -26,10 +28,10 @@ namespace stock {
         std::string id_;
         int balance_{};
         std::vector<Stock> owned_stocks_;
-        std::shared_ptr<Mediator<void, Stock&>> mediator_;
+        std::shared_ptr<StockMediator<void, Stock&>> mediator_;
         queries_sig_t& query_sig_;
     public:
-        explicit TraderAccount(std::string&& id, std::shared_ptr<Mediator<void, Stock&>> mediator, queries_sig_t& query_sig)
+        explicit TraderAccount(std::string&& id, std::shared_ptr<StockMediator<void, Stock&>> mediator, queries_sig_t& query_sig)
                 : id_(std::move(id)), mediator_(mediator), query_sig_(query_sig) {}
 
        std::string get_id() const {
@@ -77,18 +79,25 @@ namespace stock {
             std::shared_ptr<Stock> stock;
             std::shared_ptr<Price> price;
 
-            while(stock_query.valid() || price_query.valid())
+            try
             {
-                if (stock_query.valid() && stock_query.wait_for(timeout) == std::future_status::ready) {
-                    stock = stock_query.get();
-                    std::cout << "Stock query is done:" << *stock << std::endl;
-                }
-                if(price_query.valid() && price_query.wait_for(timeout) == std::future_status::ready) {
-                    price = price_query.get();
-                    std::cout << "Price query is done: " << price->price_ << std::endl;
+                while (stock_query.valid() || price_query.valid())
+                {
+                    if (stock_query.valid() && stock_query.wait_for(timeout) == std::future_status::ready) {
+                        stock = stock_query.get();
+                        std::cout << "Stock query is done: " << *stock << "\n";
+                    }
+                    if (price_query.valid() && price_query.wait_for(timeout) == std::future_status::ready) {
+                        price = price_query.get();
+                        std::cout << "Price query is done: " << price->price_ << "\n";
+                    }
                 }
             }
-            //TODO: ERROR HANDLING IF NOT FOUND
+            catch (NoPriceException& exception)
+            {
+                std::cout << exception.what();
+                return false;
+            }
 
             stock->setPrice(price);
 
@@ -125,13 +134,20 @@ namespace stock {
             const auto timeout = std::chrono::milliseconds(100);
 
             std::shared_ptr<Price> price;
-
-            while (price_query.valid())
+            try
             {
-                if (price_query.valid() && price_query.wait_for(timeout) == std::future_status::ready) {
-                    price = price_query.get();
-                    std::cout << "Price query is done: " << price->price_ << std::endl;
+                while (price_query.valid())
+                {
+                    if (price_query.valid() && price_query.wait_for(timeout) == std::future_status::ready) {
+                        price = price_query.get();
+                        std::cout << "Price query is done: " << price->price_ << "\n";
+                    }
                 }
+            }
+            catch (NoPriceException& exception)
+            {
+                std::cout << exception.what();
+                return false;
             }
 
             stock_itr->setPrice(price);

@@ -10,6 +10,7 @@
 #include "../Queries/GetAllStockQuery.h"
 #include "../Queries/Queries.h"
 #include "../StockPrices/PriceProvider.h"
+#include "../Exceptions/NoPriceException.h"
 
 namespace stock {
     class StockBroker {
@@ -17,10 +18,10 @@ namespace stock {
         std::shared_ptr<PriceProvider> price_provider_;
         std::vector<Stock> stocks_for_sale;
         const int delay_ = 1;
-        std::map<std::string, boost::signals2::connection> connections_;
-        std::shared_ptr<Mediator<void, Stock&>> mediator_;
+        std::vector<boost::signals2::connection> connections_;
+        std::shared_ptr<StockMediator<void, Stock&>> mediator_;
     public:
-        StockBroker(std::string&& name, std::shared_ptr<PriceProvider> price_provider, queries_sig_t& queries_sig, std::shared_ptr<Mediator < void, Stock&>> mediator) :
+        StockBroker(std::string&& name, std::shared_ptr<PriceProvider> price_provider, queries_sig_t& queries_sig, std::shared_ptr<StockMediator < void, Stock&>> mediator) :
             name_(std::move(name)),
             price_provider_(price_provider), mediator_(mediator)
         {
@@ -41,16 +42,21 @@ namespace stock {
 
             auto buy_connection = mediator_->subscribe(TOPICS[TraderTopics::BUY], &StockBroker::remove_bought_stock, this);
             auto sell_connection = mediator_->subscribe(TOPICS[TraderTopics::SELL], &StockBroker::add_stock, this);
-            connections_.insert(std::make_pair(TOPICS[TraderTopics::BUY], buy_connection));
-            connections_.insert(std::make_pair(TOPICS[TraderTopics::SELL], sell_connection));
+
+            connections_.push_back(buy_connection);
+            connections_.push_back(sell_connection);
 
         }
 
         virtual ~StockBroker() {
-            std::for_each(connections_.begin(), connections_.end(), [&](std::pair<std::string, boost::signals2::connection> && pair){
-                mediator_->unSubscribe(std::move(pair.first), std::move(pair.second));
-            });
-            connections_.clear();
+            for (int i = connections_.size() - 1; i >= 0; --i)
+            {
+                if (connections_[i].connected())
+                {
+                    connections_[i].disconnect();
+                    connections_.pop_back();
+                }
+            }
         }
 
         void remove_bought_stock(Stock& stock)
@@ -105,7 +111,13 @@ namespace stock {
             if (stock == stocks_for_sale.end())
                 return;
 
-            stock->setPrice(price_provider_->get_price(stock->getStockId()));
+            const auto price = price_provider_->get_price(stock->getStockId());
+
+            if(!price) {
+                throw NoPriceException(stock->getStockId());
+            }
+
+            stock->setPrice(price);
             query.result = std::make_shared<Stock>(*stock);
             
         }
@@ -115,7 +127,12 @@ namespace stock {
             auto stocks = stocks_for_sale;
             for (auto&& stock : stocks)
             {
-                stock.setPrice(price_provider_->get_price(stock.getStockId()));
+                const auto price = price_provider_->get_price(stock.getStockId());
+                if (!price) {
+                    throw NoPriceException(stock.getStockId());
+                }
+
+                stock.setPrice(price);
             }
             std::copy(stocks.begin(), stocks.end(), std::back_inserter(query.result));
         }
@@ -127,7 +144,12 @@ namespace stock {
 
             std::cout << "Getting price of " << query.get_stock_id() << "...\n";
 
-            query.result = price_provider_->get_price(query.get_stock_id());
+            const auto price = price_provider_->get_price(query.get_stock_id());
+            if (!price) {
+                throw NoPriceException(query.get_stock_id());
+            }
+
+            query.result = price;
         }
     };
 }

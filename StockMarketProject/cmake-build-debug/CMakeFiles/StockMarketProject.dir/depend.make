@@ -12,6 +12,7 @@ CMakeFiles/StockMarketProject.dir/main.cpp.o: ../headers/Commands/TraderAccountD
 CMakeFiles/StockMarketProject.dir/main.cpp.o: ../headers/Commands/TransactionBase.h
 CMakeFiles/StockMarketProject.dir/main.cpp.o: ../headers/Commands/UndoLatestCommand.h
 CMakeFiles/StockMarketProject.dir/main.cpp.o: ../headers/Exceptions/BadCommandException.h
+CMakeFiles/StockMarketProject.dir/main.cpp.o: ../headers/Exceptions/NoPriceException.h
 CMakeFiles/StockMarketProject.dir/main.cpp.o: ../headers/Helpers/IsNumeric.h
 CMakeFiles/StockMarketProject.dir/main.cpp.o: ../headers/Helpers/UserLiterals.h
 CMakeFiles/StockMarketProject.dir/main.cpp.o: ../headers/Helpers/Utility.h
@@ -24,8 +25,8 @@ CMakeFiles/StockMarketProject.dir/main.cpp.o: ../headers/Queries/GetStockPriceQu
 CMakeFiles/StockMarketProject.dir/main.cpp.o: ../headers/Queries/GetStockQuery.h
 CMakeFiles/StockMarketProject.dir/main.cpp.o: ../headers/Queries/Queries.h
 CMakeFiles/StockMarketProject.dir/main.cpp.o: ../headers/StockBrokers/StockBroker.h
-CMakeFiles/StockMarketProject.dir/main.cpp.o: ../headers/StockMediator/Mediator.h
 CMakeFiles/StockMarketProject.dir/main.cpp.o: ../headers/StockMediator/Placeholders.h
+CMakeFiles/StockMarketProject.dir/main.cpp.o: ../headers/StockMediator/StockMediator.h
 CMakeFiles/StockMarketProject.dir/main.cpp.o: ../headers/StockPrices/PriceProvider.h
 CMakeFiles/StockMarketProject.dir/main.cpp.o: ../headers/StockPrices/StockPriceSimulator.h
 CMakeFiles/StockMarketProject.dir/main.cpp.o: ../headers/StockPrinter.h

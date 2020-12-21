@@ -8,7 +8,6 @@
 #include "Commands/SellStockCommand.h"
 #include "Commands/Commands.h"
 #include "Commands/UndoLatestCommand.h"
-#include "Exceptions/BadCommandException.h"
 #include "Queries/GetAllTransactionsQuery.h"
 #include "Queries/Queries.h"
 
@@ -92,8 +91,9 @@ namespace stock
 
             static_assert(hasExecute<T>);
 
-            if constexpr (std::is_base_of_v<TransactionBase, T> && hasUndo<T>)
+            if constexpr (std::is_base_of_v<TransactionBase, T>)
             {
+                static_assert(hasUndo<T>);
                 do_transaction(command);
             }
             else if constexpr (std::is_same_v<T, UndoLatestCommand>)

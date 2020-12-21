@@ -10,6 +10,7 @@
 #include "../Queries/GetAllStockQuery.h"
 #include "../Queries/Queries.h"
 #include "../StockPrices/PriceProvider.h"
+#include "../Exceptions/NoPriceException.h"
 
 namespace stock {
     class StockBroker {
@@ -107,7 +108,13 @@ namespace stock {
                     if (stock == stocks_for_sale.end())
                         return result;
 
-                    stock->setPrice(price_provider_->get_price(stock->getStockId()));
+                    auto price = price_provider_->get_price(stock->getStockId());
+
+                    if(!price) {
+                        throw NoPriceException(stock->getStockId());
+                    }
+
+                    stock->setPrice(price);
                     result = std::make_shared<Stock>(*stock);
 
                     return result;
@@ -121,7 +128,12 @@ namespace stock {
                     auto stocks = stocks_for_sale;
                     for (auto&& stock : stocks)
                     {
-                        stock.setPrice(price_provider_->get_price(stock.getStockId()));
+                        auto price = price_provider_->get_price(stock.getStockId());
+                        if (!price) {
+                            throw NoPriceException(stock.getStockId());
+                        }
+
+                        stock.setPrice(price);
                     }
                     return stocks;
                 });

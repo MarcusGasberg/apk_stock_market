@@ -94,7 +94,7 @@ namespace stock
             using T = std::decay_t<decltype(command)>;
             if constexpr (!hasExecute<T>)
             {
-                throw BadCommandException("No execute");
+                throw BadCommandException("Command did not have an execute operation.");
             }
             if constexpr (std::is_base_of_v<TransactionBase, T> && hasUndo<std::decay_t<T>>)
             {

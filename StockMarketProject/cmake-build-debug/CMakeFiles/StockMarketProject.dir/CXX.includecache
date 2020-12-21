@@ -124,6 +124,10 @@ sstream
 stdexcept
 -
 
+/home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/Exceptions/NoPriceException.h
+stdexcept
+-
+
 /home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/Helpers/IsNumeric.h
 iostream
 -
@@ -217,6 +221,8 @@ string
 /home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/Queries/Queries.h
 ../StockPrices/PriceProvider.h
 /home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/StockPrices/PriceProvider.h
+../Exceptions/NoPriceException.h
+/home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/Exceptions/NoPriceException.h
 
 /home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/headers/StockMediator/Mediator.h
 Placeholders.h

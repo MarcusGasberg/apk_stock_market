@@ -1,127 +1,82 @@
-@startuml StockMarket Class Diagram
+@startuml StockMarketClassDiagrak
 skinparam Monochrome true
 skinparam Shadowing false
-
-note as N1
-  # namespaces
-  # stl containers
-  # stl iterators
-  # stl algorithms
-  # boost signal2
-  # std::bind
-  # std::function
-  # std::variant
-  # exceptions
-  # compile time if
-  # literals
-  # moving
-  # promises and futures
-  # threading
-  # variadics
-  # metaprogramming
-  # memory mapped registers
-  # PMR
-end note
-
+left to right direction
 
 note as N2
-  # Threading do/undo variadaic operations
-  # Mediator handle sync between TraderAccount stocks and StockProvider
+  TraderClient reads input from keyboard 0 - 7
+  and creates command based on user input 
+  1: Buy Stock
+  2: Sell Stock
+  3: List All Transactions 
+  4: Undo Latest 
+  5: List All Available Stocks 
+  6: List Owned Stocks 
+  7: Deposit Funds 
 end note
 
 class TraderClient {
-
+  + boost::signal<...> command_signal 
+  + boost::signal<...> queries_signal
 }
 
-class StockBroker {
-  - vector<IStockTradeCommand> stockTrades
-  + place_trade(StockTradeCommand command): void
-  + list_trades(): void
+class TransactionManager {
+  - vector<commands_var_t> all_transactions_
+  + do_transaction(commands_var_t command): void
+  + undo_latest_transaction()
 } 
 
-interface IStockTradeCommand {
-  + get_buyer_id(): string
-  + get_stock_id(): string
-  + get_stock_trade(): StockTrade
-  + get_command_type(): CommandType
-  + execute(): void
-  + undo(): void
-}
-
-enum CommandType {
-  + Sell
-  + Buy
+class PriceProvider {
+  - map<id, price> price_map_ 
+  + get_price(id) : shared_ptr<Price>
 }
 
 class BuyStockCommand {
-  - StockTrade trade
-  - string buyer_id
-  - string stock_id
-  - CommandType type
-  + get_buyer_id(): string
-  + get_stock_id(): string
-  + get_command_type(): CommandType
-  + execute(): void
-  + undo(): void
+  - shared_ptr<TraderAccount> buyer_account_ 
+  - string stock_id_; 
+  + execute() : bool
+  + undo() : bool
 }
 
-class SellStockCommand {
-  - StockTrade trade
-  - string buyer_id
-  - string stock_id
-  - CommandType type
-  + get_buyer_id(): string
-  + get_stock_id(): string
-  + get_command_type(): CommandType
-  + execute(): void
-  + undo(): void
-}
-
-class StockProvider {
+class StockBroker {
   - Stock[] stocks_for_sale
-  - Stock[] stock_buy_requests
-  + list_stocks_for_sale(): void
-  + list_stock_buy_requests(): void
+  - map<string, boost::connection> connections_
+  - shared_ptr<Mediator<...>> mediator_
+  + get_stocks(): GetAllStockQuery
+  + get_stock_price(): GetPriceQuery 
+  + get_stock(): GetStockQuery  
 }
 
 class StockMediator {
-  - Stock[] stocks
-  - boost::signal on_stock_updates
-  + register_on_stock_update(std::function)
+  - boost::signal<...> provider_signal_ 
+  + subscribe(topic, callback, callbackObject) : boost::connection
+  + unSubscribe(topic, connection) : void 
 }
 
-class AccountManager {
-  - TraderAccount[] traderAccounts
-  + get_account(string id): TraderAccount
+class CommandBuilder {
+  - shared_ptr<TraderAccount> trader_account_ 
+  - boost::signal<...> queries_signal 
+  + create_command(choice): shared_ptr<commands_var_t> 
 }
 
 class TraderAccount {
-  - string id
-  - Stock[] stocks
-  + buy()
-  + sell()
+  - int balance_ 
+  - vector<Stock> owned_stocks_ 
+  - shared_ptr<Mediator<...>> mediator_ 
+  + boy_stock(stock_id) : bool 
+  + sell_stock(stock_id) : bool 
 }
 
-class Stock {
-  - string seller_id
-  - int value_each
-  - int amount
+class TraderPolicy {
+  + calculateCommission(boughtAmount, Price): T 
 }
 
-IStockTradeCommand --* CommandType
-IStockTradeCommand <|-- BuyStockCommand
-IStockTradeCommand <|-- SellStockCommand
-IStockTradeCommand --> TraderAccount
-
-StockBroker --o IStockTradeCommand
-TraderClient --> StockBroker
-
-TraderClient --> StockProvider
-StockProvider --> StockMediator
-
-AccountManager --o TraderAccount
-TraderAccount --o Stock
-StockBroker --> AccountManager
-TraderAccount --> StockMediator
-
+TraderClient --* CommandBuilder
+CommandBuilder --o TraderAccount
+TraderAccount --o StockMediator 
+TraderAccount --* TraderPolicy
+StockBroker --o StockMediator
+BuyStockCommand --o TraderAccount
+StockBroker --o PriceProvider
+TransactionManager --o BuyStockCommand
 @enduml

@@ -1,0 +1,22 @@
+@startuml StockMarket Sequence Diagram (Buy Stock)
+skinparam Monochrome true
+skinparam Shadowing false
+
+participant TraderClient 
+participant StockBroker  
+participant StockProvider 
+
+TraderClient -> StockBroker: BuyStock 
+StockBroker -> StockProvider: GetStockQuery 
+StockBroker <-- StockProvider: Stock (If available) 
+
+StockBroker -> BuyCommand: Creates and sends 
+BuyCommand -> TraderAccount: BuyStock(Stock)
+TraderAccount -> TraderAccount: Take ownership of stock  
+TraderAccount -> Mediator: notify(commandTopic, Stock) 
+Mediator --> StockProvider: callback(stock) *listeners 
+StockProvider -> StockProvider: remove stock from self (if owned) 
+
+
+
+@enduml

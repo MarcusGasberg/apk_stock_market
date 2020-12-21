@@ -32,7 +32,7 @@ namespace stock {
         queries_sig_t& query_sig_;
     public:
         explicit TraderAccount(std::string&& id, std::shared_ptr<StockMediator<void, Stock&>> mediator, queries_sig_t& query_sig)
-                : id_(std::move(id)), mediator_(mediator), query_sig_(query_sig) {}
+                : id_(std::move(id)), mediator_(std::move(mediator)), query_sig_(query_sig) {}
 
        std::string get_id() const {
             return id_;
@@ -70,17 +70,17 @@ namespace stock {
         }
 
         bool buy_stock(const std::string& stock_id) {
-            auto stock_query = launch_stock_query(stock_id);
-
-            auto price_query = launch_price_query(stock_id);
-
-            const auto timeout = std::chrono::milliseconds(100);
-
             std::shared_ptr<Stock> stock;
             std::shared_ptr<Price> price;
 
+            const auto timeout = std::chrono::milliseconds(100);
+
             try
             {
+                auto stock_query = launch_stock_query(stock_id);
+
+                auto price_query = launch_price_query(stock_id);
+
                 while (stock_query.valid() || price_query.valid())
                 {
                     if (stock_query.valid() && stock_query.wait_for(timeout) == std::future_status::ready) {
@@ -110,10 +110,13 @@ namespace stock {
             }
 
             balance_ -= subtract_amount;
+
             owned_stocks_.push_back(*stock);
 
             std::cout << "Bought " << stock->getStockId() << ", new balance is: " << balance_ << "\n";
+
             mediator_->notify(TOPICS[TraderTopics::BUY], *stock);
+
             return true;
         }
 
@@ -162,7 +165,7 @@ namespace stock {
 
             return true;
         }
-
+    private:
         std::future<std::shared_ptr<Stock>> launch_stock_query(const std::string& stock_id)
         {
             return std::async(std::launch::async, [&stock_id, this]()
@@ -173,7 +176,7 @@ namespace stock {
                     const GetStockQuery queries_result = std::move(std::get<GetStockQuery>(*queries_var));
                     auto stock = queries_result.result;
 
-                    std::this_thread::sleep_for(std::chrono::seconds(2));
+                    std::this_thread::sleep_for(std::chrono::seconds(4));
 
                     if (!stock)
                     {
@@ -194,7 +197,7 @@ namespace stock {
 
                     const auto price = price_result.result;
 
-                    std::this_thread::sleep_for(std::chrono::seconds(3));
+                    std::this_thread::sleep_for(std::chrono::seconds(2));
 
                     if (!price)
                     {

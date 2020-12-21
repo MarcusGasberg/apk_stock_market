@@ -60,27 +60,22 @@ int main()
     std::atomic<bool> termination_signal = false;
     auto t1 = sim.start_simulation(shared_price_provider, termination_signal);
 
-    int choice = -1;
+    int choice{};
     do
     {
-
         std::string line;
         std::getline(std::cin, line);
         if(!str_is_digit(line))
         {
             std::cout << "Please provide a number between 0 and 7\n";
-            continue;
+            continue;\
+
         }
 
         choice = std::stoi(line);
 
         try
         {
-            if(choice == 0) {
-                //termination_signal = true;
-                break;
-            }
-
             const auto stock_command = command_builder.create_command(choice);
             if(stock_command)
             {
@@ -93,6 +88,5 @@ int main()
         }
     } while(choice != 0);
 
-    t1.join();
     return 0;
 }

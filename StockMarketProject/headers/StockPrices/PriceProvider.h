@@ -19,7 +19,7 @@ namespace stock {
 
         void add_stock(std::string &&id, Price&& price) {
             std::unique_lock lock(price_lock_);
-            price_map_.insert(std::make_pair(std::move(id), std::move(price)));
+            price_map_.insert(std::make_pair(std::move(id), price));
         }
 
         void remove_stock(std::string && id) {

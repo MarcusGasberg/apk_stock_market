@@ -52,10 +52,7 @@ namespace stock
                         if constexpr (std::is_same_v<T, GetAllTransactionsQuery>)
                         {
                             auto transactions = get_all_transactions();
-                            for (auto transaction : transactions)
-                            {
-                                q.result.push_back(std::move(transaction));
-                            }
+                            q.append_result(std::move(transactions));
                         }
                     },
                     *query);
@@ -92,11 +89,10 @@ namespace stock
         void handle_command(Command& command)
         {
             using T = std::decay_t<decltype(command)>;
-            if constexpr (!hasExecute<T>)
-            {
-                throw BadCommandException("No execute");
-            }
-            if constexpr (std::is_base_of_v<TransactionBase, T> && hasUndo<std::decay_t<T>>)
+
+            static_assert(hasExecute<T>);
+
+            if constexpr (std::is_base_of_v<TransactionBase, T> && hasUndo<T>)
             {
                 do_transaction(command);
             }

@@ -50,7 +50,7 @@ namespace stock
                     const std::shared_ptr<queries_var_t> queries_var = std::make_shared<queries_var_t>(GetAllTransactionsQuery());
                     queries_sig_(queries_var);
                     const GetAllTransactionsQuery queries_result = std::get<0>(*queries_var);
-                    result = std::make_shared<commands_var_t>(ListAllTransactionsCommand(queries_result.result));
+                    result = std::make_shared<commands_var_t>(ListAllTransactionsCommand(queries_result.get_result()));
                 }
                 break;
             case 4:
@@ -63,9 +63,8 @@ namespace stock
                     using TQuery = GetAllStockQuery;
                     const std::shared_ptr<queries_var_t> queries_var = std::make_shared<queries_var_t>(TQuery());
                     queries_sig_(queries_var);
-                    // TODO: Problem when several StockBrokers send back result.
                     auto queries_result = std::move(std::get<TQuery>(*queries_var));
-                    result = std::make_shared<commands_var_t>(ListAllStocksCommand(queries_result.result.get()));
+                    result = std::make_shared<commands_var_t>(ListAllStocksCommand(queries_result.result));
                 }
                 break;
             case 6:
@@ -77,7 +76,7 @@ namespace stock
                         queries_sig_(queries_var);
                         GetStockPriceQuery price_result = std::move(std::get<GetStockPriceQuery>(*queries_var));
 
-                        stock.setPrice(price_result.result.get());
+                        stock.setPrice(price_result.result);
                     }
                     result = std::make_shared<commands_var_t>(ListAllStocksCommand(stocks));
                 }
@@ -95,7 +94,8 @@ namespace stock
                     result = std::make_shared<commands_var_t>(TraderAccountDepositAction(trader_account_, amount));
                 }
                 break;
-            break;
+            case 0:
+                break;
             default:
                 throw BadCommandException("Command not found");
             }

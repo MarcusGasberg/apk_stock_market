@@ -41,8 +41,8 @@ namespace stock {
 
             auto buy_connection = mediator_->subscribe(TOPICS[TraderTopics::BUY], &StockBroker::remove_bought_stock, this);
             auto sell_connection = mediator_->subscribe(TOPICS[TraderTopics::SELL], &StockBroker::add_stock, this);
-            connections.insert(std::make_pair(TOPICS[TraderTopics::BUY], buy_connection));
-            connections.insert(std::make_pair(TOPICS[TraderTopics::SELL], sell_connection));
+            connections_.insert(std::make_pair(TOPICS[TraderTopics::BUY], buy_connection));
+            connections_.insert(std::make_pair(TOPICS[TraderTopics::SELL], sell_connection));
 
         }
 

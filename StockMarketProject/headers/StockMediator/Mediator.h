@@ -55,20 +55,7 @@ namespace stock {
             }
         }
 
-        // TODO: Move is not okay, if disconnect is NOT called, since ownership has changed.
-        void unSubscribe(std::string && topic, boost::signals2::connection && connection) {
-            if (connection.connected()) {
-
-                auto topicIterator = std::find_if(topic_map_.begin(), topic_map_.end(), [&](const auto &map) {
-                    return map.first == topic;
-                });
-
-                if (topicIterator != topic_map_.end()) {
-                    std::cout << "Disconnecting from topic: " << topicIterator->first << std::endl;
-                    connection.disconnect();
-                }
-            }
-        }
+        // TODO: Make connections tracked so all are closed when mediator is destroyed.
 
         void notify(std::string && topic, params &&... parameters) {
             typename topic_map::iterator topicIterator = std::find_if(topic_map_.begin(), topic_map_.end(),

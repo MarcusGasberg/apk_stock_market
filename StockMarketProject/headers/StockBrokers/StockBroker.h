@@ -18,7 +18,7 @@ namespace stock {
         std::shared_ptr<PriceProvider> price_provider_;
         std::vector<Stock> stocks_for_sale;
         const int delay_ = 1;
-        std::map<std::string, boost::signals2::connection> connections_;
+        std::vector<boost::signals2::connection> connections_;
         std::shared_ptr<Mediator<void, Stock&>> mediator_;
     public:
         StockBroker(std::string&& name, std::shared_ptr<PriceProvider> price_provider, queries_sig_t& queries_sig, std::shared_ptr<Mediator < void, Stock&>> mediator) :
@@ -42,16 +42,20 @@ namespace stock {
 
             auto buy_connection = mediator_->subscribe(TOPICS[TraderTopics::BUY], &StockBroker::remove_bought_stock, this);
             auto sell_connection = mediator_->subscribe(TOPICS[TraderTopics::SELL], &StockBroker::add_stock, this);
-            connections_.insert(std::make_pair(TOPICS[TraderTopics::BUY], buy_connection));
-            connections_.insert(std::make_pair(TOPICS[TraderTopics::SELL], sell_connection));
+            connections_.push_back(buy_connection);
+            connections_.push_back(sell_connection);
 
         }
 
         virtual ~StockBroker() {
-            std::for_each(connections_.begin(), connections_.end(), [&](std::pair<std::string, boost::signals2::connection> && pair){
-                mediator_->unSubscribe(std::move(pair.first), std::move(pair.second));
-            });
-            connections_.clear();
+            for (int i = connections_.size() - 1; i >= 0; --i)
+            {
+                if (connections_[i].connected())
+                {
+                    connections_[i].disconnect();
+                    connections_.pop_back();
+                }
+            }
         }
 
         void remove_bought_stock(Stock& stock)
@@ -146,7 +150,12 @@ namespace stock {
                 {
                     std::cout << "Getting price of " << *stock_id << "...\n";
                     std::this_thread::sleep_for(std::chrono::seconds(delay_));
-                    return price_provider_->get_price(std::move(*stock_id));
+
+                    auto price = price_provider_->get_price(std::move(*stock_id));
+                    if (!price) {
+                        throw NoPriceException(*stock_id);
+                    }
+                    return price;
                 });
         }
     };

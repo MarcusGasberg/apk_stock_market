@@ -54,8 +54,6 @@ namespace stock {
             }
         }
 
-        // TODO: Make connections tracked so all are closed when mediator is destroyed.
-
         returnType notify(std::string && topic, params &&... parameters) {
             typename topic_map::iterator topicIterator = std::find_if(topic_map_.begin(), topic_map_.end(),
                                                                       [&](const auto &map) {

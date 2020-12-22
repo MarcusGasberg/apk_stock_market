@@ -79,6 +79,8 @@ int main()
             if(stock_command)
             {
                 command_sig(stock_command);
+            } else {
+                termination_signal = true;
             }
         }
         catch (const stock::NoStockException& exception)
@@ -95,5 +97,6 @@ int main()
         }
     } while(choice != 0);
 
+    t1.join();
     return 0;
 }

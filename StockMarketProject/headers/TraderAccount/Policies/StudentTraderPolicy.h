@@ -17,9 +17,7 @@ namespace stock {
     private:
         static constexpr float commissionRate = 1.2;
     public:
-        // Account Manager, Account Type
-        template<typename T, typename = typename IsNumeric<T>::value>
-
+        template<typename T, typename = IsNumeric<T>>
         static T calculate_commission(T boughtAmount, T stockPrice) {
             return (stockPrice * boughtAmount * (commissionRate / 100));
         }

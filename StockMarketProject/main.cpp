@@ -19,14 +19,14 @@ int main()
     std::cout << "     Welcome To Northern Networks    \n";
     std::cout << "  Your Modern Stock Market Platform   \n";
     std::cout << "_______________________________________\n";
-    std::cout << "0: Exit Program\n";
-    std::cout << "1: Buy Stock\n";
-    std::cout << "2: Sell Stock\n";
-    std::cout << "3: List All Transactions\n";
-    std::cout << "4: Undo Latest\n";
-    std::cout << "5: List All Available Stocks\n";
-    std::cout << "6: List Owned Stocks\n";
+    std::cout << "1: List All Available Stocks\n";
+    std::cout << "2: Buy Stock\n";
+    std::cout << "3: Sell Stock\n";
+    std::cout << "4: List All Transactions\n";
+    std::cout << "5: List Owned Stocks\n";
+    std::cout << "6: Undo Latest\n";
     std::cout << "7: Deposit Funds\n\n";
+    std::cout << "0: Exit Program\n";
 
     stock::commands_sig_t command_sig;
     stock::queries_sig_t queries_sig;

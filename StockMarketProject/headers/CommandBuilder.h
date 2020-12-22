@@ -28,6 +28,15 @@ namespace stock
             switch (choice)
             {
             case 1:
+            {
+                using TQuery = GetAllStockQuery;
+                const std::shared_ptr<queries_var_t> queries_var = std::make_shared<queries_var_t>(TQuery());
+                queries_sig_(queries_var);
+                const auto queries_result = std::move(std::get<TQuery>(*queries_var));
+                result = std::make_shared<commands_var_t>(ListAllStocksCommand(queries_result.result));
+            }
+            break;
+            case 2:
                 {
                     std::cout << "Please Provide the id of the stock you want to buy: ";
                     std::string stock_id;
@@ -36,7 +45,7 @@ namespace stock
                     result = std::make_shared<commands_var_t>(BuyStockCommand(trader_account_, stock_id));
                 }
                 break;
-            case 2:
+            case 3:
                 {
                     std::cout << "Please Provide the id of the stock you want to sell: ";
                     std::string stock_id;
@@ -45,7 +54,7 @@ namespace stock
                     result = std::make_shared<commands_var_t>(SellStockCommand(trader_account_, stock_id));
                 }
                 break;
-            case 3:
+            case 4:
                 {
                     const std::shared_ptr<queries_var_t> queries_var = std::make_shared<queries_var_t>(GetAllTransactionsQuery());
                     queries_sig_(queries_var);
@@ -53,32 +62,23 @@ namespace stock
                     result = std::make_shared<commands_var_t>(ListAllTransactionsCommand(queries_result.get_result()));
                 }
                 break;
-            case 4:
-                {
-                    result = std::make_shared<commands_var_t>(UndoLatestCommand());
-                }
-                break;
             case 5:
+            {
+                auto stocks = trader_account_->owned_stocks();
+                for (auto&& stock : stocks)
                 {
-                    using TQuery = GetAllStockQuery;
-                    const std::shared_ptr<queries_var_t> queries_var = std::make_shared<queries_var_t>(TQuery());
+                    auto queries_var = std::make_shared<queries_var_t>(GetStockPriceQuery(stock.getStockId()));
                     queries_sig_(queries_var);
-                    const auto queries_result = std::move(std::get<TQuery>(*queries_var));
-                    result = std::make_shared<commands_var_t>(ListAllStocksCommand(queries_result.result));
+                    const GetStockPriceQuery price_result = std::move(std::get<GetStockPriceQuery>(*queries_var));
+
+                    stock.setPrice(price_result.result);
                 }
-                break;
+                result = std::make_shared<commands_var_t>(ListAllStocksCommand(stocks));
+            }
+            break;
             case 6:
                 {
-                    auto stocks = trader_account_->owned_stocks();
-                    for (auto && stock : stocks)
-                    {
-                        auto queries_var = std::make_shared<queries_var_t>(GetStockPriceQuery(stock.getStockId()));
-                        queries_sig_(queries_var);
-                        const GetStockPriceQuery price_result = std::move(std::get<GetStockPriceQuery>(*queries_var));
-
-                        stock.setPrice(price_result.result);
-                    }
-                    result = std::make_shared<commands_var_t>(ListAllStocksCommand(stocks));
+                    result = std::make_shared<commands_var_t>(UndoLatestCommand());
                 }
                 break;
             case 7:

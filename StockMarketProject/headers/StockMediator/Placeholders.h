@@ -20,8 +20,6 @@ namespace std {
     struct is_placeholder<::custom_placeholder<N>> : std::integral_constant<int, N> { };
 }
 
-// TODO: Use boost::ref or boost::cref?
-// TODO: Problems with this reference? Should be forwarded or something?
 template<class R, class T, class...Types,  int... indices>
 std::function<R (Types...)> custom_bind(R (T::* providerCallback)(Types ...), T * providerObject, std::integer_sequence<int, indices...>)
 {

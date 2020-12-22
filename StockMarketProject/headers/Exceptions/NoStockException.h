@@ -29,7 +29,7 @@ namespace stock
 
         char const* what() const noexcept override
         {
-            return exception::what();
+            return runtime_error::what();
         };
     };
 }

@@ -60,7 +60,7 @@ int main()
     std::atomic<bool> termination_signal = false;
     auto t1 = sim.start_simulation(shared_price_provider, termination_signal);
 
-    int choice{};
+    int choice = -1;
     do
     {
         std::string line;
@@ -85,14 +85,17 @@ int main()
         }
         catch (const stock::NoStockException& exception)
         {
+            std::cout << typeid(exception).name() << std::endl;
             std::cout << exception.what() << std::endl;
         }
         catch (const stock::NoPriceException& exception)
         {
+            std::cout << typeid(exception).name() << std::endl;
             std::cout << exception.what() << std::endl;
         }
         catch (const stock::BadCommandException& exception)
         {
+            std::cout << typeid(exception).name() << std::endl;
             std::cout << exception.what() << std::endl;
         }
     } while(choice != 0);

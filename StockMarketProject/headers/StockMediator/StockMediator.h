@@ -26,7 +26,6 @@ namespace stock {
         // Actual map that contains callbacks.
         topic_map topic_map_;
     public:
-        // TODO: Shared_pointer / Unique_pointer for connection?
         template<typename T>
         boost::signals2::connection subscribe(std::string && topic, returnType (T::* providerCallback)(params ...), T *providerObject) {
             typename topic_map::iterator topicIterator = std::find_if(topic_map_.begin(), topic_map_.end(),
@@ -41,9 +40,9 @@ namespace stock {
                 std::cout << "Connecting: " << typeid(providerObject).name() << " to NEW topic: " << topic << std::endl;
                 auto connection = signal.connect(callback);
 
-                // TODO: Check this forwarding.
-                topic_insert_result ir = topic_map_.insert(std::make_pair(std::move(topic), std::forward<provider_signal>(signal)));
+                topic_insert_result ir = topic_map_.insert(std::make_pair(std::move(topic), std::move(signal)));
                 if (!ir.second) {
+                    connection.disconnect();
                     throw "An error occurred when inserting topic map.";
                 }
                 return connection;
@@ -61,7 +60,7 @@ namespace stock {
                                                                      });
 
             if (topicIterator != topic_map_.end()) {
-                return topicIterator->second(parameters ...);
+                return topicIterator->second(std::forward<params...>(parameters...));
             }
         }
     };

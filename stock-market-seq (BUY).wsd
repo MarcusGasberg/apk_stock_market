@@ -1,6 +1,8 @@
 @startuml StockMarketSequenceDiagramBuy
 skinparam Monochrome true
 skinparam Shadowing false
+skinparam ParticipantFontSize 18
+skinparam ArrowFontSize 20
 
 participant TraderClient 
 participant CommandBuilder
@@ -14,15 +16,15 @@ participant PriceProvider
 
 TraderClient -> CommandBuilder: create_command(BuyStockCommand)
 CommandBuilder -> TraderClient: BuyStockCommand
-TraderClient ->o TransactionManager: command_signal(BuyStockCommand)
+TraderClient -> TransactionManager: command_signal(BuyStockCommand)
 TransactionManager -> BuyStockCommand: execute()
 BuyStockCommand -> TraderAccount: buy_stock(stock_id_)
 TraderAccount ->> StockBroker: queries_signal(GetStockQuery)
 StockBroker -> PriceProvider: get_price(stock_id)
 StockBroker --> TraderAccount: stock 
 TraderAccount -> TraderPolicy: takeCommision(stock.amount, stock.price)
-TraderAccount --> Mediator: notify(TraderTopic::BUY, stock) 
-Mediator ->o StockBroker: provider_signal(stock)  
+TraderAccount -> Mediator: notify(TraderTopic::BUY, stock) 
+Mediator -> StockBroker: provider_signal(stock)  
 alt StockBroker owns stock 
     StockBroker -> StockBroker: remove_bought_stock(stock) 
 end 

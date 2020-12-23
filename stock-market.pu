@@ -1,20 +1,11 @@
 @startuml StockMarketClassDiagram
 skinparam Monochrome true
 skinparam Shadowing false
+skinparam ClassFontSize 22
+skinparam ClassAttributeFontSize 18
+skinparam NoteFontSize 18
 
 title Stock Market Class Diagram 
-
-note as N2
-  TraderClient reads input from keyboard 0 - 7
-  and creates command based on user input 
-  1: Buy Stock
-  2: Sell Stock
-  3: List All Transactions 
-  4: Undo Latest 
-  5: List All Available Stocks 
-  6: List Owned Stocks 
-  7: Deposit Funds 
-end note
 
 class TraderClient {
   + command_sig_t command_signal 
@@ -42,7 +33,7 @@ class BuyStockCommand {
 class StockBroker {
   - Stock[] stocks_for_sale
   - map<string, boost::connection> connections_
-  - shared_ptr<Mediator<void, shared_ptr<Stock>> mediator_
+  - shared_ptr<Mediator<void, Stock&> mediator_
   + get_stocks(): GetAllStockQuery
   + get_stock_price(): GetPriceQuery 
   + get_stock(): GetStockQuery  
@@ -63,7 +54,7 @@ class CommandBuilder {
 class TraderAccount {
   - int balance_ 
   - vector<Stock> owned_stocks_ 
-  - shared_ptr<Mediator<void, shared_ptr<Stock>>> mediator_ 
+  - shared_ptr<Mediator<void, Stock&>> mediator_ 
   + boy_stock(stock_id) : bool 
   + sell_stock(stock_id) : bool 
 }

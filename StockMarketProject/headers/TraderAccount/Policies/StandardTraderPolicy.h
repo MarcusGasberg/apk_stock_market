@@ -17,7 +17,7 @@ namespace stock {
         static constexpr float commission_rate = 2.0;
         static constexpr float flat_rate = 30;
     public:
-        template<typename T, typename = IsNumeric<T>>
+        template<typename T, typename = utility::IsNumeric<T>>
         static T calculate_commission(T boughtAmount, T stockPrice) {
             int commission = (stockPrice * boughtAmount * (commission_rate / 100));
             if(commission > 30) return commission;

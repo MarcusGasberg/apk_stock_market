@@ -13,7 +13,7 @@
 #include "chrono"
 #include "../Helpers/UserLiterals.h"
 #include "math.h"
-
+using namespace stock::utility;
 
 namespace stock
 {

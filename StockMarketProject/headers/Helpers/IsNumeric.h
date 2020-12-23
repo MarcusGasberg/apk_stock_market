@@ -6,11 +6,13 @@
 #define STOCKMARKETPROJECT_ISNUMERIC_H
 #include <iostream>
 
-template<class T>
-struct IsNumeric {
-    static constexpr bool value =
-            std::is_floating_point<T>::value ||
-            std::is_integral<T>::value;
-};
+namespace stock::utility {
+    template<class T>
+    struct IsNumeric {
+        static constexpr bool value =
+                std::is_floating_point<T>::value ||
+                std::is_integral<T>::value;
+    };
+}
 
 #endif //STOCKMARKETPROJECT_ISNUMERIC_H

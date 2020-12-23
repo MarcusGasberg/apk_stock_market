@@ -1,5 +1,5 @@
 file(REMOVE_RECURSE
-  "CMakeFiles/StockMarketProject.dir/main.cpp.o"
+  "CMakeFiles/StockMarketProject.dir/TraderClient.cpp.o"
   "StockMarketProject"
   "StockMarketProject.pdb"
 )

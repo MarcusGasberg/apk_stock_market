@@ -86,7 +86,7 @@ namespace stock
                     std::cout << "How much do you want to deposit: ";
                     std::string line;
                     std::getline(std::cin, line);
-                    if (!str_is_digit(line))
+                    if (!utility::str_is_digit(line))
                     {
                         throw BadCommandException("Deposit must be a valid number");
                     }

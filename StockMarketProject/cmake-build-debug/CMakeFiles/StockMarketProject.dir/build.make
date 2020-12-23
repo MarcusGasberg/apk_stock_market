@@ -77,27 +77,27 @@ include CMakeFiles/StockMarketProject.dir/progress.make
 # Include the compile flags for this target's objects.
 include CMakeFiles/StockMarketProject.dir/flags.make
 
-CMakeFiles/StockMarketProject.dir/main.cpp.o: CMakeFiles/StockMarketProject.dir/flags.make
-CMakeFiles/StockMarketProject.dir/main.cpp.o: ../main.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/StockMarketProject.dir/main.cpp.o"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/StockMarketProject.dir/main.cpp.o -c /home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/main.cpp
+CMakeFiles/StockMarketProject.dir/TraderClient.cpp.o: CMakeFiles/StockMarketProject.dir/flags.make
+CMakeFiles/StockMarketProject.dir/TraderClient.cpp.o: ../TraderClient.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/StockMarketProject.dir/TraderClient.cpp.o"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/StockMarketProject.dir/TraderClient.cpp.o -c /home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/TraderClient.cpp
 
-CMakeFiles/StockMarketProject.dir/main.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/StockMarketProject.dir/main.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/main.cpp > CMakeFiles/StockMarketProject.dir/main.cpp.i
+CMakeFiles/StockMarketProject.dir/TraderClient.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/StockMarketProject.dir/TraderClient.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/TraderClient.cpp > CMakeFiles/StockMarketProject.dir/TraderClient.cpp.i
 
-CMakeFiles/StockMarketProject.dir/main.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/StockMarketProject.dir/main.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/main.cpp -o CMakeFiles/StockMarketProject.dir/main.cpp.s
+CMakeFiles/StockMarketProject.dir/TraderClient.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/StockMarketProject.dir/TraderClient.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/TraderClient.cpp -o CMakeFiles/StockMarketProject.dir/TraderClient.cpp.s
 
 # Object files for target StockMarketProject
 StockMarketProject_OBJECTS = \
-"CMakeFiles/StockMarketProject.dir/main.cpp.o"
+"CMakeFiles/StockMarketProject.dir/TraderClient.cpp.o"
 
 # External object files for target StockMarketProject
 StockMarketProject_EXTERNAL_OBJECTS =
 
-StockMarketProject: CMakeFiles/StockMarketProject.dir/main.cpp.o
+StockMarketProject: CMakeFiles/StockMarketProject.dir/TraderClient.cpp.o
 StockMarketProject: CMakeFiles/StockMarketProject.dir/build.make
 StockMarketProject: CMakeFiles/StockMarketProject.dir/link.txt
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Linking CXX executable StockMarketProject"

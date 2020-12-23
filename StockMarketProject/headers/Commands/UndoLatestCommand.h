@@ -15,6 +15,7 @@ namespace stock
 
         void execute()
         {
+            std::cout << "========= " << "Undo Latest" << " =========" << "\n";
             for (auto undo_action : undo_actions)
             {
                 undo_action();
@@ -24,18 +25,6 @@ namespace stock
         void add_undo_action(std::function<void()>& undo_action)
         {
             undo_actions.push_back(undo_action);
-        }
-
-        [[nodiscard]] std::string get_description() const
-        {
-            std::stringstream ss;
-            ss << "UndoCommand";
-            return ss.str();
-        }
-
-        friend std::ostream& operator<<(std::ostream& os, const UndoLatestCommand& obj)
-        {
-            return os << obj.get_description();
         }
     };
 }

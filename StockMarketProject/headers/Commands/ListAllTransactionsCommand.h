@@ -23,6 +23,7 @@ namespace stock
 
         void execute()
         {
+            std::cout << "========= " << "List All Transactions" << " =========" << "\n";
             for (const auto& command : all_commands)
             {
                 std::cout << command->get_description() << "\n";

@@ -24,6 +24,7 @@ namespace stock
 
         void execute()
         {
+            std::cout << "========= " << "List All Stocks" << " =========" "\n";
             if(all_stocks_.empty())
             {
                 std::cout << "No Stocks found\n";

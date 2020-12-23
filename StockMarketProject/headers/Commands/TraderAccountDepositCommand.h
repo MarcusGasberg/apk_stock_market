@@ -23,6 +23,7 @@ namespace stock
 
         void execute() const
         {
+            std::cout << "========= " << "Deposit" << " =========" << "\n";
             if(trader_account_ && amount_ > 0)
             {
                 trader_account_->deposit(amount_);

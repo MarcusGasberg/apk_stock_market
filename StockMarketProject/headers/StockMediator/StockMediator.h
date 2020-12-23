@@ -7,6 +7,7 @@
 #include "Placeholders.h"
 #include "boost/signals2.hpp"
 #include "iostream"
+#include "../Exceptions/BadMediatorConnectionException.h"
 
 namespace stock {
 /*
@@ -37,20 +38,17 @@ namespace stock {
 
             if (topicIterator == topic_map_.end()) {
                 provider_signal signal;
-                std::cout << "Connecting: " << typeid(providerObject).name() << " to NEW topic: " << topic << std::endl;
                 auto connection = signal.connect(callback);
 
                 topic_insert_result ir = topic_map_.insert(std::make_pair(std::move(topic), std::move(signal)));
                 if (!ir.second) {
                     connection.disconnect();
-                    throw "An error occurred when inserting topic map.";
+                    throw BadMediatorConnectionException("An error occurred when inserting topic map.");
                 }
                 return connection;
-            } else {
-                std::cout << "Connecting: " << typeid(providerObject).name() << " to EXISTING topic: " << topic
-                          << std::endl;
-                return topicIterator->second.connect(callback);
             }
+
+            return topicIterator->second.connect(callback);
         }
 
         returnType notify(std::string && topic, params &&... parameters) {

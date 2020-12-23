@@ -26,7 +26,7 @@ int main()
     std::cout << "5: List Owned Stocks\n";
     std::cout << "6: Undo Latest\n";
     std::cout << "7: Deposit Funds\n\n";
-    std::cout << "0: Exit Program\n";
+    std::cout << "0: Exit Program\n\n";
 
     stock::commands_sig_t command_sig;
     stock::queries_sig_t queries_sig;

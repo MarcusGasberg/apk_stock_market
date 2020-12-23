@@ -29,6 +29,7 @@ namespace stock
 
         bool execute() const
         {
+            std::cout << get_description() << "\n";
             return buyer_account_->buy_stock(stock_id_);
         }
 
@@ -40,7 +41,7 @@ namespace stock
         std::string get_description() const override
         {
             std::stringstream ss;
-            ss << "BuyCommand[" << get_id() << "]: " << stock_id_;
+            ss << "========= "<<"Buy Stock " << get_id() << " =========" << stock_id_;
             return ss.str();
         }
 

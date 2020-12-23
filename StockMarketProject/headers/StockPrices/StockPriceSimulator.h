@@ -13,13 +13,13 @@
 #include "chrono"
 #include "../Helpers/UserLiterals.h"
 #include "math.h"
-
+using namespace stock::utility;
 
 namespace stock
 {
     using namespace std::chrono_literals;
     class StockPriceSimulator {
-        // Updates prices every 10th min.
+        // Updates prices every 10th sec.
         void update_prices(std::shared_ptr<PriceProvider> provider, std::atomic<bool> & termination_signal){
             while(!termination_signal){
             "Updating prices..."_print;

@@ -13,21 +13,20 @@
 
 namespace stock
 {
-    template<typename T>
-    class to_vector_visitor
+    template<typename TBase>
+    class FilterOfBaseVisitor
     {
-        std::vector<std::shared_ptr<T>>& vec_;
+        std::vector<std::shared_ptr<TBase>>& vec_;
     public:
-        explicit to_vector_visitor(std::vector<std::shared_ptr<T>>& vec)
+        explicit FilterOfBaseVisitor(std::vector<std::shared_ptr<TBase>>& vec)
             : vec_(vec)
         {
         }
 
-        template <typename C, typename = typename std::enable_if<std::is_base_of<T, C>::value>::type>
-
+        template <typename C, typename = typename std::enable_if<std::is_base_of<TBase, C>::value>::type>
         void operator ()(C val)
         {
-            vec_.push_back(std::make_shared<C>(val));
+            vec_.emplace_back(std::make_shared<C>(val));
         }
 
         void operator()(...) const {}
@@ -40,27 +39,47 @@ namespace stock
 
     public:
         TransactionManager(queries_sig_t& queries_sig,
-                           commands_sig_t& command_sig)
+                           commands_sig_t& commands_sig)
         {
-            const std::function<void(std::shared_ptr<queries_var_t>)> get_commands_from_stockbroker_f =
-                [this](const std::shared_ptr<queries_var_t> query)
-            {
-                std::visit([this](auto&& q)
-                    {
-                        using T = std::decay_t<decltype(q)>;
-                        if constexpr (std::is_same_v<T, GetAllTransactionsQuery>)
-                        {
-                            auto transactions = get_all_transactions();
-                            for (auto transaction : transactions)
-                            {
-                                q.result.push_back(std::move(transaction));
-                            }
-                        }
-                    },
-                    *query);
-            };
+            connect_queries(queries_sig);
+            connect_commands(commands_sig);
+        }
 
-            const std::function<void(std::shared_ptr<commands_var_t>)> commands_f = 
+        ~TransactionManager()
+        {
+            for (auto i = connections_.rbegin(); i != connections_.rend(); ++i)
+            {
+                if(i->connected())
+                {
+                    i->disconnect();
+                }
+                connections_.erase(std::next(i).base());
+            }
+        }
+
+        TransactionManager(const TransactionManager& other) = delete;
+
+        TransactionManager(TransactionManager&& other) noexcept
+            : all_transactions_(std::move(other.all_transactions_)),
+              connections_(std::move(other.connections_))
+        {
+        }
+
+        TransactionManager& operator=(const TransactionManager& other) = delete;
+
+        TransactionManager& operator=(TransactionManager&& other) noexcept
+        {
+            if (this == &other)
+                return *this;
+            all_transactions_ = std::move(other.all_transactions_);
+            connections_ = std::move(other.connections_);
+            return *this;
+        }
+
+    private:
+        void connect_commands(commands_sig_t& commands_sig)
+        {
+            const std::function<void(std::shared_ptr<commands_var_t>)> handle_commands_f =
                 [this](const std::shared_ptr<commands_var_t> variant)
             {
                 std::visit([this](auto&& command)
@@ -69,22 +88,8 @@ namespace stock
                     }, *variant);
             };
 
-            const auto query_connection = queries_sig.connect(get_commands_from_stockbroker_f);
-            const auto command_connection = command_sig.connect(commands_f);
-            connections_.push_back(query_connection);
+            const auto command_connection = commands_sig.connect(handle_commands_f);
             connections_.push_back(command_connection);
-        }
-
-        ~TransactionManager()
-        {
-            for (int i = connections_.size() - 1; i >= 0; --i)
-            {
-                if (connections_[i].connected())
-                {
-                    connections_[i].disconnect();
-                    connections_.pop_back();
-                }
-            }
         }
 
         template<typename Command>
@@ -97,7 +102,11 @@ namespace stock
             if constexpr (std::is_base_of_v<TransactionBase, T>)
             {
                 static_assert(hasUndo<T>);
-                do_transaction(command);
+                auto success = command.execute();
+                if (success)
+                {
+                    all_transactions_.emplace_back(command);
+                }
             }
             else if constexpr (std::is_same_v<T, UndoLatestCommand>)
             {
@@ -105,26 +114,35 @@ namespace stock
             }
         }
 
-        template<typename Command>
-        void do_transaction(Command transaction)
+        void connect_queries(queries_sig_t& queries_sig)
         {
-            auto success = transaction.execute();
-            if(success)
+            const std::function<void(std::shared_ptr<queries_var_t>)> get_transactions_f =
+                [this](const std::shared_ptr<queries_var_t> query)
             {
-                all_transactions_.emplace_back(transaction);
-            }
+                std::visit([this](auto&& q)
+                    {
+                        using T = std::decay_t<decltype(q)>;
+                        if constexpr (std::is_same_v<T, GetAllTransactionsQuery>)
+                        {
+                            auto transactions = get_all_transactions();
+                            q.append_result(std::move(transactions));
+                        }
+                    },
+                    *query);
+            };
+            const auto query_connection = queries_sig.connect(get_transactions_f);
+            connections_.push_back(query_connection);
         }
 
         void undo_latest_transaction(UndoLatestCommand& undo_command)
         {
-            if (all_transactions_.empty())
-            {
-                std::cout << "No more transactions in stock broker...\n";
-                return;
-            }
-
             std::function<void()> undo_latest_f = [this]()
             {
+                if (all_transactions_.empty())
+                {
+                    std::cout << "No more transactions in stock broker...\n";
+                    return;
+                }
                 auto latest = all_transactions_.back();
 
                 std::visit([&](auto&& val)
@@ -144,7 +162,7 @@ namespace stock
         std::vector<std::shared_ptr<TransactionBase>> get_all_transactions()
         {
             std::vector<std::shared_ptr<TransactionBase>> commands;
-            to_vector_visitor<TransactionBase> visitor(commands);
+            FilterOfBaseVisitor<TransactionBase> visitor(commands);
             for (auto& transaction : all_transactions_)
             {
                 std::visit(visitor, transaction);

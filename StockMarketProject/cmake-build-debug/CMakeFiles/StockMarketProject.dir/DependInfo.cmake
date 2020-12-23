@@ -4,7 +4,7 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_CXX
-  "/home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/main.cpp" "/home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/cmake-build-debug/CMakeFiles/StockMarketProject.dir/main.cpp.o"
+  "/home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/TraderClient.cpp" "/home/stud/Desktop/Clion/apk_stock_market/StockMarketProject/cmake-build-debug/CMakeFiles/StockMarketProject.dir/TraderClient.cpp.o"
   )
 set(CMAKE_CXX_COMPILER_ID "GNU")
 

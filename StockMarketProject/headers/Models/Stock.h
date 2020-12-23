@@ -60,7 +60,7 @@ namespace stock
         }
 
         friend std::ostream &operator<<(std::ostream &os, const Stock &stock1) {
-            os << "ID: " << stock1.getStockId() << ", Amount: " << stock1.getAmount() << ", Price: " << stock1.getPrice()->price_ << "\n";
+            os << "ID: " << stock1.getStockId() << ", Amount: " << stock1.getAmount() << ", Price: " << (stock1.getPrice() ? stock1.getPrice()->price_ : 0) << "\n";
             return os;
         }
     };

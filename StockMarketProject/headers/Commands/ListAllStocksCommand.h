@@ -24,15 +24,15 @@ namespace stock
 
         void execute()
         {
+            std::cout << "========= " << "List All Stocks" << " =========" "\n";
             if(all_stocks_.empty())
             {
                 std::cout << "No Stocks found\n";
                 return;
             }
-            for (const Stock& stock : all_stocks_)
-            {
-                std::cout << stock;
-            }
+
+            const std::ostream_iterator<Stock> ostream_iterator(std::cout);
+            std::copy(all_stocks_.begin(), all_stocks_.end(), ostream_iterator);
         }
     };
 }

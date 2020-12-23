@@ -24,6 +24,6 @@ namespace stock
             return stock_id_;
         }
 
-        std::future<std::shared_ptr<Stock>> result;
+        std::shared_ptr<Stock> result;
     };
 }

@@ -9,6 +9,6 @@ namespace stock
 {
     struct GetAllStockQuery
     {
-        std::future<std::vector<Stock>> result;
+        std::vector<Stock> result;
     };
 }

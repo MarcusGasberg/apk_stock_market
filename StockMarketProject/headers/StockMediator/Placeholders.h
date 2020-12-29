@@ -8,7 +8,6 @@
 #include "iostream"
 #include "functional"
 
-// Inspiration from "http://coliru.stacked-crooked.com/a/f9b21ba0b6b62e42"
 template <int N>
 struct custom_placeholder { static custom_placeholder cp; };
 
